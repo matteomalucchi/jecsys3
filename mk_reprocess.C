@@ -5,7 +5,7 @@
 
   // For JEC residual (and pile-up)
   gROOT->ProcessLine(".L CondFormats/JetMETObjects/src/Utilities.cc+");
-  gROOT->ProcessLine(".L CondFormats//JetMETObjects/src/JetCorrectorParameters.cc+");
+  gROOT->ProcessLine(".L CondFormats/JetMETObjects/src/JetCorrectorParameters.cc+");
   gROOT->ProcessLine(".L CondFormats/JetMETObjects/src/SimpleJetCorrector.cc+");
   gROOT->ProcessLine(".L CondFormats/JetMETObjects/src/FactorizedJetCorrector.cc+");
   //
@@ -16,7 +16,7 @@
   gROOT->ProcessLine(".L tools.C+g");
   gROOT->ProcessLine(".L Flavor.C+g");
   gROOT->ProcessLine(".L reprocess.C+g");
-  gROOT->ProcessLine(".L scaleJES.C+g");
+  // gROOT->ProcessLine(".L scaleJES.C+g");
   gROOT->ProcessLine(".L softrad3.C+g");
   //gROOT->ProcessLine(".L globalFitSyst.C+g");
   //gROOT->ProcessLine(".L globalFitRenormPF.C+g");
@@ -30,6 +30,7 @@
   std::cout << epoch.c_str()<< std::endl;
   std::cout << inputepoch.c_str()<< std::endl;
   epoch = inputepoch;
+  std::cout << epoch.c_str()<< std::endl;
   #endif
 
   // Read in files from different groups and merge them in jecdata[epoch].root
@@ -44,7 +45,7 @@
   //scaleJES(epoch, "gamjet");
   //}
   //scaleJES(epoch, "multijet"); // 19Dec no scaling needed
-  
+
   // HDM method: use HT decomposition (lead, soft jets, unclustered) for FSR
   softrad3(0.0,1.3,epoch); // 3-point FSR
 
@@ -59,6 +60,6 @@
   //globalFitEtaBin(0.0, 1.3, epoch, "Summer23");
   //globalFitEtaBin(0.0, 1.3, epoch, "Summer23_V1test");
   globalFitEtaBin(0.0, 1.3, epoch, "Summer23_V2");
-  
+
   exit(0); // Avoid page full of THastList::Delete errors
 }

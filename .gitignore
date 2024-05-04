@@ -36,3 +36,5 @@
 
 #MacOS
 *.DS_Store
+
+pdf/

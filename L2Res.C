@@ -23,7 +23,7 @@ bool fitJ = true; // Dijet (pT,tag)
 // Step 1. Slice 1D profile out of 2D in given range and draw it
 TProfile* drawEta(TProfile2D *p2, double ptmin, double ptmax,
 		  string draw, int marker, int color, string label="") {
-  
+
   assert(p2);
   int iy1 = p2->GetYaxis()->FindBin(ptmin);
   int iy2 = p2->GetYaxis()->FindBin(ptmax);
@@ -46,7 +46,7 @@ TProfile* drawEta(TProfile2D *p2, double ptmin, double ptmax,
 } // drawEta
 TProfile* drawPt(TProfile2D *p2, double etamin, double etamax,
 		 string draw, int marker, int color, string label="") {
-  
+
   assert(p2);
   int ix1 = p2->GetXaxis()->FindBin(etamin);
   int ix2 = p2->GetXaxis()->FindBin(etamax);
@@ -80,7 +80,7 @@ TH1D *drawNormEta(TProfile *p, string draw, int marker, int color) {
   f1->SetRange(0,5.2);
   h->Divide(f1);
   tdrDraw(h,draw,marker,color,kSolid,-1,kNone);
-  
+
   return h;
 }
 TH1D *drawNormPt(TProfile *p, TProfile *p13,
@@ -92,7 +92,7 @@ TH1D *drawNormPt(TProfile *p, TProfile *p13,
   TH1D *h = p->ProjectionX(Form("h%s",id.c_str()));
   h->Divide(p13);
   tdrDraw(h,draw,marker,color,kSolid,-1,kNone);
-  
+
   return h;
 }
 
@@ -106,7 +106,7 @@ TH1D *drawRatio(TH1D *h, TH1D *hm, string draw, int marker, int color) {
   hr->Divide(hm);
 
   tdrDraw(hr,draw,marker,color,kSolid,-1,kNone);
-  
+
   return hr;
 }
 
@@ -155,7 +155,7 @@ TH1D *drawCleaned(TH1D *h, double eta, string data, string draw,
       // Summer23
       if (ptmin>=59. && ptmax<=110. && emax<3100. && eta<2.853) keep = true;
     }
-    
+
     // Check that no points out of bound
     if (h->GetBinContent(i)>1.3 || h->GetBinContent(i)<0.3) {
       keep = false;
@@ -179,7 +179,7 @@ TH1D *drawCleaned(TH1D *h, double eta, string data, string draw,
   } // for i
 
   tdrDraw(hc,draw,marker,color,kSolid,-1,kNone);
-  
+
   return hc;
 }
 // Helper for TMultiGraphErrors
@@ -235,36 +235,54 @@ void L2Res() {
   // Mikko's temporary code to create L2Res.root file
   // Load Z+jet
   TFile *fz(0);
-  fz = new TFile(Form("rootfiles/Summer23_L2ResOnly/jme_bplusZ_%s_Zmm_sync_v70.root",cr),"READ"); // Summer23 L2Res_V1
+  TFile *fzd(0);
+  // fz = new TFile(Form("rootfiles/Summer23_L2ResOnly/jme_bplusZ_%s_Zmm_sync_v70.root",cr),"READ"); // Summer23 L2Res_V1
+  // fz = new TFile(Form("../dijet/rootfiles/jmenano_data_cmb_v22ul16.root"),"READ"); // Summer23 L2Res_V1
+  // fzd = new TFile(Form("../dijet/rootfiles/jmenano_mc_cmb_v22ul16flatmc.root"),"READ"); // Summer23 L2Res_V1
+  fz = new TFile(Form("/work/mmalucch/L2Res_inputs/no_reg/zb/jme_bplusZ_merged_vX_run%s.root",cr),"READ"); // Summer23 L2Res_V1
   assert(fz && !fz->IsZombie());
 
   TDirectory *dz = fz->GetDirectory("data/l2res");
   TDirectory *dzm = fz->GetDirectory("mc/l2res");
-  
+
+  // TDirectory *dz = fz->GetDirectory("Dijet2");
+  // TDirectory *dzm = fzd->GetDirectory("Dijet2");
+
   // Load G+jet
   TFile *fg(0), *fgm(0);
-  fg = new TFile(Form("rootfiles/Summer23_L2ResOnly/gamjet_all/GamHistosFill_data_%s_w4.root",cr),"READ"); // Summer23 with L2Res
+  // fg = new TFile(Form("rootfiles/Summer23_L2ResOnly/gamjet_all/GamHistosFill_data_%s_w4.root",cr),"READ"); // Summer23 with L2Res
+  // fg = new TFile(Form("../dijet/rootfiles/jmenano_data_cmb_v22ul16.root"),"READ"); // Summer23 with L2Res
+  fg = new TFile(Form("/work/mmalucch/L2Res_inputs/no_reg/gam/GamHistosFill_data_%s_tot_23.root",cr),"READ"); // Summer23 with L2Res
   assert(fg && !fg->IsZombie());
   //
-  fgm = new TFile(run=="2023D" ? "rootfiles/Summer23_L2ResOnly/gamjet_all/GamHistosFill_mc_2023P8-BPix_w4.root" : "rootfiles/Summer23_L2ResOnly/gamjet_all/GamHistosFill_mc_2023P8_w4.root","READ"); // Summer23 L2Res_V1
+  // fgm = new TFile(run=="2023D" ? "rootfiles/Summer23_L2ResOnly/gamjet_all/GamHistosFill_mc_2023P8-BPix_w4.root" : "rootfiles/Summer23_L2ResOnly/gamjet_all/GamHistosFill_mc_2023P8_w4.root","READ"); // Summer23 L2Res_V1
+  // fgm = new TFile(Form("../dijet/rootfiles/jmenano_mc_cmb_v22ul16flatmc.root"),"READ"); // Summer23 L2Res_V1
+  fgm = new TFile(run=="2023D" ? "/work/mmalucch/L2Res_inputs/no_reg/gam/GamHistosFill_mc_2023P8-BPix_tot_23.root" : "/work/mmalucch/L2Res_inputs/no_reg/gam/GamHistosFill_mc_2023P8-BPix_tot_23.root","READ"); // Summer23 L2Res_V1
   assert(fgm && !fgm->IsZombie());
-  
+
   TDirectory *dg = fg->GetDirectory("Gamjet2");
   TDirectory *dgm = fgm->GetDirectory("Gamjet2");
 
+  // TDirectory *dg = fg->GetDirectory("Dijet2");
+  // TDirectory *dgm = fgm->GetDirectory("Dijet2");
+
   // Load dijet
   TFile *fd(0), *fdm(0);
-  fd = new TFile(Form("rootfiles/Summer23_L2ResOnly/jmenano_data_cmb_%s_JME_v39_noRwPU_noSmearJets_25Feb2024_L2Res_v1.root",cr),"READ"); // Summer23 L2Res_V1
+  // fd = new TFile(Form("rootfiles/Summer23_L2ResOnly/jmenano_data_cmb_%s_JME_v39_noRwPU_noSmearJets_25Feb2024_L2Res_v1.root",cr),"READ"); // Summer23 L2Res_V1
+  // fd = new TFile(Form("../dijet/rootfiles/jmenano_data_cmb_v22ul16.root"),"READ"); // Summer23 L2Res_V1
+  fd = new TFile(Form("/work/mmalucch/L2Res_inputs/no_reg/dijet/jmenano_data_cmb_%s_ZB_v38_Summer23MG_NoL2L3Res_Off_reweight_jets_test2.root",cr),"READ"); // Summer23 L2Res_V1
   assert(fd && !fd->IsZombie());
   //
-  fdm = new TFile(Form("rootfiles/Summer23_L2ResOnly/jmenano_mc_cmb_Summer23MG%s_v39_noRwPU_noSmearJets_25Feb2024_L2Res_v1.root",run=="2023D" ? "BPix" : ""),"READ");
+  // fdm = new TFile(Form("rootfiles/Summer23_L2ResOnly/jmenano_mc_cmb_Summer23MG%s_v39_noRwPU_noSmearJets_25Feb2024_L2Res_v1.root",run=="2023D" ? "BPix" : ""),"READ");
+  // fdm = new TFile(Form("../dijet/rootfiles/jmenano_mc_cmb_v22ul16flatmc.root"),"READ");
+  fdm = new TFile(Form("/work/mmalucch/L2Res_inputs/no_reg/dijet/jmenano_mc_cmb_Summer23MG%s_v38_Summer23MG_NoL2L3Res_Off_reweight_jets_test2.root",run=="2023D" ? "BPix" : ""),"READ");
   assert(fdm && !fdm->IsZombie());
 
   TDirectory *dd = fd->GetDirectory("Dijet2");
   TDirectory *ddm = fdm->GetDirectory("Dijet2");
-  
+
   // Get the TProfile2D inputs. Z+jet, gam+jet, 3x dijet
-  
+
   // Z+jet: x:eta, y:pT,avp (others p2m0tc for pT,tag, p2m0pf for pT,probe )
   TProfile2D *p2z = (TProfile2D*)dz->Get("p2m0tc"); assert(p2z);
   TProfile2D *p2zm = (TProfile2D*)dzm->Get("p2m0tc"); assert(p2zm);
@@ -299,7 +317,7 @@ void L2Res() {
   p2p = (TProfile2D*)f->Get(Form("p2m0pf_dijet_data_%s",cr)); assert(p2p);
   p2pm = (TProfile2D*)f->Get(Form("p2m0pf_dijet_mc_%s",cm)); assert(p2pm);
   p2d = (TProfile2D*)f->Get(Form("p2m0ab_dijet_data_%s",cr)); assert(p2d);
-  p2dm = (TProfile2D*)f->Get(Form("p2m0ab_dijet_mc_%s",cm)); assert(p2dm);  
+  p2dm = (TProfile2D*)f->Get(Form("p2m0ab_dijet_mc_%s",cm)); assert(p2dm);
   */
   // Step 0. Extract barrel reference to normalize it out later
   TProfile *p13zm(0), *p13gm(0), *p13dm(0), *p13jm(0), *p13pm(0);
@@ -315,10 +333,10 @@ void L2Res() {
   l->SetLineStyle(kDashed);
   l->SetLineColor(kGray+1);
   l->DrawLine(15,1,3500,1);
-  
+
   TLatex *tex = new TLatex();
   tex->SetNDC(); tex->SetTextSize(0.045);
-  
+
   TLegend *leg13 = tdrLeg(0.20,0.90,0.45,0.90);
   _leg = leg13;
 
@@ -332,7 +350,7 @@ void L2Res() {
   p13jm = drawPt(p2jm,etamin,etamax,"HISTE",kNone,kGreen+2);
   p13pm = drawPt(p2pm,etamin,etamax,"HISTE",kNone,kOrange+2);
   p13dm = drawPt(p2dm,etamin,etamax,"HISTE",kNone,kBlack);
-  
+
   p13z = drawPt(p2z,etamin,etamax,"Pz",kFullSquare,kRed,"Z");
   p13g = drawPt(p2g,etamin,etamax,"Pz",kFullCircle,kBlue,"#gamma");
   p13j = drawPt(p2j,etamin,etamax,"Pz",kFullDiamond,kGreen+2,"Tag");
@@ -340,16 +358,16 @@ void L2Res() {
   p13d = drawPt(p2d,etamin,etamax,"Pz",kOpenDiamond,kBlack,"Dijet");
 
   tex->DrawLatex(0.50,0.85,Form("[%1.3f,%1.3f]",eta1,eta2));
-  
+
   c13->SaveAs(Form("pdf/L2Res/vsPt/L2Res_vsPt_%04d_%04d_%s_%s.pdf",
 		  int(1000.*eta1),int(1000.*eta2),cr,"c13"));
-  
+
   // Create giant canvas for all eta bins (7*3=21; more in the future)
   int nxy = p2d->GetNbinsX();
   TCanvas *cx = new TCanvas("cx","cx",7*250,3*250);
   cx->Divide(7,3,0,0);
   TH2D *h2jes = p2d->ProjectionXY("h2jes"); h2jes->Reset();
-  
+
   // Loop over the ieta bins
   vector<TF1*> vf1(p2d->GetNbinsX()+1);
   TH1D *hmin = p2d->ProjectionX(Form("hmin_%s",cr)); hmin->Reset();
@@ -361,7 +379,7 @@ void L2Res() {
     double eta1 = p2d->GetXaxis()->GetBinLowEdge(ieta);
     double eta2 = p2d->GetXaxis()->GetBinLowEdge(ieta+1);
   // (No indent here for the resf of the loop, maybe function call later)
-    
+
   TH1D *h1 = tdrHist("h1","JES",0.65,1.85);
   lumi_136TeV = Form("%s - %s",cr,cm);
   extraText = "Private";
@@ -391,11 +409,11 @@ void L2Res() {
   pd = drawPt(p2d,etamin,etamax,"Pz",kOpenDiamond,kBlack,"Dijet");
 
   tex->DrawLatex(0.50,0.85,Form("[%1.3f,%1.3f]",eta1,eta2));
-  
+
   c1->SaveAs(Form("pdf/L2Res/vsPt/L2Res_vsPt_%04d_%04d_%s_%s.pdf",
 		  int(1000.*eta1),int(1000.*eta2),cr,"c1"));
 
-  
+
   // Step 2. Project profile to histogram, normalize by |eta|<1.3
   TH1D *h2 = tdrHist("h2","Rel. JES",0.65,1.85);
   TCanvas *c2 = tdrCanvas("c2",h2,8,33,kSquare);
@@ -404,7 +422,7 @@ void L2Res() {
   l->DrawLine(15,1,3500,1);
 
   leg1->Draw("SAME");
-  
+
   TH1D *hzm, *hgm, *hdm, *hjm, *hpm;
   hzm = drawNormPt(pzm,p13zm,"HISTE",kNone,kRed);
   hgm = drawNormPt(pgm,p13gm,"HISTE",kNone,kBlue);
@@ -432,7 +450,7 @@ void L2Res() {
   l->DrawLine(15,1,3500,1);
 
   leg1->Draw("SAME");
-  
+
   TH1D *hzr, *hgr, *hdr, *hjr, *hpr;
   hzr = drawRatio(pz->ProjectionX(),pzm,"Pz",kFullSquare,kRed);
   hgr = drawRatio(pg->ProjectionX(),pgm,"Pz",kFullCircle,kBlue);
@@ -441,7 +459,7 @@ void L2Res() {
   hdr = drawRatio(pd->ProjectionX(),pdm,"Pz",kOpenDiamond,kBlack);
 
   tex->DrawLatex(0.50,0.85,Form("[%1.3f,%1.3f]",eta1,eta2));
-  
+
   c3->SaveAs(Form("pdf/L2Res/vsPt/L2Res_vsPt_%04d_%04d_%s_%s.pdf",
 		  int(1000.*eta1),int(1000.*eta2),cr,"c3"));
 
@@ -453,7 +471,7 @@ void L2Res() {
   l->DrawLine(15.,1,3500.,1);
 
   leg1->Draw("SAME");
-	     
+
   TH1D *hzrn, *hgrn, *hdrn, *hjrn, *hprn;
   hzrn = drawRatio(hz,hzm,"Pz",kFullSquare,kRed);
   hgrn = drawRatio(hg,hgm,"Pz",kFullCircle,kBlue);
@@ -543,10 +561,10 @@ void L2Res() {
       }
     }
   }
-  
+
   // Keep track of log-lin+1/x for text files
   vf1[ieta-1] = f2;
-  
+
   f0->Draw("SAME"); f0->SetLineColor(kMagenta+2); f0->SetLineStyle(kDashed);
   f1->Draw("SAME"); f1->SetLineColor(kBlue);
   f2->Draw("SAME"); f2->SetLineColor(kGreen+1);
@@ -554,10 +572,10 @@ void L2Res() {
   f4->Draw("SAME"); f4->SetLineColor(kRed);
 
   tex->DrawLatex(0.50,0.85,Form("[%1.3f,%1.3f]",eta1,eta2));
-  
+
   c5->SaveAs(Form("pdf/L2Res/vsPt/L2Res_vsPt_%04d_%04d_%s_%s.pdf",
 		  int(1000.*eta1),int(1000.*eta2),cr,"c5"));
-  
+
 
   // Step 6. Also draw final results into a giant canvas
   cx->cd(ieta);
@@ -586,7 +604,7 @@ void L2Res() {
   f3->Draw("SAME");
   f4->Draw("SAME");
   f2->Draw("SAME");
-  
+
   mg->Draw();
 
   if (ieta==1 || ieta==nxy) leg1->Draw("SAME");
@@ -604,17 +622,17 @@ void L2Res() {
     double jes1 = f2->Eval(pt); //loglin
     //double jes = jes4; // quadlog+1/x
     double jes = jes2; // loglin+1/x
-    double ejes = sqrt(pow(jes1-jes,2) + pow(jes2-jes,2) + 
+    double ejes = sqrt(pow(jes1-jes,2) + pow(jes2-jes,2) +
 		       pow(jes3-jes,2) + pow(jes4-jes,2));
     if (emax1 < 13600.*0.5) {
       h2jes->SetBinContent(ieta, ipt, jes);
-      h2jes->SetBinError(ieta, ipt, ejes); 
+      h2jes->SetBinError(ieta, ipt, ejes);
     }
   }
   hmin->SetBinContent(ieta, f2->Eval(10.));
   hmax->SetBinContent(ieta, f2->Eval(6800./cosh(eta1)));
 
-  
+
   // Rename to avoid loop leakage and errors
   h1->SetName(Form("h1pt_%s_%d",cr,ieta));
   h2->SetName(Form("h2pt_%s_%d",cr,ieta));
@@ -622,13 +640,13 @@ void L2Res() {
   h4->SetName(Form("h4pt_%s_%d",cr,ieta));
   h5->SetName(Form("h5t_%s_%d",cr,ieta));
   h6->SetName(Form("h6t_%s_%d",cr,ieta));
-  
+
   f0->SetName(Form("f0pt_%s_%d",cr,ieta));
   f1->SetName(Form("f1pt_%s_%d",cr,ieta));
   f2->SetName(Form("f2pt_%s_%d",cr,ieta));
   f3->SetName(Form("f3pt_%s_%d",cr,ieta));
   f4->SetName(Form("f4pt_%s_%d",cr,ieta));
-  
+
   c1->SetName(Form("c1pt_%s_%d",cr,ieta));
   c2->SetName(Form("c2pt_%s_%d",cr,ieta));
   c3->SetName(Form("c3pt_%s_%d",cr,ieta));
@@ -659,7 +677,7 @@ void L2Res() {
   TLegend *legy0 = tdrLeg(0.20,0.20,0.45,0.20+2*0.045);
   legy0->AddEntry(hmax,"E < #sqrt{s}/2","FL");
   legy0->AddEntry(hmin,"p_{T} > 10 GeV","FL");
-  
+
   TH1D *hy15, *hy30, *hy100, *hy300, *hy1000, *hy3000;
   hy100  = drawH2JES(h2jes,100., "HISTE][",kNone,kGreen+2);
   hy100->SetLineWidth(3);
@@ -677,7 +695,7 @@ void L2Res() {
   legy->AddEntry(hy300, "p_{T} = 300 GeV", "PLE");
   legy->AddEntry(hy1000,"p_{T} = 1000 GeV","PLE");
   legy->AddEntry(hy3000,"p_{T} = 3000 GeV","PLE");
-  
+
   cy->SaveAs(Form("pdf/L2res/L2Res_Summary_%s.pdf",cr));
   cy->SetName(Form("cy_%s",cr));
 
@@ -708,7 +726,7 @@ void L2Res() {
     ftxt << endl;
   }
 
-  
+
   // Loop over gamjet pT bins for plotting
   for (int ipt = 1; ipt != p2g->GetNbinsY()+1; ++ipt) {
     double ptmin = p2g->GetYaxis()->GetBinCenter(ipt);
@@ -717,7 +735,7 @@ void L2Res() {
     double pt2 = p2g->GetYaxis()->GetBinLowEdge(ipt+1);
   // (No indent here for the resf of the loop, maybe function call later)
 
-    
+
   // Step 1. Slice pT, draw response vs eta. No other manipulation yet
   TH1D *h1 = tdrHist("h1","JES",0.3,1.5,"|#eta|",0,5.2);
   lumi_136TeV = Form("%s - %s",cr,cm);
@@ -731,7 +749,7 @@ void L2Res() {
 
   TLegend *leg1 = tdrLeg(0.20,0.90,0.45,0.90);
   _leg = leg1;
-  
+
   TProfile *pzm, *pgm, *pdm, *pjm, *ppm;
   pzm = drawEta(p2zm,ptmin,ptmax,"HISTE",kNone,kRed);
   pgm = drawEta(p2gm,ptmin,ptmax,"HISTE",kNone,kBlue);
@@ -748,7 +766,7 @@ void L2Res() {
 
   c1->SaveAs(Form("pdf/L2Res/vsEta/L2Res_vsEta_%04d_%04d_%s_%s.pdf",
 		  int(pt1),int(pt2),cr,"c1"));
-    
+
 
   // Step 2. Project profile to histogram, normalize by |eta|<1.3
   TH1D *h2 = tdrHist("h2","Rel. JES",0.3,1.5,"|#eta|",0,5.2);
@@ -757,7 +775,7 @@ void L2Res() {
   l->DrawLine(0,1,5.2,1);
 
   leg1->Draw("SAME");
-  
+
   TH1D *hzm, *hgm, *hdm, *hjm, *hpm;
   hzm = drawNormEta(pzm,"HISTE",kNone,kRed);
   hgm = drawNormEta(pgm,"HISTE",kNone,kBlue);
@@ -774,8 +792,8 @@ void L2Res() {
 
   c2->SaveAs(Form("pdf/L2Res/vsEta/L2Res_vsEta_%04d_%04d_%s_%s.pdf",
 		  int(pt1),int(pt2),cr,"c2"));
-    
-  
+
+
   // Step 3. Draw data/MC ratio before normalization
   TH1D *h3 = tdrHist("h3","JES Data/MC",0.3,1.5,"|#eta|",0,5.2);
   TCanvas *c3 = tdrCanvas("c3",h3,8,33,kSquare);
@@ -783,7 +801,7 @@ void L2Res() {
   l->DrawLine(0,1,5.2,1);
 
   leg1->Draw("SAME");
-  
+
   TH1D *hzr, *hgr, *hdr, *hjr, *hpr;
   hzr = drawRatio(pz->ProjectionX(),pzm,"Pz",kFullSquare,kRed);
   hgr = drawRatio(pg->ProjectionX(),pgm,"Pz",kFullCircle,kBlue);
@@ -793,8 +811,8 @@ void L2Res() {
 
   c3->SaveAs(Form("pdf/L2Res/vsEta/L2Res_vsEta_%04d_%04d_%s_%s.pdf",
 		  int(pt1),int(pt2),cr,"c3"));
-  
-  
+
+
   // Step 4. Draw data/MC ratio of normalized JES
   TH1D *h4 = tdrHist("h4","Rel. JES Data/MC",0.3,1.5,"|#eta|",0,5.2);
   TCanvas *c4 = tdrCanvas("c4",h4,8,33,kSquare);
@@ -802,7 +820,7 @@ void L2Res() {
   l->DrawLine(0,1,5.2,1);
 
   leg1->Draw("SAME");
-	     
+
   TH1D *hzrn, *hgrn, *hdrn, *hjrn, *hprn;
   hzrn = drawRatio(hz,hzm,"Pz",kFullSquare,kRed);
   hgrn = drawRatio(hg,hgm,"Pz",kFullCircle,kBlue);
@@ -818,7 +836,7 @@ void L2Res() {
   h2->SetName(Form("h2_%s_%d",cr,ipt));
   h3->SetName(Form("h3_%s_%d",cr,ipt));
   h4->SetName(Form("h4_%s_%d",cr,ipt));
-  
+
   c1->SetName(Form("c1_%s_%d",cr,ipt));
   c2->SetName(Form("c2_%s_%d",cr,ipt));
   c3->SetName(Form("c3_%s_%d",cr,ipt));

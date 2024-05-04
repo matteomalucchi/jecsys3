@@ -103,10 +103,10 @@ void reprocess(string epoch="") {
 
   setEpoch(epoch);
   TString tepoch = TString(epoch);
-  
+
   // Set TDR style to have correct graphical settings when storing graphs
   setTDRStyle();
- 
+
   TDirectory *curdir = gDirectory;
 
   const char *cep = epoch.c_str();
@@ -124,7 +124,7 @@ void reprocess(string epoch="") {
     fz = new TFile(Form("%s/jme_bplusZ_%s_Zmm_sync_v53.root",
 			cdzul,epoch.c_str()),"READ");
   }
-  
+
   //const char *cdz58p1 = "rootfiles/Sami_20230912"; // v58p1
   // v66 files used for 22Sep2023_V3 JECs
   if (epoch=="Run22CD") {
@@ -142,17 +142,20 @@ void reprocess(string epoch="") {
   if (epoch=="Run23C123") {
     //fz = new TFile("rootfiles/jme_bplusZ_2023C123_Zmm_sync_v66.root","READ");
     //fz = new TFile("rootfiles/Summer23_noL2L3Res/jme_bplusZ_2023Cv123_Zmm_sync_v69.root","READ"); // Summer23
-    fz = new TFile("rootfiles/Summer23_L2ResOnly/jme_bplusZ_2023Cv123_Zmm_sync_v70.root","READ"); // Summer23 L2Res_V1
+    // fz = new TFile("rootfiles/Summer23_L2ResOnly/jme_bplusZ_2023Cv123_Zmm_sync_v70.root","READ"); // Summer23 L2Res_V1
+    fz = new TFile("/work/mmalucch/L2Res_inputs/no_reg/zb/jme_bplusZ_merged_vX_run2023Cv123.root","READ"); // Summer23 L2Res_V1
   }
   if (epoch=="Run23C4") {
     //fz = new TFile("rootfiles/jme_bplusZ_2023C4_Zmm_sync_v66.root","READ");
     //fz = new TFile("rootfiles/Summer23_noL2L3Res/jme_bplusZ_2023Cv4_Zmm_sync_v69.root","READ");
-    fz = new TFile("rootfiles/Summer23_L2ResOnly/jme_bplusZ_2023Cv4_Zmm_sync_v70.root","READ"); // Summer23 L2Res_V1
+    // fz = new TFile("rootfiles/Summer23_L2ResOnly/jme_bplusZ_2023Cv4_Zmm_sync_v70.root","READ"); // Summer23 L2Res_V1
+    fz = new TFile("/work/mmalucch/L2Res_inputs/no_reg/zb/jme_bplusZ_merged_vX_run2023Cv4.root","READ"); // Summer23 L2Res_V1
   }
   if (epoch=="Run23D") {
     //fz = new TFile("rootfiles/jme_bplusZ_2023D_Zmm_sync_v66.root","READ");
     //fz = new TFile("rootfiles/Summer23_noL2L3Res/jme_bplusZ_2023D_Zmm_sync_v69.root","READ");
-    fz = new TFile("rootfiles/Summer23_L2ResOnly/jme_bplusZ_2023D_Zmm_sync_v70.root","READ"); // Summer23 L2Res_V1
+    // fz = new TFile("rootfiles/Summer23_L2ResOnly/jme_bplusZ_2023D_Zmm_sync_v70.root","READ"); // Summer23 L2Res_V1
+    fz = new TFile("/work/mmalucch/L2Res_inputs/no_reg/zb/jme_bplusZ_merged_vX_run2023D.root","READ"); // Summer23 L2Res_V1
   }
   if (epoch=="Run3") {
     //fz = new TFile(Form("%s/jme_bplusZ_Run3_Zmm_sync_v59.root",cdz58p1),"READ"); // Sami's combo
@@ -160,10 +163,10 @@ void reprocess(string epoch="") {
   }
 
   assert(fz && !fz->IsZombie());
-  
-  TFile *fmz = fz; 
+
+  TFile *fmz = fz;
   assert(fmz && !fmz->IsZombie());
-  
+
   string sr = "eta_00_13";
   const char *cr = sr.c_str();
   const char *cl = CorLevel.c_str();
@@ -257,10 +260,12 @@ void reprocess(string epoch="") {
     //fp = new TFile(Form("rootfiles/Summer23_noL2L3Res/GamHistosRatio_%s_P8_w2.root",mp[epoch]),"READ"); // Summer23 no QCD
     //fp = new TFile(Form("../gamjet/rootfiles/GamHistosRatio_%s_P8QCD_w4.root",mp[epoch]),"READ"); // Summer23 no QCD with L2Res
     //fp = new TFile(Form("rootfiles/Summer23_L2ResOnly/GamHistosRatio_%s_P8%s-noQCD_w4.root",mp[epoch],epoch=="Run23D" ? "BPix" : ""),"READ"); // Summer23 L2Res_V1 (noQCD)
-    fp = new TFile(Form("rootfiles/Summer23_L2ResOnly/GamHistosRatio_%s_P8%sQCD_w6.root",mp[epoch],epoch=="Run23D" ? "BPix" : ""),"READ"); // Summer23 L2Res_V1 (withQCD)
+    // fp = new TFile(Form("rootfiles/Summer23_L2ResOnly/GamHistosRatio_%s_P8%sQCD_w6.root",mp[epoch],epoch=="Run23D" ? "BPix" : ""),"READ"); // Summer23 L2Res_V1 (withQCD)
+    fp = new TFile(Form("/work/mmalucch/L2Res_inputs/no_reg/gam/GamHistosRatio_%s_P8%sQCD_tot_23.root",mp[epoch],epoch=="Run23D" ? "BPix" : ""),"READ"); // Summer23 L2Res_V1 (withQCD)
   }
   else {
-    fp = new TFile(Form("../gamjet/rootfiles/GamHistosRatio_%s_P8QCD_v32.root",mp[epoch]),"READ"); // L2L3Res_V3
+    // fp = new TFile(Form("../gamjet/rootfiles/GamHistosRatio_%s_P8QCD_v32.root",mp[epoch]),"READ"); // L2L3Res_V3
+    fp = new TFile(Form("/work/mmalucch/L2Res_inputs/no_reg/gam/GamHistosRatio_%s_P8QCD_tot_23.root",mp[epoch]),"READ"); // L2L3Res_V3
     assert(false);
   }
   assert(fp && !fp->IsZombie());
@@ -350,8 +355,10 @@ void reprocess(string epoch="") {
   // 22Sep2023_V3 used v35a files
   //TFile *fmjd = new TFile(Form("rootfiles/Summer23_noL2L3Res/jmenano_data_cmb_%s_JME_v36_Summer23.root",mmjd[epoch]),"READ"); // Summer23_V1
   //TFile *fmjm = new TFile(Form("rootfiles/Summer23_noL2L3Res/jmenano_mc_cmb_%s_v36_Summer23.root",mmjm[epoch]),"READ"); // Summer23_V1
-  TFile *fmjd = new TFile(Form("rootfiles/Summer23_L2ResOnly/jmenano_data_cmb_%s_JME_v39_noRwPU_noSmearJets_25Feb2024_L2Res_v1.root",mmjd[epoch]),"READ"); // Summer23_V1
-  TFile *fmjm = new TFile(Form("rootfiles/Summer23_L2ResOnly/jmenano_mc_cmb_%s_v39_noRwPU_noSmearJets_25Feb2024_L2Res_v1.root",mmjm[epoch]),"READ"); // Summer23 L2Res_V1
+  // TFile *fmjd = new TFile(Form("rootfiles/Summer23_L2ResOnly/jmenano_data_cmb_%s_JME_v39_noRwPU_noSmearJets_25Feb2024_L2Res_v1.root",mmjd[epoch]),"READ"); // Summer23_V1
+  // TFile *fmjm = new TFile(Form("rootfiles/Summer23_L2ResOnly/jmenano_mc_cmb_%s_v39_noRwPU_noSmearJets_25Feb2024_L2Res_v1.root",mmjm[epoch]),"READ"); // Summer23 L2Res_V1
+  TFile *fmjd = new TFile(Form("/work/mmalucch/L2Res_inputs/no_reg/dijet/jmenano_data_cmb_%s_ZB_v38_Summer23MG_NoL2L3Res_Off_reweight_jets_test2.root",mmjd[epoch]),"READ"); // Summer23_V1
+  TFile *fmjm = new TFile(Form("/work/mmalucch/L2Res_inputs/no_reg/dijet/jmenano_mc_cmb_%s_v38_Summer23MG_NoL2L3Res_Off_reweight_jets_test2.root",mmjm[epoch]),"READ"); // Summer23 L2Res_V1
   //
   //TFile *fmjd = new TFile(Form("../dijet/rootfiles/jmenano_data_cmb_%s_JME_v35a.root",mmjd[epoch]),"READ"); // L2L3Res_V3
   //TFile *fmjm = new TFile(Form("../dijet/rootfiles/jmenano_mc_out_%s_v35a.root",mmjm[epoch]),"READ"); // L2L3Res_V3
@@ -359,7 +366,7 @@ void reprocess(string epoch="") {
   //TFile *fmjd = new TFile(Form("../dijet/rootfiles/jmenano_data_cmb_%s_JME_v35_19Dec2023.root",mmjd[epoch]),"READ"); // 19Dec2023
   //TFile *fmjm = new TFile(Form("../dijet/rootfiles/jmenano_mc_cmb_%s_v35_19Dec2023.root",mmjm[epoch]),"READ"); // 19Dec2023 bugged
   //TFile *fmjm = new TFile(Form("../dijet/rootfiles/jmenano_mc_out_%s_v35a.root",mmjm[epoch]),"READ"); // 19Dec2023 using 22Sep2023
-  
+
   assert(fmjd && !fmjd->IsZombie());
   assert(fmjm && !fmjm->IsZombie());
 
@@ -371,7 +378,7 @@ void reprocess(string epoch="") {
   //if (epoch=="Run23C4")
   //fijd = new TFile(Form("../dijet/rootfiles/jmenano_data_cmb_%s_JME_v35_19Dec2023.root",mmjd["Run23C123"]),"READ"); // 19Dec2023
   //TFile *fijm = new TFile(Form("../dijet/rootfiles/jmenano_mc_out_%s_v35a.root",mmjm[epoch]),"READ"); // 19Dec2023 using 22Sep2023
-  
+
   assert(fmjd && !fmjd->IsZombie());
   assert(fmjm && !fmjm->IsZombie());
 
@@ -425,16 +432,16 @@ void reprocess(string epoch="") {
     rename["zjet"]["mpfn"] = "rmpfjetn";
     rename["zjet"]["mpfu"] = "rmpfuncl";
     rename["zjet"]["rho"] = "rho";
-    
+
     rename["zjet"]["rjet"] = "rbal";
     rename["zjet"]["gjet"] = "rgenjet1";
   }
 
   rename["gamjet"]["ratio"] = "";
-  rename["gamjet"]["data"] = "_DATA"; 
-  rename["gamjet"]["mc"] = "_MC"; 
+  rename["gamjet"]["data"] = "_DATA";
+  rename["gamjet"]["mc"] = "_MC";
   rename["gamjet"]["mpfchs"] = "resp_MPFchs";
-  rename["gamjet"]["mpfchs1"] = "resp_MPFchs"; 
+  rename["gamjet"]["mpfchs1"] = "resp_MPFchs";
   rename["gamjet"]["ptchs"] = "resp_DBchs";
   rename["gamjet"]["counts"] = "RawNEvents_data_vs_pt";
   //
@@ -455,7 +462,7 @@ void reprocess(string epoch="") {
   rename["gjet"]["nhf"] = "neHEF";
   rename["gjet"]["cef"] = "chEmEF";
   rename["gjet"]["muf"] = "muEF";
-  
+
   rename["multijet"]["mpfchs"] = "pm0m";
   rename["multijet"]["mpfchs1"] = "pm0m";
   rename["multijet"]["ptchs"] = "pm2m";
@@ -480,7 +487,7 @@ void reprocess(string epoch="") {
   rename["multijet"]["mpfu"] = "pmum";
   //
   rename["multijet"]["crecoil"] = "pcrecoilm";
-  
+
   // color and style codes
   map<string, map<string, int> > style;
 
@@ -492,7 +499,7 @@ void reprocess(string epoch="") {
   style["jetz_mc"]["mpf1"] = kOpenTriangleUp;
   style["jetz_mc"]["mpfn"] = kOpenTriangleUp;
   style["jetz_mc"]["mpfu"] = kOpenTriangleDown;
-  
+
   style["zjet"]["mpfchs1"] = kFullDiamond;
   style["zjet"]["ptchs"] = kOpenDiamond;
   style["zjet"]["chf"] = kFullCircle;
@@ -555,7 +562,7 @@ void reprocess(string epoch="") {
   color["jetz_mpf1"] = kRed;
   color["jetz_mpfn"] = kGreen+2;
   color["jetz_mpfu"] = kBlue;
-  
+
   color["zjet"] = kRed+1;
   color["zjet_muf"] = kMagenta+1;
   color["zjet_mpf1"] = kRed;
@@ -630,7 +637,7 @@ void reprocess(string epoch="") {
   types.push_back("ptchs");
   // for pfjet only (activate puf, cef, muf later?)
   if (tepoch.Contains("UL") ||
-      epoch=="RunCD" || 
+      epoch=="RunCD" ||
       epoch=="Run22C" || epoch=="Run22D" || epoch=="Run22CD" ||
       epoch=="Run22E" || epoch=="Run22F" || epoch=="Run22G" ||
       epoch=="Run22FG" || epoch=="Run22EFG" ||
@@ -651,7 +658,7 @@ void reprocess(string epoch="") {
   types.push_back("mpfu");
   types.push_back("crecoil");
   if (tepoch.Contains("UL") ||
-      epoch=="RunCD" || 
+      epoch=="RunCD" ||
       epoch=="Run22C" || epoch=="Run22D" || epoch=="Run22CD" ||
       epoch=="Run22E" || epoch=="Run22F" || epoch=="Run22G" ||
       epoch=="Run22FG" || epoch=="Run22EFG" ||
@@ -690,28 +697,28 @@ void reprocess(string epoch="") {
   etas.push_back(make_pair<double,double>(0,1.305));
   //etas.push_back(make_pair<double,double>(0,2.500));
   // Narrow eta bins for L2Res
-  
+
   /*
-  etas.push_back(make_pair<double,double>(0.000,0.261)); 
-  etas.push_back(make_pair<double,double>(0.261,0.522)); 
+  etas.push_back(make_pair<double,double>(0.000,0.261));
+  etas.push_back(make_pair<double,double>(0.261,0.522));
   // PATCH!! V15 gamjet combines 0-0.5 bins
-  etas.push_back(make_pair<double,double>(0.522,0.783)); 
-  etas.push_back(make_pair<double,double>(0.783,1.044)); 
-  etas.push_back(make_pair<double,double>(1.044,1.305)); 
-  // PATCH!! V15 gamjet has 0.8-1.1? 
-  etas.push_back(make_pair<double,double>(1.305,1.479)); 
-  etas.push_back(make_pair<double,double>(1.479,1.653)); 
-  // PATCH!! V15 gamjet has 1.3-1.7? 
-  etas.push_back(make_pair<double,double>(1.653,1.930)); 
-  etas.push_back(make_pair<double,double>(1.930,2.172)); 
-  etas.push_back(make_pair<double,double>(2.172,2.322)); 
-  etas.push_back(make_pair<double,double>(2.322,2.500)); 
-  etas.push_back(make_pair<double,double>(2.500,2.650)); 
-  etas.push_back(make_pair<double,double>(2.650,2.853)); 
-  etas.push_back(make_pair<double,double>(2.853,2.964)); 
-  etas.push_back(make_pair<double,double>(2.964,3.139)); 
-  etas.push_back(make_pair<double,double>(3.139,3.489)); 
-  etas.push_back(make_pair<double,double>(3.489,3.839)); 
+  etas.push_back(make_pair<double,double>(0.522,0.783));
+  etas.push_back(make_pair<double,double>(0.783,1.044));
+  etas.push_back(make_pair<double,double>(1.044,1.305));
+  // PATCH!! V15 gamjet has 0.8-1.1?
+  etas.push_back(make_pair<double,double>(1.305,1.479));
+  etas.push_back(make_pair<double,double>(1.479,1.653));
+  // PATCH!! V15 gamjet has 1.3-1.7?
+  etas.push_back(make_pair<double,double>(1.653,1.930));
+  etas.push_back(make_pair<double,double>(1.930,2.172));
+  etas.push_back(make_pair<double,double>(2.172,2.322));
+  etas.push_back(make_pair<double,double>(2.322,2.500));
+  etas.push_back(make_pair<double,double>(2.500,2.650));
+  etas.push_back(make_pair<double,double>(2.650,2.853));
+  etas.push_back(make_pair<double,double>(2.853,2.964));
+  etas.push_back(make_pair<double,double>(2.964,3.139));
+  etas.push_back(make_pair<double,double>(3.139,3.489));
+  etas.push_back(make_pair<double,double>(3.489,3.839));
   etas.push_back(make_pair<double,double>(3.839,5.191));
 
   // Wide eta bins for L2L3Res closure
@@ -742,12 +749,12 @@ void reprocess(string epoch="") {
 
     // Loop over eta bins
     for (unsigned int ieta = 0; ieta != etas.size(); ++ieta) {
-      
+
       double eta1 = etas[ieta].first;
       double eta2 = etas[ieta].second;
       const char *dd0 = Form("eta%02.0f-%02.0f",eta1*10.,eta2*10.);
       cout << dd0 << endl << flush;
-      
+
       dout0->mkdir(dd0);
       assert(dout0->cd(dd0));
       TDirectory *dout = dout0->GetDirectory(dd0); assert(dout);
@@ -762,16 +769,16 @@ void reprocess(string epoch="") {
       h->SetMinimum(0.50);
       h->SetMaximum(1.50);
       h->Write();
-      
+
       // Loop over methods (MPF, pT balance)
       for (unsigned int itype = 0; itype != types.size(); ++itype) {
-	
+
 	string t = types[itype];
 	const char* tt = t.c_str();
 
 	// Loop over samples (Z+jet, gamma+jet, multijet, W>qq')
 	for (unsigned int iset = 0; iset != sets.size(); ++iset) {
-	
+
 	  string s = sets[iset];
 	  const char* ss = s.c_str();
 	  string sp = (rename[s]["parent"]!=0 ? rename[s]["parent"] : "");
@@ -789,10 +796,10 @@ void reprocess(string epoch="") {
 			 t=="cef"||t=="muf"||t=="puf");
 	  if (s=="incjet" && !isfrac) continue;
 
-	  bool isflavor = 
+	  bool isflavor =
 	    (s=="zi"  || s=="zb"  || s=="zc"  || s=="zq"  || s=="zg"||s=="zn")||
 	    (s=="gi"  || s=="gb"  || s=="gc"  || s=="gq"  || s=="gg"||s=="gn");
-	  bool isflavormc = 
+	  bool isflavormc =
 	    (s=="zii" || s=="zbi" || s=="zci" || s=="zqi"||s=="zgi"||s=="zni"||
 	     s=="zib" || s=="zbb" || s=="zcb" || s=="zqb"||s=="zgb"||s=="znb"||
 	     s=="zic" || s=="zbc" || s=="zcc" || s=="zqc"||s=="zgc"||s=="znc"||
@@ -821,7 +828,7 @@ void reprocess(string epoch="") {
 	  double alpha = 1.00;
 	  eta1 = etas[ieta].first; // reset to avoid trouble with below
 	  eta2 = etas[ieta].second; // reset to avoid trouble with below
-	  
+
 	  // Reconstruct naming scheme used in each of the files
 	  // If non-conventional naming schemes, patch here
 	  const char *c(0);
@@ -844,7 +851,7 @@ void reprocess(string epoch="") {
 		) {
 	      c = Form("%s/eta_%02.0f_%02.0f/%s%s_zmmjet_a%1.0f",
 		       rename[s][d],10*eta1,10*eta2,
-		       ((d=="data"||d=="ratio"||t=="counts") ? "" : 
+		       ((d=="data"||d=="ratio"||t=="counts") ? "" :
 			sPSWgtZ.c_str()),
 		       rename[s][t],100.*alpha);
 	      if (t=="rho")
@@ -897,7 +904,7 @@ void reprocess(string epoch="") {
 	    //if (d=="mc") // patch 22Sep2023, not 19Dec2023
 	    //c = Form("HLT_MC/Incjet/PFcomposition/p%s13",tt);//rename[s][t]);
 	  }
-	  
+
 	  assert(f);
 	  TObject *obj = f->Get(c);
 	  if (!obj) {
@@ -907,7 +914,7 @@ void reprocess(string epoch="") {
 	    cout << "Eta " << eta1 << " - " << eta2 <<  endl << flush;
 	  }
 	  if (t=="counts" && !obj) obj = hcounts;
-	  
+
 	  // Calculate data/MC ratio
 	  if ((s=="jetz" || s=="zjet" || sp=="zjet" || s=="multijet") &&
 	      d=="ratio" && (t=="mpfchs1"||t=="ptchs")) {
@@ -915,7 +922,7 @@ void reprocess(string epoch="") {
 	    TGraphErrors *gm = grs["mc"][t][s][ieta];
 	    assert(gd);
 	    assert(gm);
-	    
+
 	    TGraphErrors *g = tools::ratioGraphs(gd, gm);
 	    obj = (TObject*)g;
 	  }
@@ -928,7 +935,7 @@ void reprocess(string epoch="") {
 	    TGraphErrors *gm = grs["mc"][t][s][ieta];
 	    assert(gd);
 	    assert(gm);
-	    
+
 	    TGraphErrors *g = tools::diffGraphs(gd, gm);
 	    obj = (TObject*)g;
 	  }
@@ -938,10 +945,10 @@ void reprocess(string epoch="") {
 	    cout << "s="<<s<<", d="<<d<<", t="<<t<<endl<<flush;
 	  }
 	  assert(obj);
-	  
+
 	  // write out counts to jecdata.root (as TH1F)
 	  if (t=="counts") {
-	      
+
 	    assert(obj->InheritsFrom("TH1D") ||obj->InheritsFrom("TH1F"));
 	    dout->cd();
 	    TH1D *h = (TH1D*)obj;
@@ -957,7 +964,7 @@ void reprocess(string epoch="") {
 	      (t=="mpfchs1" || t=="ptchs" || ismpfc) &&
 	      rebinMultijet) {
 
-	    Double_t vx[] = 
+	    Double_t vx[] =
 	      {1, 5, 6, 8, 10, 12, 15, 18, 21, 24, 28, 32, 37, 43, 49,
 	       56, 64, 74, 84, 97, 114, 133, 153, 174, 196, 220, 245,
 	       272, 300, 330, 362, 395, 430, 468, 507, 548, 592, 638, 686,
@@ -967,14 +974,14 @@ void reprocess(string epoch="") {
 	       1248, 1497, 1784, 2116, 2500, 3273,  4252, 5492, 5777, 7000};
 	    // Photon+jet
   	    // 1000, 1200, 1450, 1750, 2100, 2500, 3000};
-	    
+
 	    const int nx = sizeof(vx)/sizeof(vx[0])-1;
-	    
+
 	    if (obj->InheritsFrom("TProfile")) {
 	      obj = ((TProfile*)obj)->Rebin(nx,Form("%s_%s_%s",ss,dd,tt),&vx[0]);
 	    }
 	  } // rebinMultijet
-	    
+
 	  // If data stored in TH2D instead of TGrapherrors, patch here
 	  // Patch for zjet that has PF fractions in TH2D (v24)
 	  if (obj->InheritsFrom("TH2")) {
@@ -986,7 +993,7 @@ void reprocess(string epoch="") {
 	  if (obj->InheritsFrom("TH1")) {
 	    obj = new TGraphErrors((TH1D*)obj);
 	  }
-	  
+
 	  // If data stored in TProfile instead of TGraphErrors, patch here
 	  // Patch for pfjet file that has TProfiles's instead of graphs
 	  // Patch for zjet file that has TProfiles instead of graphs
@@ -996,7 +1003,7 @@ void reprocess(string epoch="") {
 
 	  assert(obj->InheritsFrom("TGraphErrors"));
 	  TGraphErrors *g = (TGraphErrors*)obj;
-	    
+
 	  // Clean out empty points from TH1D->TGraphErrors conversion
 	  for (int i = g->GetN()-1; i != -1; --i) {
 	    assert(i<=g->GetN()-1);
@@ -1008,7 +1015,7 @@ void reprocess(string epoch="") {
 	  // for documenting it
 	  TGraphErrors *g_orig = (TGraphErrors*)g->Clone();
 	  g_orig->SetName(Form("%s_%s_a%1.0f",tt,ss,100.*alpha));
-	    
+
 	  // Select stable range and good statistics points for global fit
 	  for (int i = g->GetN()-1; i != -1; --i) {
 	    assert(i<=g->GetN()-1);
@@ -1032,7 +1039,7 @@ void reprocess(string epoch="") {
 		     (g->GetX()[i]<fijptmin || g->GetX()[i]>fijptmax))
 	      g->RemovePoint(i);
 	  } // for i
-	  
+
 	  // Mass corrections for Z+jet
 	  if (correctZMass && (s=="jetz" || s=="zjet") &&
 	      (d=="data" || d=="ratio") &&
@@ -1044,7 +1051,7 @@ void reprocess(string epoch="") {
 	      double k = f1mz->Eval(pt);
 	      g->SetPoint(i, g->GetX()[i], g->GetY()[i]*k);
 	      //if (correctUncert)
-	      //g->SetPointError(i, g->GetEX()[i], 
+	      //g->SetPointError(i, g->GetEX()[i],
 	      //		 sqrt(pow(g->GetEY()[i]*k,2) + ek*ek));
 	    }
 	  }
@@ -1080,7 +1087,7 @@ void reprocess(string epoch="") {
 	  g_orig->Write();
 
 	  dout->cd();
-	  
+
 	  // Set uniform naming scheme and graphical style
 	  g->SetName(Form("%s_%s_a%1.0f",tt,ss,100.*alpha));
 	  g->UseCurrentStyle(); // Basic TDR style
@@ -1134,7 +1141,7 @@ void reprocess(string epoch="") {
     const char *s, *s2;
     // Usual directory for text files
     const char *cd = "CondFormats/JetMETObjects/data";
-    
+
     // New JEC for plotting on the back and mcjec for softrad3.C
     // ** Also used as reference for CorLevel=="L1L2L3Res" **
     // So be careful when running minitools/createL2L3Res.C
@@ -1228,13 +1235,13 @@ void reprocess(string epoch="") {
     //add vjec here later to combine IOVs
 
     if (rp_debug) cout << "Loading reference JECs..." << endl << flush;
-    
+
     FactorizedJetCorrector *jecrun1, *jecrun2, *jecold(0);
 
     // Reference Run I and Run II JEC for plotting on the back
-    jecrun1 = getFJC("","","Winter14_V8_DATA_L2L3Residual_AK5PFchs"); 
-    jecrun2 = getFJC("","","Summer19UL18_RunD_V5_DATA_L2L3Residual_AK4PFchs"); 
-    
+    jecrun1 = getFJC("","","Winter14_V8_DATA_L2L3Residual_AK5PFchs");
+    jecrun2 = getFJC("","","Summer19UL18_RunD_V5_DATA_L2L3Residual_AK4PFchs");
+
     // Store old JEC for undoing it in global fit (JEC from closure files)
     // NB: I think 'jec' is now used instaed of 'jecold' so this may be obsolete
     //jecold = getFJC("","",Form("Winter22Run3_Run%s_V1_DATA_L2L3Residual","A"));
@@ -1377,7 +1384,7 @@ void reprocess(string epoch="") {
 
     // Loop over eta bins, but do JEC for data/MC ratio only
     for (unsigned int ieta = 0; ieta != etas.size(); ++ieta) {
-      
+
       assert(fout->cd("ratio"));
       TDirectory *dout1 = fout->GetDirectory("ratio"); assert(dout1);
       double eta1 = etas[ieta].first; double eta2 = etas[ieta].second;
@@ -1526,9 +1533,9 @@ void reprocess(string epoch="") {
 	  // old JEC
 	  double jes = 1./getJEC(jecold,eta,pt);
 
-	  double vall2l3res = val; // For closure test 
+	  double vall2l3res = val; // For closure test
 	  if(CorLevel=="L1L2L3Res") { //to get proper bands during closure test
-	    val /= jes; 
+	    val /= jes;
 	    jesrun1 /= jes;
 	    jesrun2 /= jes;
 	    jes /= jes;
@@ -1540,7 +1547,7 @@ void reprocess(string epoch="") {
 	  sumval += w*val;
 	  sumjes += w*jes;
 	  sumw += w; // sum weights only once
-	  
+
 	  // JEC uncertainties
 	  unc->setJetEta(eta);
 	  unc->setJetPt(pt);
@@ -1840,7 +1847,7 @@ void setEtaPtRho(FactorizedJetCorrector *jec, double eta, double pt,
 }
 
 Double_t funcCorrPt(Double_t *x, Double_t *p) {
-  
+
   double eta = p[0];
   double pt = x[0];
   double rho = p[1];

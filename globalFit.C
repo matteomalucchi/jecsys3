@@ -40,7 +40,7 @@ const bool debug = true;
 const bool saveROOT = false;
 const bool plotPF = false; // plot PF composition
 
-// Helper functions to draw fit uncertainty band for arbitrary TF1 
+// Helper functions to draw fit uncertainty band for arbitrary TF1
 Double_t fitError(Double_t *x, Double_t *p);
 Double_t jesFit(Double_t *x, Double_t *p);
 void jesFitter(Int_t& npar, Double_t* grad, Double_t& chi2, Double_t* par,
@@ -111,7 +111,7 @@ void globalFitEtaBin(double etamin, double etamax, string run, string version) {
 
   // Keep track of current working directory so plots don't disappear
   TDirectory *curdir = gDirectory;
-  
+
 
   // 1. Load input data sets
   ///////////////////////////
@@ -163,7 +163,7 @@ void globalFitEtaBin(double etamin, double etamax, string run, string version) {
     // Check if input dataset is whitelisted
     if (!whitelist.empty() && whitelist.find(name)==whitelist.end()) continue;
     if (string(name)=="") continue; // missing elements in dataset array
-    
+
     // Retrieve graph for input data
     TGraphErrors *g = (TGraphErrors*)deta->Get(name);
     if (!g) cout << "Input " << name << " not found." << endl << flush;
@@ -177,7 +177,7 @@ void globalFitEtaBin(double etamin, double etamax, string run, string version) {
       g2 = (TGraphErrors*)deta->Get(name2);
       assert(g2);
     }
-    
+
     // Patch HDM input from TH1D to graph [temporary]
     // => fix in softrad3.C and globalFitSyst.C (for hadw)
     if (TString(name).Contains("hdm_")) {
@@ -223,7 +223,7 @@ void globalFitEtaBin(double etamin, double etamax, string run, string version) {
     if (TString(name).Contains("jetz")) {
       scaleGraph(data.input, scaleJZ);
     }
-    
+
     // Multijet special
     if (g2) { //string(name2)!="") {
       data.input2 = (TGraphErrors*)g2->Clone(Form("%s_in2",name2));
@@ -239,7 +239,7 @@ void globalFitEtaBin(double etamin, double etamax, string run, string version) {
   // 2. Load input uncertainty sources
   ////////////////////////////////////
 
-  if (debug) cout << "Loading systematics" << endl << flush; 
+  if (debug) cout << "Loading systematics" << endl << flush;
 
   // Create listing and mapping of active uncertainty sources
   //set<string> sources;
@@ -266,7 +266,7 @@ void globalFitEtaBin(double etamin, double etamax, string run, string version) {
     TH1D *h = (TH1D*)dsys->Get(histname);
     if (!h) h = (TH1D*)dfsr->Get(histname);
     assert(h);
-  
+
     // Create fitSyst object
     fitSyst syst;
     syst.idx = msrcidx[name];
@@ -277,7 +277,7 @@ void globalFitEtaBin(double etamin, double etamax, string run, string version) {
     // Save fitSyst to list and map
     sources.insert(name);
     _msrc[syst.appliesTo].push_back(syst);
-  } // for i in sources  
+  } // for i in sources
 
 
   // 3. Load input fit shapes
@@ -294,7 +294,7 @@ void globalFitEtaBin(double etamin, double etamax, string run, string version) {
   set<string> shapes;
   map<string, int> mshapeidx;
   for (unsigned int i = 0; i != _gf_shapes.size(); ++i) {
-    
+
     string name       = _gf_shapes[i][0];
     string appliesTo  = _gf_shapes[i][1];
     string funcstring = _gf_shapes[i][2];
@@ -364,7 +364,7 @@ void globalFitEtaBin(double etamin, double etamax, string run, string version) {
   // Suppress output
   double printlevel = -1; // Suppress most output
   fitter->ExecuteCommand("SET PRINT", &printlevel, 1);
-  
+
   // Run fitter (multiple times if needed)
   const int nfit = 2;//1;
   cnt = 0;
@@ -412,7 +412,7 @@ void globalFitEtaBin(double etamin, double etamax, string run, string version) {
       ++ndt;
     }
   }
-  
+
   cout << endl;
   cout << "Listing global fit results for " << run << endl;
   cout << Form("  Used %d data points, %d fit parameters and %d nuisances.\n"
@@ -448,13 +448,13 @@ void globalFitEtaBin(double etamin, double etamax, string run, string version) {
 		   vpar[vs[i].idx], verr[vs[i].idx]) << endl;
     }
   } // for it in _msrc
-  
+
 
   // 5. Save results
   //////////////////
   deta->mkdir("run3");
   deta->cd("run3");
-  
+
   // Fit function(s) and error matrix
   _jesFit->SetRange(10.,6500.); // nice range
   _jesFit->SetNpx(6490.); // dense binning for log scale
@@ -462,7 +462,7 @@ void globalFitEtaBin(double etamin, double etamax, string run, string version) {
   const char *obs[nobs] = {"Rjet", "chf",    "nhf", "nef"};
   const int color[nobs] = {kBlack,  kRed, kGreen+2, kBlue};
   for (int i = 0; i != nobs; ++i) {
-    
+
     _obs = obs[i]; _jesFit->SetLineColor(color[i]);
     _jesFit->Write(Form("jesFit_%s",_obs.c_str()),TObject::kOverwrite);
   }
@@ -491,10 +491,10 @@ void globalFitEtaBin(double etamin, double etamax, string run, string version) {
     h->SetMarkerStyle(kFullCircle);
     h->Write(Form("hFit_%s",_obs.c_str()),TObject::kOverwrite);
   } // for i in nobs
-  
+
   // Fit functions as graphs with error band
   for (int i = 0; i != nobs; ++i) {
-    
+
     _obs = obs[i];
     TGraph *gr = new TGraph(_jesFit); // use graph to keep '_obs' setting
     TGraphErrors *gre = new TGraphErrors(gr->GetN());
@@ -522,7 +522,7 @@ void globalFitEtaBin(double etamin, double etamax, string run, string version) {
 
 // Separate drawing to factorize code and enable direct redrawing from file
 void globalFitDraw(string run, string version) {
-  
+
   setTDRStyle();
   TDirectory *curdir = gDirectory;
 
@@ -533,7 +533,7 @@ void globalFitDraw(string run, string version) {
   assert(f && !f->IsZombie());
 
   curdir->cd();
-  
+
   const char *p = "ratio/eta00-13/run3";
   TH1D *herr = (TH1D*)f->Get("ratio/eta00-13/herr"); assert(herr);
   TMatrixD *pemat = (TMatrixD*)f->Get(Form("%s/emat",p)); assert(pemat);
@@ -634,7 +634,7 @@ void globalFitDraw(string run, string version) {
     //}
     l->SetLineStyle(kDashed);
     l->DrawLine(15,1,4500,1);
-    
+
     //if (!TString(epoch).Contains("UL"))
     //leg2->AddEntry(l,"Run 3 avg.","L");
     //leg2->AddEntry(herr,"Total unc.","F");
@@ -665,10 +665,10 @@ void globalFitDraw(string run, string version) {
     TGraphErrors *gzljet(0);
     TGraphErrors *gzmjet(0);
     TGraphErrors *ggjet(0);
-  
+
     if (debug) cout << "Draw data" << endl << flush;
     for (unsigned int i = 0; i != _vdt.size(); ++i) {
-      
+
       TGraphErrors *gi = (TGraphErrors*)_vdt[i].input->Clone(Form("gi%d",i));
       TGraphErrors *go = (TGraphErrors*)_vdt[i].output->Clone(Form("go%d",i));
       string name = _vdt[i].name;
@@ -696,13 +696,13 @@ void globalFitDraw(string run, string version) {
 	scaleGraph(gi,100);
 	scaleGraph(go,100);
       }
-      
+
       // Default settings
       if (_gf_color[name]==0)  _gf_color[name] = kBlack;
       if (_gf_marker[name]==0) _gf_marker[name] = kFullCircle;
       if (_gf_label[name]==0)  _gf_label[name] = name.c_str();
       if (_gf_size[name]==0)   _gf_size[name] = 1.0;
-      
+
       tdrDraw(go,"Pz",_gf_marker[name],_gf_color[name]);
       if (name=="hdm_mpfchs1_multijet" || name=="mpfchs1_multijet_a100" ||
 	  name=="ptchs_multijet_a100") {
@@ -719,12 +719,12 @@ void globalFitDraw(string run, string version) {
 	for (int i = go2->GetN()-1; i != -1; --i) {
 	  if (go2->GetX()[i]>ptsplit*sqrt(crecoil)) go2->RemovePoint(i);
 	}
-	
+
 	tdrDraw(go2,"Pz",kFullTriangleDown,kGray+2);
 	go2->SetMarkerSize(0.8);
 	go->SetMarkerSize(0.8);
       }
-      
+
       //if (name=="hdm_cmb_mj" || (run=="2017H" && name=="hdm_cmb")) {
       if (name=="mpfchs1_zjet_a100" || name=="hdm_mpfchs1_zjet" ||
 	  name=="ptchs_zjet_a100" || //) {
@@ -748,8 +748,8 @@ void globalFitDraw(string run, string version) {
       }
 
       go->SetMarkerSize(_gf_size[name]);
-      gi->SetMarkerSize(_gf_size[name]);      
-    } // for i in _vdt   
+      gi->SetMarkerSize(_gf_size[name]);
+    } // for i in _vdt
 
     if (debug) cout << "Draw EFL, MUF compositions" << endl << flush;
 
@@ -853,7 +853,7 @@ void globalFitDraw(string run, string version) {
     c1l->cd(); gPad->RedrawAxis();
 
     if (debug) cout << "Draw plots" << endl << flush;
-   
+
     c1->SaveAs(Form("pdf/globalFit/globalFit_%s_%s_rjet.pdf",crun,cv));
     if (plotPF) c1c->SaveAs(Form("pdf/globalFit/globalFit_%s_%s_pf.pdf",crun,cv));
     if (usingMu) c1l->SaveAs(Form("pdf/globalFit/globalFit_%s_%s_mu.pdf",crun,cv));
@@ -895,11 +895,11 @@ void globalFitDraw(string run, string version) {
     if (run=="Run3")  {
       nhf_off = ((5.1+3.0)*2.0 + 5.9*3.0 + (18.0+3.1)*3.0 +
 		 //8.7*1.0 + 9.8*4.0 + 9.5*4.5) / //Summer22
-		 //8.7*-1.0 + 9.8*7.0 + 9.5*9.0) /  //Summer23 old 
+		 //8.7*-1.0 + 9.8*7.0 + 9.5*9.0) /  //Summer23 old
 		 8.7*-1.5 + 9.8*2.0 + 9.5*3.5) /  //Summer23 new
 	((5.1+3.0) + 5.9 + (18.0+3.1) + 8.7 + (9.8+9.5));
     }
-    
+
     for (int i = 0; i != gnhf0->GetN(); ++i) {
       double x = gnhf0->GetX()[i];
       //double ex = gnhf0->GetEX()[i];
@@ -915,7 +915,7 @@ void globalFitDraw(string run, string version) {
       gnhf0z->SetPoint(i, x, (1+y)-nhf_off*0.01); // small offset
       if (x>50.) gnhf0z->RemovePoint(i); // only range with no incjet
     }
-    
+
     //leg->AddEntry(gnhf0,"Not fit: Dijet NHF","PLE");
     //leg->AddEntry(gnhf0,"Not fit: Incjet NHF-1%","PLE");
     //leg->AddEntry(gnhf0,Form("Not fit: jet NHF-%1.1f%%",nhf_off),"PLE");
@@ -989,7 +989,7 @@ void jesFitter(Int_t& npar, Double_t* grad, Double_t& chi2, Double_t* par,
   int ns = npar - _jesFit->GetNpar();
 
   if (flag) {
-    
+
     // do the following calculation:
     // chi2 = sum_i( (x_i+sum_s(a_s y_si) -fit)^2/sigma_i^2) + sum_s(a_s^2)
     chi2 = 0;
@@ -1006,7 +1006,7 @@ void jesFitter(Int_t& npar, Double_t* grad, Double_t& chi2, Double_t* par,
       TGraphErrors *gin2  = _vdt[ig].input2;
       TGraphErrors *gout  = _vdt[ig].output; assert(gout);
       TGraphErrors *gout2 = _vdt[ig].output2;
-      
+
       for (int i = 0; i != gin->GetN(); ++i) {
 
 	// Retrieve central value and uncertainty for this point
@@ -1038,10 +1038,10 @@ void jesFitter(Int_t& npar, Double_t* grad, Double_t& chi2, Double_t* par,
 		     TString(name.c_str()).Contains("nhf") ||
 		     TString(name.c_str()).Contains("nef"));
 	if (!_gf_fitPFcomp && isPF) addChi2 = false;
-	    
+
 	// For Z+jet HDM, check if we want to add this to chi2
 	if (!_gf_fitZjetHDM && name=="hdm_mpfchs1_zjet") addChi2 = false;
-	
+
 	// Calculate total shift caused by all nuisance parameters
 	double shifts = 0;
 	vector<fitSyst> &_vsrc = _msrc[name];
@@ -1054,7 +1054,7 @@ void jesFitter(Int_t& npar, Double_t* grad, Double_t& chi2, Double_t* par,
 	  shifts += ps[idx] * hsrc->GetBinContent(ipt);
 	}
 
-	
+
 	// Add chi2 from residual
 	double chi = (data + shifts - fit) / oplus(sigma,globalErrMin);
 	if (isPF) { // quick hack to de-emphasize PF composition a bit
@@ -1083,10 +1083,10 @@ void jesFitter(Int_t& npar, Double_t* grad, Double_t& chi2, Double_t* par,
 	} // multijet
       } // for ipt
     } // for ig
-  
+
     // Add chi2 from nuisance parameters
     for (int is = 0; is != ns; ++is) {
-      
+
       chi2 += ps[is]*ps[is];
     } // for ipar
 
@@ -1097,7 +1097,7 @@ void jesFitter(Int_t& npar, Double_t* grad, Double_t& chi2, Double_t* par,
 	++Nk;
       }
     } // penalizeFitPars
-    
+
     // Give some feedback on progress in case loop gets stuck
     if ((++cnt)%100==0) cout << "." << flush;
   } // if flag
@@ -1109,11 +1109,11 @@ void jesFitter(Int_t& npar, Double_t* grad, Double_t& chi2, Double_t* par,
 } // jesFitter
 
 
-// Calculate fit uncertainty for an arbitrary function                          
-// using standard error propagation with differentials                          
+// Calculate fit uncertainty for an arbitrary function
+// using standard error propagation with differentials
 Double_t fitError(Double_t *xx, Double_t *pp) {
 
-  // Sanity checks on inputs                                                    
+  // Sanity checks on inputs
   assert(_fitError_func);
   assert(_fitError_emat);
   double x = *xx;
@@ -1125,23 +1125,23 @@ Double_t fitError(Double_t *xx, Double_t *pp) {
   assert(emat.GetNrows()==n+nsrc);
   assert(emat.GetNcols()==n+nsrc);
 
-  // Partial derivatives as differentials with 10% step size                    
+  // Partial derivatives as differentials with 10% step size
   vector<double> df(n);
   for (int i = 0; i != n; ++i) {
 
     double p = f->GetParameter(i);
-    double dp = 0.1*sqrt(emat[i][i]); // step size 10% of uncertainty           
+    double dp = 0.1*sqrt(emat[i][i]); // step size 10% of uncertainty
     f->SetParameter(i, p+dp);
     double fup = f->Eval(x);
     f->SetParameter(i, p-dp);
     double fdw = f->Eval(x);
     f->SetParameter(i, p);
 
-    // Calculate partial derivative as a simple differential                    
+    // Calculate partial derivative as a simple differential
     df[i] = (dp ? (fup - fdw) / (2.*dp) : 0);
   }
 
-  // Perform standard error propagation                                         
+  // Perform standard error propagation
   double sumerr2(0);
   for (int i = 0; i != n; ++i) {
     for (int j = 0; j != n; ++j) {
