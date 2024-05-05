@@ -46,7 +46,7 @@ Double_t jesFit(Double_t *x, Double_t *p);
 void jesFitter(Int_t& npar, Double_t* grad, Double_t& chi2, Double_t* par,
 	       Int_t flag);
 void cleanGraph(TGraphErrors *g);
-void globalFitEtaBin(double etamin, double etamax, string run, string version);
+void globalFitEtaBin(double etamin, double etamax, string run, string version, string closure);
 void globalFitDraw(string run, string version);
 
 // Define global variables used in fitError
@@ -99,12 +99,12 @@ void shiftHist(TH1D* h, double dy) {
 } // shiftHist
 
 // Call global fit for each eta bin separately
-void globalFit(string run = "All", string version = "vX") {
+void globalFit(string run = "All", string version = "vX", string closure = "False") {
 
-  globalFitEtaBin(0.0, 1.3, run, version);
+  globalFitEtaBin(0.0, 1.3, run, version, closure);
 } // globalFit
 
-void globalFitEtaBin(double etamin, double etamax, string run, string version) {
+void globalFitEtaBin(double etamin, double etamax, string run, string version, string closure) {
 
   // Set fancy plotting style (CMS TDR style)
   setTDRStyle();
@@ -187,6 +187,8 @@ void globalFitEtaBin(double etamin, double etamax, string run, string version) {
       cleanGraph(g);
     }
 
+    if (closure=="True")      _gf_undoJESref=false;
+    else       _gf_undoJESref=true;
     // Undo previous L2L3Res, if so requested
     if (string(type)=="Rjet" && _gf_undoJESref) {
       if (debug) cout << "...undoing JES for " << type << endl << flush;
@@ -343,9 +345,18 @@ void globalFitEtaBin(double etamin, double etamax, string run, string version) {
   cout << endl;
   cout << "Global fit has " << npar << " fit parameters and "
        << nsrc << " nuisance parameters." << endl;
+
+  // #ifdef gaus_prior
+  // _gf_penalizeFitPars = true;
+  // #else
+  // _gf_penalizeFitPars = false;
+  // #endif
+
   if (_gf_penalizeFitPars)
     cout << "Fit parameters have Gaussian prior" << endl;
   cout << endl;
+
+
 
   // Setup global chi2 fit (jesFitter is our function)
   // Warning, legacy code and ROOT team recommends using
@@ -854,9 +865,9 @@ void globalFitDraw(string run, string version) {
 
     if (debug) cout << "Draw plots" << endl << flush;
 
-    c1->SaveAs(Form("pdf/globalFit/globalFit_%s_%s_rjet.pdf",crun,cv));
-    if (plotPF) c1c->SaveAs(Form("pdf/globalFit/globalFit_%s_%s_pf.pdf",crun,cv));
-    if (usingMu) c1l->SaveAs(Form("pdf/globalFit/globalFit_%s_%s_mu.pdf",crun,cv));
+    c1->SaveAs(Form("pdf/globalFit/globalFit_%s_%s_rjet_%s.pdf",crun,cv,_gf_undoJESref ? "initial": "closure" ));
+    if (plotPF) c1c->SaveAs(Form("pdf/globalFit/globalFit_%s_%s_pf_%s.pdf",crun,cv,_gf_undoJESref ? "initial": "closure" ));
+    if (usingMu) c1l->SaveAs(Form("pdf/globalFit/globalFit_%s_%s_mu_%s.pdf",crun,cv,_gf_undoJESref ? "initial": "closure" ));
     //
     if (saveROOT) c1->SaveAs(Form("pdf/globalFit/globalFit_%s_%s_rjet.root",crun,cv));
 
@@ -938,9 +949,9 @@ void globalFitDraw(string run, string version) {
     }
 
     if (string(crun)=="Run3")
-      c1->SaveAs(Form("pdf/globalFit/globalFit_%s_%s_rjet_wNHF.pdf",crun,cv));
+      c1->SaveAs(Form("pdf/globalFit/globalFit_%s_%s_rjet_wNHF_%s.pdf",crun,cv,_gf_undoJESref ? "initial": "closure" ));
     else
-      c1->SaveAs(Form("pdf/globalFit/globalFit_%s_%s_rjet.pdf",crun,cv));
+      c1->SaveAs(Form("pdf/globalFit/globalFit_%s_%s_rjet_%s.pdf",crun,cv, _gf_undoJESref ? "initial": "closure" ));
   } // drawResults
 } // globalFitEtaBin
 

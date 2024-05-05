@@ -37,7 +37,7 @@ bool _debug3 = false;
 // Find entry in graph corresponding to this histogram bin
 double getY(double pt, double ptmin, double ptmax, TGraphErrors *g,
 	    double &ey) {
-  
+
   int j(-1);
   double dx(0);
   for (int i = 0; i != g->GetN(); ++i) {
@@ -71,12 +71,12 @@ void getEntry(int i, double &pt, double &p0, double &p1, double &pn, double &pu,
 
 // 3-point soft radiation corrections for L3Res
 Flavor *_flv(0);
-void softrad3(double etamin=0.0, double etamax=1.3, string epoch="") {
-  
+void softrad3(double etamin=0.0, double etamax=1.3, string epoch="", string version=""){
+
   cout << "Calling softrad3("<<etamin<<","<<etamax<<");\n"<<flush;
   const char *cep = epoch.c_str();
   cout << "For epoch " << epoch << endl;
-  
+
   if (!_flv) {
     cout << "Initializing Flavor" << endl;
     _flv = new Flavor();
@@ -86,7 +86,7 @@ void softrad3(double etamin=0.0, double etamax=1.3, string epoch="") {
   }
 
   setTDRStyle();
-  
+
   TDirectory *curdir = gDirectory;
 
   // Open jecdata.root produced by reprocess.C
@@ -131,7 +131,7 @@ void softrad3(double etamin=0.0, double etamax=1.3, string epoch="") {
 
   map<string, map<string, map<string, TGraphErrors*> > > gs;
   map<string, map<string, TH1D*> > hs;
- 
+
   // Load all data sets first
   for (unsigned int idir = 0; idir != dirs.size(); ++idir) {
     string d = dirs[idir];
@@ -144,13 +144,13 @@ void softrad3(double etamin=0.0, double etamax=1.3, string epoch="") {
       for (unsigned int isam = 0; isam != samples.size(); ++isam) {
 	string s = samples[isam];
 	const char *cs = s.c_str();
-	
+
 	int xref = (s=="multijet" ? mptref : aref);
 	string sg = Form("%s/eta%02d-%02d/%s_%s_a%d",
 			 cd,int(10*etamin),int(10*etamax),cm,cs,xref);
 	const char *cg = sg.c_str();
 
-	bool isflavormc = 
+	bool isflavormc =
 	  (s=="zii" || s=="zbi" || s=="zci" || s=="zqi" || s=="zgi" ||s=="zni"||
 	   s=="zib" || s=="zbb" || s=="zcb" || s=="zqb" || s=="zgb" ||s=="znb"||
 	   s=="zic" || s=="zbc" || s=="zcc" || s=="zqc" || s=="zgc" ||s=="znc"||
@@ -273,7 +273,7 @@ void softrad3(double etamin=0.0, double etamax=1.3, string epoch="") {
 	  TH1D *hfsru1 = (TH1D*)h->Clone("fsru1"); hfsru1->Reset();
 	  TH1D *hfsru2 = (TH1D*)h->Clone("fsru2"); hfsru2->Reset();
 	  TH1D *hfsrus = (TH1D*)h->Clone("fsrus"); hfsrus->Reset();
-	  
+
 	  double pt(0), p0(0), p1(0), pn(0), pu(0);
 	  double pm(0), q0(0), q1(0), qn(0), qu(0);
 	  double eq0(0), eq1(0), eqn(0), equ(0);
@@ -320,7 +320,7 @@ void softrad3(double etamin=0.0, double etamax=1.3, string epoch="") {
 	      double gJES = _flv->getResp(gJESpt,0.,"MultijetRecoil25",-1,"25");
 	      Ru_d *= gJES;
 	    }
-	    
+
 	    // Systematic variations for Rn_m, Ru_m numerically
 	    double dRnd = -0.01; // guesstimate for data-MC
 	    double dRnm = -0.02; // quark/gluon response variation
@@ -358,7 +358,7 @@ void softrad3(double etamin=0.0, double etamax=1.3, string epoch="") {
 	      double Bd = 0.5*(r1-1);
 	      double Am = 0.5*(q0-1);
 	      double Bm = 0.5*(q1-1);
-	      
+
 	      // same for N-jet and unclustered, which are
 	      /*
 	      // rn = 2*Pn / (1 - Pn) <=> rn-rn*Pn=+2*Pn <=> Pn=rn/(2+rn)
@@ -377,7 +377,7 @@ void softrad3(double etamin=0.0, double etamax=1.3, string epoch="") {
 	      double Pud = k*ru;
 	      double Pnm = k*qn;
 	      double Pum = k*qu;
-	      
+
 	      double Rd(0), Rm(0), dR(0), dR_d(0), dR_m(0);
 	      double xmin(0.1), xmax(1.9);
 	      if (m=="mpfchs1") { // multijet
@@ -387,7 +387,7 @@ void softrad3(double etamin=0.0, double etamax=1.3, string epoch="") {
 		fma->SetParameters(Am,Pnm,Pum,Rn_m,Ru_m,R2_m);
 		Rm = fma->GetX(0,xmin,xmax);
 		dR = Rd / Rm - r0 / q0;
-		
+
 		// Approximate parts for data and MC
 		dR_d = Rd - r0;
 		dR_m = Rm - q0;
@@ -401,7 +401,7 @@ void softrad3(double etamin=0.0, double etamax=1.3, string epoch="") {
 		double Rd_n2 = fma->GetX(0,xmin,xmax);
 		fma->SetParameters(Am,Pnm,Pum,Rn_m+dRnm,Ru_m,R2_m);
 		double Rm_n2 = fma->GetX(0,xmin,xmax);
-		double dRn2 = Rd_n2/Rm_n2 - Rd/Rm; 
+		double dRn2 = Rd_n2/Rm_n2 - Rd/Rm;
 		// vary unclustered Ru in data (data/MC difference)
 		fma->SetParameters(Ad,Pnd,Pud,Rn_d,Ru_d+dRud,R2_d);
 		double Rd_u1 = fma->GetX(0,xmin,xmax);
@@ -411,7 +411,7 @@ void softrad3(double etamin=0.0, double etamax=1.3, string epoch="") {
 		double Rd_u2 = fma->GetX(0,xmin,xmax);
 		fma->SetParameters(Am,Pnm,Pum,Rn_m,Ru_m+dRum,R2_m);
 		double Rm_u2 = fma->GetX(0,xmin,xmax);
-		double dRu2 = Rd_u2/Rm_u2 - Rd/Rm; 
+		double dRu2 = Rd_u2/Rm_u2 - Rd/Rm;
 
 		// Statistical variations with error propagation from r1, rn, ru
 		// (r0,r1,rn,ru correlations tricky, though)
@@ -426,7 +426,7 @@ void softrad3(double etamin=0.0, double etamax=1.3, string epoch="") {
 		       << " pt="<<pt<<endl<<flush;
 		  assert(fabs(r0/q0-mpf)<1e-3);
 		}
-		
+
 		double ddR = sqrt(pow(dRn1,2) + pow(dRn2,2) +
 				  pow(dRu1,2)+pow(dRu2,2));
 
@@ -453,7 +453,7 @@ void softrad3(double etamin=0.0, double etamax=1.3, string epoch="") {
 		  hfsru1->SetBinContent(i, dRu1);
 		  hfsru2->SetBinContent(i, dRu2);
 		  hfsrus->SetBinContent(i, dRus);
-		}		
+		}
 
 	      } // mpfchs1 multijet
 
@@ -477,7 +477,7 @@ void softrad3(double etamin=0.0, double etamax=1.3, string epoch="") {
 		double Rd_n2 = fpa->GetX(0,xmin,xmax);
 		fpa->SetParameters(Bm,Pnm,Pum,Rn_m+dRnm,Ru_m,R2_m);
 		double Rm_n2 = fpa->GetX(0,xmin,xmax);
-		double dRn2 = Rd_n2/Rm_n2 - Rd/Rm; 
+		double dRn2 = Rd_n2/Rm_n2 - Rd/Rm;
 		// vary unclustered Ru in data (data/MC difference)
 		fpa->SetParameters(Bd,Pnd,Pud,Rn_d,Ru_d+dRud,R2_d);
 		double Rd_u1 = fpa->GetX(0,xmin,xmax);
@@ -487,7 +487,7 @@ void softrad3(double etamin=0.0, double etamax=1.3, string epoch="") {
 		double Rd_u2 = fpa->GetX(0,xmin,xmax);
 		fpa->SetParameters(Bm,Pnm,Pum,Rn_m,Ru_m+dRum,R2_m);
 		double Rm_u2 = fpa->GetX(0,xmin,xmax);
-		double dRu2 = Rd_u2/Rm_u2 - Rd/Rm; 
+		double dRu2 = Rd_u2/Rm_u2 - Rd/Rm;
 
 		// Statistical variations with error propagation from r1, rn, ru
 		// (r0,r1,rn,ru correlations tricky, though)
@@ -501,7 +501,7 @@ void softrad3(double etamin=0.0, double etamax=1.3, string epoch="") {
 		  cout <<s<<": r0/q0="<<r0/q0<<" mpf="<<mpf<<endl<<flush;
 		  assert(fabs(r0/q0-mpf)<1e-3);
 		}
-		
+
 		double ddR = sqrt(pow(dRn1,2) + pow(dRn2,2) +
 				  pow(dRu1,2)+pow(dRu2,2));
 
@@ -539,7 +539,7 @@ void softrad3(double etamin=0.0, double etamax=1.3, string epoch="") {
 		cout << "Rd="<<Rd<<" Rm="<<Rm<<endl;
 	      }
 	    } // multijet
-	    
+
 
 	    // xmin(0.5), xmax(1.5)
 	    double xmin(0.1), xmax(1.9);
@@ -564,7 +564,7 @@ void softrad3(double etamin=0.0, double etamax=1.3, string epoch="") {
 	      double R1_dn2 = fm->GetX(0,xmin,xmax);
 	      fm->SetParameters(q0, qn, qu, Rn_m+dRnm, Ru_m);
 	      double R1_mn2 = fm->GetX(0,xmin,xmax);
-	      double dRn2 = R1_dn2/R1_mn2 - R1_d/R1_m; 
+	      double dRn2 = R1_dn2/R1_mn2 - R1_d/R1_m;
 	      //
 	      fm->SetParameters(r0, rn, ru, Rn_d, Ru_d+dRud);
 	      double R1_du1 = fm->GetX(0,xmin,xmax);
@@ -574,7 +574,7 @@ void softrad3(double etamin=0.0, double etamax=1.3, string epoch="") {
 	      double R1_du2 = fm->GetX(0,xmin,xmax);
 	      fm->SetParameters(q0, qn, qu, Rn_m, Ru_m+dRum);
 	      double R1_mu2 = fm->GetX(0,xmin,xmax);
-	      double dRu2 = R1_du2/R1_mu2 - R1_d/R1_m; 
+	      double dRu2 = R1_du2/R1_mu2 - R1_d/R1_m;
 
 	      // Statistical variations with error propagation from r1, rn, ru
 	      // (r0,r1,rn,ru correlations tricky, though)
@@ -617,7 +617,7 @@ void softrad3(double etamin=0.0, double etamax=1.3, string epoch="") {
 		hfsru2->SetBinContent(i, dRu2);
 		hfsrus->SetBinContent(i, dRus);
 	      }
-	      
+
 	      if (_debug3) {
 		cout << " MPF pt="<<pt<<" R1_d="<<R1_d<<" R1_m="<<R1_m
 		     << " R1="<<R1_d/R1_m<<" raw="<<mpf<<endl;
@@ -655,7 +655,7 @@ void softrad3(double etamin=0.0, double etamax=1.3, string epoch="") {
 	      double R1_dn2 = fp->GetX(0,xmin,xmax);
 	      fp->SetParameters(q1, qn, qu, Rn_m+dRnm, Ru_m);
 	      double R1_mn2 = fp->GetX(0,xmin,xmax);
-	      double dRn2 = R1_dn2/R1_mn2 - R1_d/R1_m; 
+	      double dRn2 = R1_dn2/R1_mn2 - R1_d/R1_m;
 	      //
 	      fp->SetParameters(r1, rn, ru, Rn_d, Ru_d+dRud);
 	      double R1_du1 = fp->GetX(0,xmin,xmax);
@@ -665,7 +665,7 @@ void softrad3(double etamin=0.0, double etamax=1.3, string epoch="") {
 	      double R1_du2 = fp->GetX(0,xmin,xmax);
 	      fp->SetParameters(q1, qn, qu, Rn_m, Ru_m+dRum);
 	      double R1_mu2 = fp->GetX(0,xmin,xmax);
-	      double dRu2 = R1_du2/R1_mu2 - R1_d/R1_m; 
+	      double dRu2 = R1_du2/R1_mu2 - R1_d/R1_m;
 
 	      // Statistical variations with error propagation from r1, rn, ru
 	      // (r0,r1,rn,ru correlations tricky, though)
@@ -707,7 +707,7 @@ void softrad3(double etamin=0.0, double etamax=1.3, string epoch="") {
 		hfsru2->SetBinContent(i, dRu2);
 		hfsrus->SetBinContent(i, dRus);
 	      }
-	      
+
 	      if (_debug3) {
 		cout << " pTbal pt="<<pt<<" R1_d="<<R1_d<<" R1_m="<<R1_m
 		     << " R1="<<R1_d/R1_m<<" raw="<<ptbal<<endl;

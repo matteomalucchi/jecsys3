@@ -40,7 +40,7 @@ struct fitShape {
 };
 
 // Gaussian prior for fit parameters
-bool _gf_penalizeFitPars = true;
+bool _gf_penalizeFitPars = false;
 
 // Downweight PF compositin data to get broad features
 double _gf_fitPFcomp_minErr = 0.001;
@@ -210,7 +210,7 @@ const array<array<string,3>, nshp> _gf_shapes = {{
     {"hbsipm","nef","-1.717+log(x)*(2.522+log(x)*(-1.163+log(x)*(0.1623+log(x)*(0.01883+log(x)*(-0.006616+log(x)*0.0004364)))))"},
     {"hbsipm","nhf","-1.346+log(x)*(0.9761+log(x)*(-0.1417+log(x)*(-0.02259+log(x)*(0.003066+log(x)*(0.0009335+log(x)*-0.0001261)))))"},
     // "hbsipm" checksum: 36dd66b29cf0d8aec0b2a4cb145728ea
-    
+
     {"hbtime","Rjet","0.1394+log(x)*(-0.08167+log(x)*(-0.001402+log(x)*(0.005871+log(x)*(0.0003952+log(x)*(-0.0003595+log(x)*2.291e-05)))))"},
     {"hbtime","chf","1.029+log(x)*(-0.9924+log(x)*(0.2604+log(x)*(0.03122+log(x)*(-0.02631+log(x)*(0.004353+log(x)*-0.0002299)))))"},
     {"hbtime","nef","-1.396+log(x)*(1.355+log(x)*(-0.3602+log(x)*(-0.04115+log(x)*(0.03584+log(x)*(-0.005978+log(x)*0.0003229)))))"},
@@ -224,7 +224,7 @@ const array<array<string,3>, nshp> _gf_shapes = {{
     {"hbtime","nhf","2.*log(x/15.)*(0.005884+log(x/15.)*(-0.001467+log(x/15.)*-0.004223))"},
     // "hbtime" checksum: cc2b0bb93a82fa64200db36d81c05b1e
     */
-    
+
     {"em3","Rjet","-0.3222+log(x)*(0.1973+log(x)*(-0.0774+log(x)*(-0.006124+log(x)*(0.001035+log(x)*(0.0002058+log(x)*-2.089e-05)))))"},
     {"em3","chf","2.59+log(x)*(-1.188+log(x)*(0.1324+log(x)*(0.01962+log(x)*(-0.001522+log(x)*(-0.0004592+log(x)*3.848e-05)))))"},
     {"em3","nef","-2.715+log(x)*(1.225+log(x)*(-0.1397+log(x)*(-0.02023+log(x)*(0.001699+log(x)*(0.0004898+log(x)*-4.382e-05)))))"},

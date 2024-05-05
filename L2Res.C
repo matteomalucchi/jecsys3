@@ -20,6 +20,9 @@ bool fitD = true; // Dijet (pT,ave)
 bool fitP = true; // Dijet (pT,probe)
 bool fitJ = true; // Dijet (pT,tag)
 
+string version_string = "tot_23";
+const char * version = version_string.c_str();
+
 // Step 1. Slice 1D profile out of 2D in given range and draw it
 TProfile* drawEta(TProfile2D *p2, double ptmin, double ptmax,
 		  string draw, int marker, int color, string label="") {
@@ -211,13 +214,13 @@ void L2Res() {
   TDirectory *curdir = gDirectory;
 
   // Set output directory;
-  TFile *fout = new TFile("rootfiles/L2Res.root","RECREATE");
+  TFile *fout = new TFile(Form("rootfiles/L2Res_%s.root", version),"RECREATE");
 
   // Make sure graphics output directories exists
   gROOT->ProcessLine(".! mkdir pdf");
-  gROOT->ProcessLine(".! mkdir pdf/L2Res");
-  gROOT->ProcessLine(".! mkdir pdf/L2Res/vsEta");
-  gROOT->ProcessLine(".! mkdir pdf/L2Res/vsPt");
+  gROOT->ProcessLine(Form(".! mkdir pdf/L2Res_%s", version));
+  gROOT->ProcessLine(Form(".! mkdir pdf/L2Res_%s/vsEta", version));
+  gROOT->ProcessLine(Form(".! mkdir pdf/L2Res_%s/vsPt", version));
 
   string vrun[] = {"2023Cv123","2023Cv4","2023D"};
   const int nrun = sizeof(vrun)/sizeof(vrun[0]);
@@ -239,7 +242,8 @@ void L2Res() {
   // fz = new TFile(Form("rootfiles/Summer23_L2ResOnly/jme_bplusZ_%s_Zmm_sync_v70.root",cr),"READ"); // Summer23 L2Res_V1
   // fz = new TFile(Form("../dijet/rootfiles/jmenano_data_cmb_v22ul16.root"),"READ"); // Summer23 L2Res_V1
   // fzd = new TFile(Form("../dijet/rootfiles/jmenano_mc_cmb_v22ul16flatmc.root"),"READ"); // Summer23 L2Res_V1
-  fz = new TFile(Form("/work/mmalucch/L2Res_inputs/no_reg/zb/jme_bplusZ_merged_vX_run%s.root",cr),"READ"); // Summer23 L2Res_V1
+  // fz = new TFile(Form("/work/mmalucch/L2L3Res_inputs/tot_23/zb/jme_bplusZ_merged_vX_run%s.root",cr),"READ"); // Summer23 L2Res_V1
+  fz = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/zb/jme_bplusZ_merged_%s_run%s.root",version, version, cr),"READ"); // Summer23 L2Res_V1
   assert(fz && !fz->IsZombie());
 
   TDirectory *dz = fz->GetDirectory("data/l2res");
@@ -252,12 +256,14 @@ void L2Res() {
   TFile *fg(0), *fgm(0);
   // fg = new TFile(Form("rootfiles/Summer23_L2ResOnly/gamjet_all/GamHistosFill_data_%s_w4.root",cr),"READ"); // Summer23 with L2Res
   // fg = new TFile(Form("../dijet/rootfiles/jmenano_data_cmb_v22ul16.root"),"READ"); // Summer23 with L2Res
-  fg = new TFile(Form("/work/mmalucch/L2Res_inputs/no_reg/gam/GamHistosFill_data_%s_tot_23.root",cr),"READ"); // Summer23 with L2Res
+  // fg = new TFile(Form("/work/mmalucch/L2L3Res_inputs/tot_23/gam/GamHistosFill_data_%s_tot_23.root",cr),"READ"); // Summer23 with L2Res
+  fg = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/gam/GamHistosFill_data_%s_%s.root",version, cr, version),"READ"); // Summer23 with L2Res
   assert(fg && !fg->IsZombie());
   //
   // fgm = new TFile(run=="2023D" ? "rootfiles/Summer23_L2ResOnly/gamjet_all/GamHistosFill_mc_2023P8-BPix_w4.root" : "rootfiles/Summer23_L2ResOnly/gamjet_all/GamHistosFill_mc_2023P8_w4.root","READ"); // Summer23 L2Res_V1
   // fgm = new TFile(Form("../dijet/rootfiles/jmenano_mc_cmb_v22ul16flatmc.root"),"READ"); // Summer23 L2Res_V1
-  fgm = new TFile(run=="2023D" ? "/work/mmalucch/L2Res_inputs/no_reg/gam/GamHistosFill_mc_2023P8-BPix_tot_23.root" : "/work/mmalucch/L2Res_inputs/no_reg/gam/GamHistosFill_mc_2023P8-BPix_tot_23.root","READ"); // Summer23 L2Res_V1
+  // fgm = new TFile(run=="2023D" ? "/work/mmalucch/L2L3Res_inputs/tot_23/gam/GamHistosFill_mc_2023P8-BPix_tot_23.root" : "/work/mmalucch/L2L3Res_inputs/tot_23/gam/GamHistosFill_mc_2023P8-BPix_tot_23.root","READ"); // Summer23 L2Res_V1
+  fgm = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/gam/GamHistosFill_mc_2023P8%s_%s.root" ,version, run=="2023D" ? "-BPix" : "", version),"READ"); // Summer23 with L2Res
   assert(fgm && !fgm->IsZombie());
 
   TDirectory *dg = fg->GetDirectory("Gamjet2");
@@ -270,12 +276,14 @@ void L2Res() {
   TFile *fd(0), *fdm(0);
   // fd = new TFile(Form("rootfiles/Summer23_L2ResOnly/jmenano_data_cmb_%s_JME_v39_noRwPU_noSmearJets_25Feb2024_L2Res_v1.root",cr),"READ"); // Summer23 L2Res_V1
   // fd = new TFile(Form("../dijet/rootfiles/jmenano_data_cmb_v22ul16.root"),"READ"); // Summer23 L2Res_V1
-  fd = new TFile(Form("/work/mmalucch/L2Res_inputs/no_reg/dijet/jmenano_data_cmb_%s_ZB_v38_Summer23MG_NoL2L3Res_Off_reweight_jets_test2.root",cr),"READ"); // Summer23 L2Res_V1
+  // fd = new TFile(Form("/work/mmalucch/L2L3Res_inputs/tot_23/dijet/jmenano_data_cmb_%s_ZB_v38_Summer23MG_NoL2L3Res_Off_reweight_jets_test2.root",cr),"READ"); // Summer23 L2Res_V1
+  fd = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/dijet/jmenano_data_cmb_%s_JME_%s.root",version, cr, version),"READ"); // Summer23 with L2Res
   assert(fd && !fd->IsZombie());
   //
   // fdm = new TFile(Form("rootfiles/Summer23_L2ResOnly/jmenano_mc_cmb_Summer23MG%s_v39_noRwPU_noSmearJets_25Feb2024_L2Res_v1.root",run=="2023D" ? "BPix" : ""),"READ");
   // fdm = new TFile(Form("../dijet/rootfiles/jmenano_mc_cmb_v22ul16flatmc.root"),"READ");
-  fdm = new TFile(Form("/work/mmalucch/L2Res_inputs/no_reg/dijet/jmenano_mc_cmb_Summer23MG%s_v38_Summer23MG_NoL2L3Res_Off_reweight_jets_test2.root",run=="2023D" ? "BPix" : ""),"READ");
+  // fdm = new TFile(Form("/work/mmalucch/L2L3Res_inputs/tot_23/dijet/jmenano_mc_cmb_Summer23MG%s_v38_Summer23MG_NoL2L3Res_Off_reweight_jets_test2.root",run=="2023D" ? "BPix" : ""),"READ");
+  fdm = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/dijet/jmenano_mc_cmb_QCD%s_%s.root", version, run=="2023D" ? "-BPix" : "", version),"READ"); // Summer23 with L2Res
   assert(fdm && !fdm->IsZombie());
 
   TDirectory *dd = fd->GetDirectory("Dijet2");
@@ -359,7 +367,7 @@ void L2Res() {
 
   tex->DrawLatex(0.50,0.85,Form("[%1.3f,%1.3f]",eta1,eta2));
 
-  c13->SaveAs(Form("pdf/L2Res/vsPt/L2Res_vsPt_%04d_%04d_%s_%s.pdf",
+  c13->SaveAs(Form("pdf/L2Res_%s/vsPt/L2Res_vsPt_%04d_%04d_%s_%s.pdf", version,
 		  int(1000.*eta1),int(1000.*eta2),cr,"c13"));
 
   // Create giant canvas for all eta bins (7*3=21; more in the future)
@@ -410,7 +418,7 @@ void L2Res() {
 
   tex->DrawLatex(0.50,0.85,Form("[%1.3f,%1.3f]",eta1,eta2));
 
-  c1->SaveAs(Form("pdf/L2Res/vsPt/L2Res_vsPt_%04d_%04d_%s_%s.pdf",
+  c1->SaveAs(Form("pdf/L2Res_%s/vsPt/L2Res_vsPt_%04d_%04d_%s_%s.pdf", version,
 		  int(1000.*eta1),int(1000.*eta2),cr,"c1"));
 
 
@@ -439,7 +447,7 @@ void L2Res() {
 
   tex->DrawLatex(0.50,0.85,Form("[%1.3f,%1.3f]",eta1,eta2));
 
-  c2->SaveAs(Form("pdf/L2Res/vsPt/L2Res_vsPt_%04d_%04d_%s_%s.pdf",
+  c2->SaveAs(Form("pdf/L2Res_%s/vsPt/L2Res_vsPt_%04d_%04d_%s_%s.pdf", version,
 		  int(1000.*eta1),int(1000*eta2),cr,"c2"));
 
   // Step 3. Draw data/MC ratio before normalization
@@ -460,7 +468,7 @@ void L2Res() {
 
   tex->DrawLatex(0.50,0.85,Form("[%1.3f,%1.3f]",eta1,eta2));
 
-  c3->SaveAs(Form("pdf/L2Res/vsPt/L2Res_vsPt_%04d_%04d_%s_%s.pdf",
+  c3->SaveAs(Form("pdf/L2Res_%s/vsPt/L2Res_vsPt_%04d_%04d_%s_%s.pdf", version,
 		  int(1000.*eta1),int(1000.*eta2),cr,"c3"));
 
   // Step 4. Draw data/MC ratio of normalized JES
@@ -481,7 +489,7 @@ void L2Res() {
 
   tex->DrawLatex(0.50,0.85,Form("[%1.3f,%1.3f]",eta1,eta2));
 
-  c4->SaveAs(Form("pdf/L2Res/vsPt/L2Res_vsPt_%04d_%04d_%s_%s.pdf",
+  c4->SaveAs(Form("pdf/L2Res_%s/vsPt/L2Res_vsPt_%04d_%04d_%s_%s.pdf", version,
 		  int(1000.*eta1),int(1000.*eta2),cr,"c4"));
 
 
@@ -573,7 +581,7 @@ void L2Res() {
 
   tex->DrawLatex(0.50,0.85,Form("[%1.3f,%1.3f]",eta1,eta2));
 
-  c5->SaveAs(Form("pdf/L2Res/vsPt/L2Res_vsPt_%04d_%04d_%s_%s.pdf",
+  c5->SaveAs(Form("pdf/L2Res_%s/vsPt/L2Res_vsPt_%04d_%04d_%s_%s.pdf", version,
 		  int(1000.*eta1),int(1000.*eta2),cr,"c5"));
 
 
@@ -655,7 +663,7 @@ void L2Res() {
 
   } // for ieta
 
-  cx->SaveAs(Form("pdf/L2res/L2Res_AllEta_%s.pdf",cr));
+  cx->SaveAs(Form("pdf/L2Res_%s/L2Res_AllEta_%s.pdf", version,cr));
   cx->SetName(Form("cx_%s",cr));
 
   // Step 7. Draw summary of final results in a single plot
@@ -696,10 +704,11 @@ void L2Res() {
   legy->AddEntry(hy1000,"p_{T} = 1000 GeV","PLE");
   legy->AddEntry(hy3000,"p_{T} = 3000 GeV","PLE");
 
-  cy->SaveAs(Form("pdf/L2res/L2Res_Summary_%s.pdf",cr));
+  cy->SaveAs(Form("pdf/L2Res_%s/L2Res_Summary_%s.pdf", version,cr));
   cy->SetName(Form("cy_%s",cr));
 
   // Step 8. Print out text files
+  gROOT->ProcessLine(".! mkdir -p textfiles/Summer23_L2ResClosure");
   ofstream ftxt(Form("textfiles/Summer23_L2ResClosure/Summer23Prompt23_Run%s_V1_DATA_L2Residual_AK4PFPuppi.txt",cr));
   ftxt << Form("{ 1 JetEta 1 JetPt 1./(%s) Correction L2Relative}",
 	       vf1[0]->GetExpFormula().Data()) << endl;
@@ -764,7 +773,7 @@ void L2Res() {
   pp = drawEta(p2p,ptmin,ptmax,"Pz",kFullDiamond,kOrange+2,"Probe");
   pd = drawEta(p2d,ptmin,ptmax,"Pz",kOpenDiamond,kBlack,"Dijet");
 
-  c1->SaveAs(Form("pdf/L2Res/vsEta/L2Res_vsEta_%04d_%04d_%s_%s.pdf",
+  c1->SaveAs(Form("pdf/L2Res_%s/vsEta/L2Res_vsEta_%04d_%04d_%s_%s.pdf", version,
 		  int(pt1),int(pt2),cr,"c1"));
 
 
@@ -790,7 +799,7 @@ void L2Res() {
   hp = drawNormEta(pp,"Pz",kFullDiamond,kOrange+2);
   hd = drawNormEta(pd,"Pz",kOpenDiamond,kBlack);
 
-  c2->SaveAs(Form("pdf/L2Res/vsEta/L2Res_vsEta_%04d_%04d_%s_%s.pdf",
+  c2->SaveAs(Form("pdf/L2Res_%s/vsEta/L2Res_vsEta_%04d_%04d_%s_%s.pdf", version,
 		  int(pt1),int(pt2),cr,"c2"));
 
 
@@ -809,7 +818,7 @@ void L2Res() {
   hpr = drawRatio(pp->ProjectionX(),ppm,"Pz",kFullDiamond,kOrange+2);
   hdr = drawRatio(pd->ProjectionX(),pdm,"Pz",kOpenDiamond,kBlack);
 
-  c3->SaveAs(Form("pdf/L2Res/vsEta/L2Res_vsEta_%04d_%04d_%s_%s.pdf",
+  c3->SaveAs(Form("pdf/L2Res_%s/vsEta/L2Res_vsEta_%04d_%04d_%s_%s.pdf", version,
 		  int(pt1),int(pt2),cr,"c3"));
 
 
@@ -828,7 +837,7 @@ void L2Res() {
   hprn = drawRatio(hp,hpm,"Pz",kFullDiamond,kOrange+2);
   hdrn = drawRatio(hd,hdm,"Pz",kOpenDiamond,kBlack);
 
-  c4->SaveAs(Form("pdf/L2Res/vsEta/L2Res_vsEta_%04d_%04d_%s_%s.pdf",
+  c4->SaveAs(Form("pdf/L2Res_%s/vsEta/L2Res_vsEta_%04d_%04d_%s_%s.pdf", version,
 		  int(pt1),int(pt2),cr,"c4"));
 
   // Rename to avoid loop leakage and errors

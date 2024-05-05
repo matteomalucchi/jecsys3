@@ -99,7 +99,9 @@ double getJEC(FactorizedJetCorrector *jec, double eta, double ptcorr,
 void setEpoch(string epoch);
 
 // put all the different methods in a single file for easy access for everybody
-void reprocess(string epoch="") {
+void reprocess(string epoch="", string version_string="", string closure="") {
+
+  const char *version = version_string.c_str();
 
   setEpoch(epoch);
   TString tepoch = TString(epoch);
@@ -143,19 +145,19 @@ void reprocess(string epoch="") {
     //fz = new TFile("rootfiles/jme_bplusZ_2023C123_Zmm_sync_v66.root","READ");
     //fz = new TFile("rootfiles/Summer23_noL2L3Res/jme_bplusZ_2023Cv123_Zmm_sync_v69.root","READ"); // Summer23
     // fz = new TFile("rootfiles/Summer23_L2ResOnly/jme_bplusZ_2023Cv123_Zmm_sync_v70.root","READ"); // Summer23 L2Res_V1
-    fz = new TFile("/work/mmalucch/L2Res_inputs/no_reg/zb/jme_bplusZ_merged_vX_run2023Cv123.root","READ"); // Summer23 L2Res_V1
+    fz = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/zb/jme_bplusZ_merged_%s_run2023Cv123.root", version, version),"READ"); // Summer23 L2Res_V1
   }
   if (epoch=="Run23C4") {
     //fz = new TFile("rootfiles/jme_bplusZ_2023C4_Zmm_sync_v66.root","READ");
     //fz = new TFile("rootfiles/Summer23_noL2L3Res/jme_bplusZ_2023Cv4_Zmm_sync_v69.root","READ");
     // fz = new TFile("rootfiles/Summer23_L2ResOnly/jme_bplusZ_2023Cv4_Zmm_sync_v70.root","READ"); // Summer23 L2Res_V1
-    fz = new TFile("/work/mmalucch/L2Res_inputs/no_reg/zb/jme_bplusZ_merged_vX_run2023Cv4.root","READ"); // Summer23 L2Res_V1
+    fz = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/zb/jme_bplusZ_merged_%s_run2023Cv4.root", version, version),"READ"); // Summer23 L2Res_V1
   }
   if (epoch=="Run23D") {
     //fz = new TFile("rootfiles/jme_bplusZ_2023D_Zmm_sync_v66.root","READ");
     //fz = new TFile("rootfiles/Summer23_noL2L3Res/jme_bplusZ_2023D_Zmm_sync_v69.root","READ");
     // fz = new TFile("rootfiles/Summer23_L2ResOnly/jme_bplusZ_2023D_Zmm_sync_v70.root","READ"); // Summer23 L2Res_V1
-    fz = new TFile("/work/mmalucch/L2Res_inputs/no_reg/zb/jme_bplusZ_merged_vX_run2023D.root","READ"); // Summer23 L2Res_V1
+    fz = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/zb/jme_bplusZ_merged_%s_run2023D.root", version, version),"READ"); // Summer23 L2Res_V1
   }
   if (epoch=="Run3") {
     //fz = new TFile(Form("%s/jme_bplusZ_Run3_Zmm_sync_v59.root",cdz58p1),"READ"); // Sami's combo
@@ -169,6 +171,10 @@ void reprocess(string epoch="") {
 
   string sr = "eta_00_13";
   const char *cr = sr.c_str();
+
+  if (closure=="True")    CorLevel="L1L2L3Res";
+  else CorLevel="L1L2Res";
+
   const char *cl = CorLevel.c_str();
 
   TH1D *hcounts(0);
@@ -261,11 +267,11 @@ void reprocess(string epoch="") {
     //fp = new TFile(Form("../gamjet/rootfiles/GamHistosRatio_%s_P8QCD_w4.root",mp[epoch]),"READ"); // Summer23 no QCD with L2Res
     //fp = new TFile(Form("rootfiles/Summer23_L2ResOnly/GamHistosRatio_%s_P8%s-noQCD_w4.root",mp[epoch],epoch=="Run23D" ? "BPix" : ""),"READ"); // Summer23 L2Res_V1 (noQCD)
     // fp = new TFile(Form("rootfiles/Summer23_L2ResOnly/GamHistosRatio_%s_P8%sQCD_w6.root",mp[epoch],epoch=="Run23D" ? "BPix" : ""),"READ"); // Summer23 L2Res_V1 (withQCD)
-    fp = new TFile(Form("/work/mmalucch/L2Res_inputs/no_reg/gam/GamHistosRatio_%s_P8%sQCD_tot_23.root",mp[epoch],epoch=="Run23D" ? "BPix" : ""),"READ"); // Summer23 L2Res_V1 (withQCD)
+    fp = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/gam/GamHistosRatio_%s_P8%sQCD_%s.root",version, mp[epoch],epoch=="Run23D" ? "BPix" : "",version),"READ"); // Summer23 L2Res_V1 (withQCD)
   }
   else {
     // fp = new TFile(Form("../gamjet/rootfiles/GamHistosRatio_%s_P8QCD_v32.root",mp[epoch]),"READ"); // L2L3Res_V3
-    fp = new TFile(Form("/work/mmalucch/L2Res_inputs/no_reg/gam/GamHistosRatio_%s_P8QCD_tot_23.root",mp[epoch]),"READ"); // L2L3Res_V3
+    fp = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/gam/GamHistosRatio_%s_P8QCD_%s.root",version,mp[epoch],version),"READ"); // L2L3Res_V3
     assert(false);
   }
   assert(fp && !fp->IsZombie());
@@ -343,10 +349,14 @@ void reprocess(string epoch="") {
   mmjm["Run22G"] = "Summer22EEMG";
   mmjm["Run22FG"] = "Summer22EEMG";
   mmjm["Run23BC123"] = "Summer22MG";
-  mmjm["Run23C123"] = "Summer23MG";//GBPix";//"Summer22MG";
-  mmjm["Run23C4"] = "Summer23MG";//BPix";//"Summer22MG";
-  mmjm["Run23D"] = "Summer23MGBPix";//"Summer22MG";
-  mmjm["Run23C4D"] = "Summer23MGBPix";//22MG";
+  // mmjm["Run23C123"] = "Summer23MG";//GBPix";//"Summer22MG";
+  // mmjm["Run23C4"] = "Summer23MG";//BPix";//"Summer22MG";
+  // mmjm["Run23D"] = "Summer23MGBPix";//"Summer22MG";
+  // mmjm["Run23C4D"] = "Summer23MGBPix";//22MG";
+  mmjm["Run23C123"] = "QCD";//GBPix";//"Summer22MG";
+  mmjm["Run23C4"] = "QCD";//BPix";//"Summer22MG";
+  mmjm["Run23D"] = "QCD-BPix";//"Summer22MG";
+  mmjm["Run23C4D"] = "QCD-BPix";//22MG";
   mmjm["Run3"] = "Summer22MG";
   //TFile *fmjd = new TFile(Form("../dijet/rootfiles/jmenano_data_cmb_%s_JME_v32.root",mmjd[epoch]),"READ"); // no L2L3Res (L2Res for 2022 only)
   //assert(fmjd && !fmjd->IsZombie());
@@ -357,8 +367,8 @@ void reprocess(string epoch="") {
   //TFile *fmjm = new TFile(Form("rootfiles/Summer23_noL2L3Res/jmenano_mc_cmb_%s_v36_Summer23.root",mmjm[epoch]),"READ"); // Summer23_V1
   // TFile *fmjd = new TFile(Form("rootfiles/Summer23_L2ResOnly/jmenano_data_cmb_%s_JME_v39_noRwPU_noSmearJets_25Feb2024_L2Res_v1.root",mmjd[epoch]),"READ"); // Summer23_V1
   // TFile *fmjm = new TFile(Form("rootfiles/Summer23_L2ResOnly/jmenano_mc_cmb_%s_v39_noRwPU_noSmearJets_25Feb2024_L2Res_v1.root",mmjm[epoch]),"READ"); // Summer23 L2Res_V1
-  TFile *fmjd = new TFile(Form("/work/mmalucch/L2Res_inputs/no_reg/dijet/jmenano_data_cmb_%s_ZB_v38_Summer23MG_NoL2L3Res_Off_reweight_jets_test2.root",mmjd[epoch]),"READ"); // Summer23_V1
-  TFile *fmjm = new TFile(Form("/work/mmalucch/L2Res_inputs/no_reg/dijet/jmenano_mc_cmb_%s_v38_Summer23MG_NoL2L3Res_Off_reweight_jets_test2.root",mmjm[epoch]),"READ"); // Summer23 L2Res_V1
+  TFile *fmjd = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/dijet/jmenano_data_cmb_%s_JME_%s.root",version,mmjd[epoch],version),"READ"); // Summer23_V1
+  TFile *fmjm = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/dijet/jmenano_mc_cmb_%s_%s.root",version,mmjm[epoch],version),"READ"); // Summer23 L2Res_V1
   //
   //TFile *fmjd = new TFile(Form("../dijet/rootfiles/jmenano_data_cmb_%s_JME_v35a.root",mmjd[epoch]),"READ"); // L2L3Res_V3
   //TFile *fmjm = new TFile(Form("../dijet/rootfiles/jmenano_mc_out_%s_v35a.root",mmjm[epoch]),"READ"); // L2L3Res_V3
@@ -1449,38 +1459,45 @@ void reprocess(string epoch="") {
       if(rp_debug) cout << "calculate reference R_uncl (hruncl)" << endl<<flush;
 
       TH1D *hruncl = new TH1D("hruncl",";mode;Runcl",4,0.5,4.5);
-      if (CorLevel=="L1L2L3Res") { // R_uncl
-	double ptref = 15.;
-	int jref = h2pteta->GetXaxis()->FindBin(ptref);
-	jref = max(1,min(jref, h2pteta->GetXaxis()->GetNbins()));
-	TH1D *hpteta = h2pteta->ProjectionY("hpteta",jref,jref);
 
-	double suml2l3(0), suml2l3res(0), sumw5(0), sumw8(0);
-	for (int ieta = 1; ieta != hpteta->GetNbinsX()+1; ++ieta) {
+      if (false) { // R_uncl
+      // if (CorLevel=="L1L2L3Res") { // R_uncl
+        double ptref = 15.;
+        int jref = h2pteta->GetXaxis()->FindBin(ptref);
+        jref = max(1,min(jref, h2pteta->GetXaxis()->GetNbins()));
+        TH1D *hpteta = h2pteta->ProjectionY("hpteta",jref,jref);
 
-	  double abseta = hpteta->GetBinCenter(ieta);
-	  double w = hpteta->GetBinContent(ieta);
-	  sumw8 += w;
-	  if (abseta<5.191) {
-	    sumw5 += w;
-	    double l2l3p = 1./getJEC(mcjec,+abseta,ptref);
-	    double l2l3m = 1./getJEC(mcjec,-abseta,ptref);
-	    double l2l3 = 0.5*(l2l3p+l2l3m);
-	    suml2l3 += w*l2l3;
-	    double l2l3resp = 1./getJEC(jec,+abseta,ptref);
-	    double l2l3resm = 1./getJEC(jec,-abseta,ptref);
-	    double l2l3res = 0.5*(l2l3resp+l2l3resm);
-	    suml2l3res += w*l2l3res;
-	  }
-	} // for ieta
-	hruncl->SetBinContent(1, sumw5/sumw8);
-	hruncl->GetXaxis()->SetBinLabel(1,"|#eta|<5.2");
-	hruncl->SetBinContent(2, suml2l3/sumw5);
-	hruncl->GetXaxis()->SetBinLabel(2,"L2L3");
-	hruncl->SetBinContent(3, suml2l3res/sumw5);
-	hruncl->GetXaxis()->SetBinLabel(3,"L2L3Res");
-	hruncl->SetBinContent(4, (suml2l3/sumw5)*(suml2l3res/sumw5));
-	hruncl->GetXaxis()->SetBinLabel(4,"DATA");
+        double suml2l3(0), suml2l3res(0), sumw5(0), sumw8(0);
+        for (int ieta = 1; ieta != hpteta->GetNbinsX()+1; ++ieta) {
+
+          double abseta = hpteta->GetBinCenter(ieta);
+          double w = hpteta->GetBinContent(ieta);
+          sumw8 += w;
+          if (abseta<5.191) {
+            sumw5 += w;
+            cout << "############################### 1 ###############################" << endl;
+            double l2l3p = 1./getJEC(mcjec,+abseta,ptref);
+            cout << "############################### 2 ###############################" << endl;
+            double l2l3m = 1./getJEC(mcjec,-abseta,ptref);
+            double l2l3 = 0.5*(l2l3p+l2l3m);
+            suml2l3 += w*l2l3;
+            cout << "############################### 3 ###############################" << endl;
+            double l2l3resp = 1./getJEC(jec,+abseta,ptref);
+            cout << "############################### 4 ###############################" << endl;
+            double l2l3resm = 1./getJEC(jec,-abseta,ptref);
+            cout << "############################### 5 ###############################" << endl;
+            double l2l3res = 0.5*(l2l3resp+l2l3resm);
+            suml2l3res += w*l2l3res;
+          }
+        } // for ieta
+        hruncl->SetBinContent(1, sumw5/sumw8);
+        hruncl->GetXaxis()->SetBinLabel(1,"|#eta|<5.2");
+        hruncl->SetBinContent(2, suml2l3/sumw5);
+        hruncl->GetXaxis()->SetBinLabel(2,"L2L3");
+        hruncl->SetBinContent(3, suml2l3res/sumw5);
+        hruncl->GetXaxis()->SetBinLabel(3,"L2L3Res");
+        hruncl->SetBinContent(4, (suml2l3/sumw5)*(suml2l3res/sumw5));
+        hruncl->GetXaxis()->SetBinLabel(4,"DATA");
       } // R_uncl
 
       if(rp_debug) cout << "create reference JES bands" << endl << flush;
