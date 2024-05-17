@@ -39,4 +39,5 @@
 *.DS_Store
 
 pdf/
+png/
 # rootfiles/

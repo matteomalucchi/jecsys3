@@ -145,6 +145,14 @@ void globalFitEtaBin(double etamin, double etamax, string run, string version, s
     if (_gf_datasets_whitelist[i]!="")
       whitelist.insert(_gf_datasets_whitelist[i]);
   }
+  // extend array _gf_datasets_whitelist
+  if (complete){
+    for (unsigned int i = 0; i != _gf_datasets_whitelist_dijet.size(); ++i) {
+      if (_gf_datasets_whitelist_dijet[i]!="")
+            whitelist.insert(_gf_datasets_whitelist_dijet[i]);
+    }
+  }
+
   set<string> whitelistshape;
   for (unsigned int i = 0; i != _gf_shapes_whitelist.size(); ++i) {
     if (_gf_shapes_whitelist[i]!="")
@@ -865,11 +873,11 @@ void globalFitDraw(string run, string version) {
 
     if (debug) cout << "Draw plots" << endl << flush;
 
-    c1->SaveAs(Form("pdf/globalFit/globalFit_%s_%s_rjet_%s.pdf",crun,cv,_gf_undoJESref ? "initial": "closure" ));
-    if (plotPF) c1c->SaveAs(Form("pdf/globalFit/globalFit_%s_%s_pf_%s.pdf",crun,cv,_gf_undoJESref ? "initial": "closure" ));
-    if (usingMu) c1l->SaveAs(Form("pdf/globalFit/globalFit_%s_%s_mu_%s.pdf",crun,cv,_gf_undoJESref ? "initial": "closure" ));
+    c1->SaveAs(Form("png/globalFit/globalFit_%s_%s_rjet_%s.png",crun,cv,_gf_undoJESref ? "initial": "closure" ));
+    if (plotPF) c1c->SaveAs(Form("png/globalFit/globalFit_%s_%s_pf_%s.png",crun,cv,_gf_undoJESref ? "initial": "closure" ));
+    if (usingMu) c1l->SaveAs(Form("png/globalFit/globalFit_%s_%s_mu_%s.png",crun,cv,_gf_undoJESref ? "initial": "closure" ));
     //
-    if (saveROOT) c1->SaveAs(Form("pdf/globalFit/globalFit_%s_%s_rjet.root",crun,cv));
+    if (saveROOT) c1->SaveAs(Form("png/globalFit/globalFit_%s_%s_rjet.root",crun,cv));
 
     // Test
     c1->cd();
@@ -930,12 +938,14 @@ void globalFitDraw(string run, string version) {
     //leg->AddEntry(gnhf0,"Not fit: Dijet NHF","PLE");
     //leg->AddEntry(gnhf0,"Not fit: Incjet NHF-1%","PLE");
     //leg->AddEntry(gnhf0,Form("Not fit: jet NHF-%1.1f%%",nhf_off),"PLE");
-      leg->AddEntry(gnhf0,Form("Not fit: NHF%+1.1f%%",nhf_off),"PLE");
-    leg->SetY1NDC(leg->GetY1NDC()-0.05);
     //tdrDraw(gnhf0,"Pz",kFullSquare,kGreen+2);
-    tdrDraw(gnhf0,"Pz",kOpenSquare,kGreen+2);
-    tdrDraw(gnhf0z,"Pz",kOpenSquare,kGreen+3);
-
+    //if (complete){
+    if (false){
+      leg->AddEntry(gnhf0,Form("Not fit: NHF%+1.1f%%",nhf_off),"PLE");
+      tdrDraw(gnhf0,"Pz",kOpenSquare,kGreen+2);
+      tdrDraw(gnhf0z,"Pz",kOpenSquare,kGreen+3);
+  }
+    leg->SetY1NDC(leg->GetY1NDC()-0.05);
     // Add average JEC also on the plot
     if (run=="Run3") {
       TFile *f2 = new TFile("rootfiles/jecdataRun3Data.root","READ");
@@ -949,9 +959,9 @@ void globalFitDraw(string run, string version) {
     }
 
     if (string(crun)=="Run3")
-      c1->SaveAs(Form("pdf/globalFit/globalFit_%s_%s_rjet_wNHF_%s.pdf",crun,cv,_gf_undoJESref ? "initial": "closure" ));
+      c1->SaveAs(Form("png/globalFit/globalFit_%s_%s_rjet_wNHF_%s.png",crun,cv,_gf_undoJESref ? "initial": "closure" ));
     else
-      c1->SaveAs(Form("pdf/globalFit/globalFit_%s_%s_rjet_%s.pdf",crun,cv, _gf_undoJESref ? "initial": "closure" ));
+      c1->SaveAs(Form("png/globalFit/globalFit_%s_%s_rjet_%s.png",crun,cv, _gf_undoJESref ? "initial": "closure" ));
   } // drawResults
 } // globalFitEtaBin
 

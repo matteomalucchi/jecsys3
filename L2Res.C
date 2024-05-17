@@ -23,6 +23,8 @@ bool fitJ = true; // Dijet (pT,tag)
 string version_string = "tot_23";
 const char * version = version_string.c_str();
 
+bool dijet = false;
+
 // Step 1. Slice 1D profile out of 2D in given range and draw it
 TProfile* drawEta(TProfile2D *p2, double ptmin, double ptmax,
 		  string draw, int marker, int color, string label="") {
@@ -243,7 +245,7 @@ void L2Res() {
   // fz = new TFile(Form("../dijet/rootfiles/jmenano_data_cmb_v22ul16.root"),"READ"); // Summer23 L2Res_V1
   // fzd = new TFile(Form("../dijet/rootfiles/jmenano_mc_cmb_v22ul16flatmc.root"),"READ"); // Summer23 L2Res_V1
   // fz = new TFile(Form("/work/mmalucch/L2L3Res_inputs/tot_23/zb/jme_bplusZ_merged_vX_run%s.root",cr),"READ"); // Summer23 L2Res_V1
-  fz = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/zb/jme_bplusZ_merged_%s_run%s.root",version, version, cr),"READ"); // Summer23 L2Res_V1
+  fz = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/zb/jme_bplusZ_merged_%s_%s.root",version, cr,version),"READ"); // Summer23 L2Res_V1
   assert(fz && !fz->IsZombie());
 
   TDirectory *dz = fz->GetDirectory("data/l2res");
@@ -355,15 +357,19 @@ void L2Res() {
   double eta2 = p2d->GetXaxis()->GetBinLowEdge(ieta2+1);
   p13zm = drawPt(p2zm,etamin,etamax,"HISTE",kNone,kRed);
   p13gm = drawPt(p2gm,etamin,etamax,"HISTE",kNone,kBlue);
-  p13jm = drawPt(p2jm,etamin,etamax,"HISTE",kNone,kGreen+2);
-  p13pm = drawPt(p2pm,etamin,etamax,"HISTE",kNone,kOrange+2);
-  p13dm = drawPt(p2dm,etamin,etamax,"HISTE",kNone,kBlack);
+  if (dijet) {
+    p13jm = drawPt(p2jm,etamin,etamax,"HISTE",kNone,kGreen+2);
+    p13pm = drawPt(p2pm,etamin,etamax,"HISTE",kNone,kOrange+2);
+    p13dm = drawPt(p2dm,etamin,etamax,"HISTE",kNone,kBlack);
+  }
 
   p13z = drawPt(p2z,etamin,etamax,"Pz",kFullSquare,kRed,"Z");
   p13g = drawPt(p2g,etamin,etamax,"Pz",kFullCircle,kBlue,"#gamma");
-  p13j = drawPt(p2j,etamin,etamax,"Pz",kFullDiamond,kGreen+2,"Tag");
-  p13p = drawPt(p2p,etamin,etamax,"Pz",kFullDiamond,kOrange+2,"Probe");
-  p13d = drawPt(p2d,etamin,etamax,"Pz",kOpenDiamond,kBlack,"Dijet");
+  if (dijet) {
+    p13j = drawPt(p2j,etamin,etamax,"Pz",kFullDiamond,kGreen+2,"Tag");
+    p13p = drawPt(p2p,etamin,etamax,"Pz",kFullDiamond,kOrange+2,"Probe");
+    p13d = drawPt(p2d,etamin,etamax,"Pz",kOpenDiamond,kBlack,"Dijet");
+  }
 
   tex->DrawLatex(0.50,0.85,Form("[%1.3f,%1.3f]",eta1,eta2));
 
@@ -405,16 +411,20 @@ void L2Res() {
   TProfile *pzm, *pgm, *pdm, *pjm, *ppm;
   pzm = drawPt(p2zm,etamin,etamax,"HISTE",kNone,kRed);
   pgm = drawPt(p2gm,etamin,etamax,"HISTE",kNone,kBlue);
-  pjm = drawPt(p2jm,etamin,etamax,"HISTE",kNone,kGreen+2);
-  ppm = drawPt(p2pm,etamin,etamax,"HISTE",kNone,kOrange+2);
-  pdm = drawPt(p2dm,etamin,etamax,"HISTE",kNone,kBlack);
+  if (dijet) {
+    pjm = drawPt(p2jm,etamin,etamax,"HISTE",kNone,kGreen+2);
+    ppm = drawPt(p2pm,etamin,etamax,"HISTE",kNone,kOrange+2);
+    pdm = drawPt(p2dm,etamin,etamax,"HISTE",kNone,kBlack);
+  }
 
   TProfile *pz, *pg, *pd, *pj, *pp;
   pz = drawPt(p2z,etamin,etamax,"Pz",kFullSquare,kRed,"Z");
   pg = drawPt(p2g,etamin,etamax,"Pz",kFullCircle,kBlue,"#gamma");
-  pj = drawPt(p2j,etamin,etamax,"Pz",kFullDiamond,kGreen+2,"Tag");
-  pp = drawPt(p2p,etamin,etamax,"Pz",kFullDiamond,kOrange+2,"Probe");
-  pd = drawPt(p2d,etamin,etamax,"Pz",kOpenDiamond,kBlack,"Dijet");
+  if (dijet) {
+    pj = drawPt(p2j,etamin,etamax,"Pz",kFullDiamond,kGreen+2,"Tag");
+    pp = drawPt(p2p,etamin,etamax,"Pz",kFullDiamond,kOrange+2,"Probe");
+    pd = drawPt(p2d,etamin,etamax,"Pz",kOpenDiamond,kBlack,"Dijet");
+  }
 
   tex->DrawLatex(0.50,0.85,Form("[%1.3f,%1.3f]",eta1,eta2));
 
@@ -434,16 +444,20 @@ void L2Res() {
   TH1D *hzm, *hgm, *hdm, *hjm, *hpm;
   hzm = drawNormPt(pzm,p13zm,"HISTE",kNone,kRed);
   hgm = drawNormPt(pgm,p13gm,"HISTE",kNone,kBlue);
-  hjm = drawNormPt(pjm,p13jm,"HISTE",kNone,kGreen+2);
-  hpm = drawNormPt(ppm,p13pm,"HISTE",kNone,kOrange+2);
-  hdm = drawNormPt(pdm,p13dm,"HISTE",kNone,kBlack);
+  if (dijet) {
+    hjm = drawNormPt(pjm,p13jm,"HISTE",kNone,kGreen+2);
+    hpm = drawNormPt(ppm,p13pm,"HISTE",kNone,kOrange+2);
+    hdm = drawNormPt(pdm,p13dm,"HISTE",kNone,kBlack);
+  }
 
   TH1D *hz, *hg, *hd, *hj, *hp;
   hz = drawNormPt(pz,p13z,"Pz",kFullSquare,kRed);
   hg = drawNormPt(pg,p13g,"Pz",kFullCircle,kBlue);
-  hj = drawNormPt(pj,p13j,"Pz",kFullDiamond,kGreen+2);
-  hp = drawNormPt(pp,p13p,"Pz",kFullDiamond,kOrange+2);
-  hd = drawNormPt(pd,p13d,"Pz",kOpenDiamond,kBlack);
+  if (dijet) {
+    hj = drawNormPt(pj,p13j,"Pz",kFullDiamond,kGreen+2);
+    hp = drawNormPt(pp,p13p,"Pz",kFullDiamond,kOrange+2);
+    hd = drawNormPt(pd,p13d,"Pz",kOpenDiamond,kBlack);
+  }
 
   tex->DrawLatex(0.50,0.85,Form("[%1.3f,%1.3f]",eta1,eta2));
 
@@ -462,9 +476,11 @@ void L2Res() {
   TH1D *hzr, *hgr, *hdr, *hjr, *hpr;
   hzr = drawRatio(pz->ProjectionX(),pzm,"Pz",kFullSquare,kRed);
   hgr = drawRatio(pg->ProjectionX(),pgm,"Pz",kFullCircle,kBlue);
-  hjr = drawRatio(pj->ProjectionX(),pjm,"Pz",kFullDiamond,kGreen+2);
-  hpr = drawRatio(pp->ProjectionX(),ppm,"Pz",kFullDiamond,kOrange+2);
-  hdr = drawRatio(pd->ProjectionX(),pdm,"Pz",kOpenDiamond,kBlack);
+  if (dijet) {
+    hjr = drawRatio(pj->ProjectionX(),pjm,"Pz",kFullDiamond,kGreen+2);
+    hpr = drawRatio(pp->ProjectionX(),ppm,"Pz",kFullDiamond,kOrange+2);
+    hdr = drawRatio(pd->ProjectionX(),pdm,"Pz",kOpenDiamond,kBlack);
+  }
 
   tex->DrawLatex(0.50,0.85,Form("[%1.3f,%1.3f]",eta1,eta2));
 
@@ -483,9 +499,11 @@ void L2Res() {
   TH1D *hzrn, *hgrn, *hdrn, *hjrn, *hprn;
   hzrn = drawRatio(hz,hzm,"Pz",kFullSquare,kRed);
   hgrn = drawRatio(hg,hgm,"Pz",kFullCircle,kBlue);
-  hjrn = drawRatio(hj,hjm,"Pz",kFullDiamond,kGreen+2);
-  hprn = drawRatio(hp,hpm,"Pz",kFullDiamond,kOrange+2);
-  hdrn = drawRatio(hd,hdm,"Pz",kOpenDiamond,kBlack);
+  if (dijet){
+    hjrn = drawRatio(hj,hjm,"Pz",kFullDiamond,kGreen+2);
+    hprn = drawRatio(hp,hpm,"Pz",kFullDiamond,kOrange+2);
+    hdrn = drawRatio(hd,hdm,"Pz",kOpenDiamond,kBlack);
+  }
 
   tex->DrawLatex(0.50,0.85,Form("[%1.3f,%1.3f]",eta1,eta2));
 
@@ -511,23 +529,29 @@ void L2Res() {
   // Draw full range at the back
   tdrDraw(hzrn,"Pz",kOpenSquare,kRed-9);
   tdrDraw(hgrn,"Pz",kOpenCircle,kBlue-9);
-  tdrDraw(hjrn,"Pz",kOpenDiamond,kGreen+2-9);
-  tdrDraw(hprn,"Pz",kOpenDiamond,kOrange+2-9);
-  tdrDraw(hdrn,"Pz",kOpenDiamond,kGray);
+  if (dijet){
+    tdrDraw(hjrn,"Pz",kOpenDiamond,kGreen+2-9);
+    tdrDraw(hprn,"Pz",kOpenDiamond,kOrange+2-9);
+    tdrDraw(hdrn,"Pz",kOpenDiamond,kGray);
+  }
 
   TH1D *hzrf, *hgrf, *hdrf, *hjrf, *hprf;
   hzrf = drawCleaned(hzrn,eta,"Z","Pz",kFullSquare,kRed);
   hgrf = drawCleaned(hgrn,eta,"G","Pz",kFullCircle,kBlue);
-  hjrf = drawCleaned(hjrn,eta,"J","Pz",kFullDiamond,kGreen+3);
-  hprf = drawCleaned(hprn,eta,"P","Pz",kFullDiamond,kOrange+2);
-  hdrf = drawCleaned(hdrn,eta,"D","Pz",kFullDiamond,kBlack);
+  if (dijet){
+    hjrf = drawCleaned(hjrn,eta,"J","Pz",kFullDiamond,kGreen+3);
+    hprf = drawCleaned(hprn,eta,"P","Pz",kFullDiamond,kOrange+2);
+    hdrf = drawCleaned(hdrn,eta,"D","Pz",kFullDiamond,kBlack);
+  }
 
   TMultiGraph *mg = new TMultiGraph();
   if (fitZ) mg->Add(cleanGraph(new TGraphErrors(hzrf)),"SAMEP");
   if (fitG) mg->Add(cleanGraph(new TGraphErrors(hgrf)),"SAMEP");
-  if (fitD) mg->Add(cleanGraph(new TGraphErrors(hdrf)),"SAMEP");
-  if (fitP) mg->Add(cleanGraph(new TGraphErrors(hprf)),"SAMEP");
-  if (fitJ) mg->Add(cleanGraph(new TGraphErrors(hjrf)),"SAMEP");
+  if (dijet){
+    if (fitD) mg->Add(cleanGraph(new TGraphErrors(hdrf)),"SAMEP");
+    if (fitP) mg->Add(cleanGraph(new TGraphErrors(hprf)),"SAMEP");
+    if (fitJ) mg->Add(cleanGraph(new TGraphErrors(hjrf)),"SAMEP");
+  }
   mg->Draw();//"SAME Pz");
 
   TF1 *f0 = new TF1(Form("f0_%d_%s",ieta,cr),"[0]",15.,3500.);
@@ -762,16 +786,20 @@ void L2Res() {
   TProfile *pzm, *pgm, *pdm, *pjm, *ppm;
   pzm = drawEta(p2zm,ptmin,ptmax,"HISTE",kNone,kRed);
   pgm = drawEta(p2gm,ptmin,ptmax,"HISTE",kNone,kBlue);
-  pjm = drawEta(p2jm,ptmin,ptmax,"HISTE",kNone,kGreen+2);
-  ppm = drawEta(p2pm,ptmin,ptmax,"HISTE",kNone,kOrange+2);
-  pdm = drawEta(p2dm,ptmin,ptmax,"HISTE",kNone,kBlack);
+  if (dijet){
+    pjm = drawEta(p2jm,ptmin,ptmax,"HISTE",kNone,kGreen+2);
+    ppm = drawEta(p2pm,ptmin,ptmax,"HISTE",kNone,kOrange+2);
+    pdm = drawEta(p2dm,ptmin,ptmax,"HISTE",kNone,kBlack);
+  }
 
   TProfile *pz, *pg, *pd, *pj, *pp;
   pz = drawEta(p2z,ptmin,ptmax,"Pz",kFullSquare,kRed,"Z");
   pg = drawEta(p2g,ptmin,ptmax,"Pz",kFullCircle,kBlue,"#gamma");
-  pj = drawEta(p2j,ptmin,ptmax,"Pz",kFullDiamond,kGreen+2,"Tag");
-  pp = drawEta(p2p,ptmin,ptmax,"Pz",kFullDiamond,kOrange+2,"Probe");
-  pd = drawEta(p2d,ptmin,ptmax,"Pz",kOpenDiamond,kBlack,"Dijet");
+  if (dijet){
+    pj = drawEta(p2j,ptmin,ptmax,"Pz",kFullDiamond,kGreen+2,"Tag");
+    pp = drawEta(p2p,ptmin,ptmax,"Pz",kFullDiamond,kOrange+2,"Probe");
+    pd = drawEta(p2d,ptmin,ptmax,"Pz",kOpenDiamond,kBlack,"Dijet");
+  }
 
   c1->SaveAs(Form("pdf/L2Res_%s/vsEta/L2Res_vsEta_%04d_%04d_%s_%s.pdf", version,
 		  int(pt1),int(pt2),cr,"c1"));
@@ -788,16 +816,20 @@ void L2Res() {
   TH1D *hzm, *hgm, *hdm, *hjm, *hpm;
   hzm = drawNormEta(pzm,"HISTE",kNone,kRed);
   hgm = drawNormEta(pgm,"HISTE",kNone,kBlue);
-  hjm = drawNormEta(pjm,"HISTE",kNone,kGreen+2);
-  hpm = drawNormEta(ppm,"HISTE",kNone,kOrange+2);
-  hdm = drawNormEta(pdm,"HISTE",kNone,kBlack);
+  if (dijet){
+    hjm = drawNormEta(pjm,"HISTE",kNone,kGreen+2);
+    hpm = drawNormEta(ppm,"HISTE",kNone,kOrange+2);
+    hdm = drawNormEta(pdm,"HISTE",kNone,kBlack);
+  }
 
   TH1D *hz, *hg, *hd, *hj, *hp;
   hz = drawNormEta(pz,"Pz",kFullSquare,kRed);
   hg = drawNormEta(pg,"Pz",kFullCircle,kBlue);
-  hj = drawNormEta(pj,"Pz",kFullDiamond,kGreen+2);
-  hp = drawNormEta(pp,"Pz",kFullDiamond,kOrange+2);
-  hd = drawNormEta(pd,"Pz",kOpenDiamond,kBlack);
+  if (dijet){
+    hj = drawNormEta(pj,"Pz",kFullDiamond,kGreen+2);
+    hp = drawNormEta(pp,"Pz",kFullDiamond,kOrange+2);
+    hd = drawNormEta(pd,"Pz",kOpenDiamond,kBlack);
+  }
 
   c2->SaveAs(Form("pdf/L2Res_%s/vsEta/L2Res_vsEta_%04d_%04d_%s_%s.pdf", version,
 		  int(pt1),int(pt2),cr,"c2"));
@@ -814,9 +846,11 @@ void L2Res() {
   TH1D *hzr, *hgr, *hdr, *hjr, *hpr;
   hzr = drawRatio(pz->ProjectionX(),pzm,"Pz",kFullSquare,kRed);
   hgr = drawRatio(pg->ProjectionX(),pgm,"Pz",kFullCircle,kBlue);
-  hjr = drawRatio(pj->ProjectionX(),pjm,"Pz",kFullDiamond,kGreen+2);
-  hpr = drawRatio(pp->ProjectionX(),ppm,"Pz",kFullDiamond,kOrange+2);
-  hdr = drawRatio(pd->ProjectionX(),pdm,"Pz",kOpenDiamond,kBlack);
+  if (dijet){
+    hjr = drawRatio(pj->ProjectionX(),pjm,"Pz",kFullDiamond,kGreen+2);
+    hpr = drawRatio(pp->ProjectionX(),ppm,"Pz",kFullDiamond,kOrange+2);
+    hdr = drawRatio(pd->ProjectionX(),pdm,"Pz",kOpenDiamond,kBlack);
+  }
 
   c3->SaveAs(Form("pdf/L2Res_%s/vsEta/L2Res_vsEta_%04d_%04d_%s_%s.pdf", version,
 		  int(pt1),int(pt2),cr,"c3"));
@@ -833,9 +867,11 @@ void L2Res() {
   TH1D *hzrn, *hgrn, *hdrn, *hjrn, *hprn;
   hzrn = drawRatio(hz,hzm,"Pz",kFullSquare,kRed);
   hgrn = drawRatio(hg,hgm,"Pz",kFullCircle,kBlue);
-  hjrn = drawRatio(hj,hjm,"Pz",kFullDiamond,kGreen+2);
-  hprn = drawRatio(hp,hpm,"Pz",kFullDiamond,kOrange+2);
-  hdrn = drawRatio(hd,hdm,"Pz",kOpenDiamond,kBlack);
+  if (dijet){
+    hjrn = drawRatio(hj,hjm,"Pz",kFullDiamond,kGreen+2);
+    hprn = drawRatio(hp,hpm,"Pz",kFullDiamond,kOrange+2);
+    hdrn = drawRatio(hd,hdm,"Pz",kOpenDiamond,kBlack);
+  }
 
   c4->SaveAs(Form("pdf/L2Res_%s/vsEta/L2Res_vsEta_%04d_%04d_%s_%s.pdf", version,
 		  int(pt1),int(pt2),cr,"c4"));

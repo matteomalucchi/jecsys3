@@ -39,8 +39,12 @@ struct fitShape {
   TF1 *func;
 };
 
+// Run complete fit or exclude dijet and no fit
+bool complete = true;
+
+
 // Gaussian prior for fit parameters
-bool _gf_penalizeFitPars = false;
+bool _gf_penalizeFitPars = true;
 
 // Downweight PF compositin data to get broad features
 double _gf_fitPFcomp_minErr = 0.001;
@@ -90,7 +94,7 @@ const array<array<string,3>,ndt> _gf_datasets = {{
 // {name}
 // 'name' should match the dataset name in the list above
 // How to use: uncomment individual datasets to use only those
-const array<string,29> _gf_datasets_whitelist = {
+array<string,29> _gf_datasets_whitelist = {
   //"ptchs_zjet_a100",
   //"mpfchs1_zjet_a100",
   "hdm_mpfchs1_jetz",
@@ -104,6 +108,10 @@ const array<string,29> _gf_datasets_whitelist = {
   "chf_gamjet_a100",
   "nhf_gamjet_a100",
   "nef_gamjet_a100",
+};
+
+
+array<string,29> _gf_datasets_whitelist_dijet = {
   //"ptchs_multijet_a100", // use ptchs before v34d bug fixed
   //"mpfchs1_multijet_a100",
   "hdm_mpfchs1_multijet", // mpfchs->hdm botched before v34d
@@ -114,6 +122,7 @@ const array<string,29> _gf_datasets_whitelist = {
   "nhf_incjet_a100",
   "nef_incjet_a100",
 };
+
 
 // Use only these shapes (empty for all)
 // {name}

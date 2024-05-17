@@ -145,19 +145,19 @@ void reprocess(string epoch="", string version_string="", string closure="") {
     //fz = new TFile("rootfiles/jme_bplusZ_2023C123_Zmm_sync_v66.root","READ");
     //fz = new TFile("rootfiles/Summer23_noL2L3Res/jme_bplusZ_2023Cv123_Zmm_sync_v69.root","READ"); // Summer23
     // fz = new TFile("rootfiles/Summer23_L2ResOnly/jme_bplusZ_2023Cv123_Zmm_sync_v70.root","READ"); // Summer23 L2Res_V1
-    fz = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/zb/jme_bplusZ_merged_%s_run2023Cv123.root", version, version),"READ"); // Summer23 L2Res_V1
+    fz = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/zb/jme_bplusZ_merged_2023Cv123_%s.root", version, version),"READ"); // Summer23 L2Res_V1
   }
   if (epoch=="Run23C4") {
     //fz = new TFile("rootfiles/jme_bplusZ_2023C4_Zmm_sync_v66.root","READ");
     //fz = new TFile("rootfiles/Summer23_noL2L3Res/jme_bplusZ_2023Cv4_Zmm_sync_v69.root","READ");
     // fz = new TFile("rootfiles/Summer23_L2ResOnly/jme_bplusZ_2023Cv4_Zmm_sync_v70.root","READ"); // Summer23 L2Res_V1
-    fz = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/zb/jme_bplusZ_merged_%s_run2023Cv4.root", version, version),"READ"); // Summer23 L2Res_V1
+    fz = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/zb/jme_bplusZ_merged_2023Cv4_%s.root", version, version),"READ"); // Summer23 L2Res_V1
   }
   if (epoch=="Run23D") {
     //fz = new TFile("rootfiles/jme_bplusZ_2023D_Zmm_sync_v66.root","READ");
     //fz = new TFile("rootfiles/Summer23_noL2L3Res/jme_bplusZ_2023D_Zmm_sync_v69.root","READ");
     // fz = new TFile("rootfiles/Summer23_L2ResOnly/jme_bplusZ_2023D_Zmm_sync_v70.root","READ"); // Summer23 L2Res_V1
-    fz = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/zb/jme_bplusZ_merged_%s_run2023D.root", version, version),"READ"); // Summer23 L2Res_V1
+    fz = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/zb/jme_bplusZ_merged_2023D_%s.root", version, version),"READ"); // Summer23 L2Res_V1
   }
   if (epoch=="Run3") {
     //fz = new TFile(Form("%s/jme_bplusZ_Run3_Zmm_sync_v59.root",cdz58p1),"READ"); // Sami's combo
