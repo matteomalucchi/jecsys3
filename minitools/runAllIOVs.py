@@ -24,8 +24,8 @@ version = args.version
 IOV_list=args.IOV_list
 
 # make pdf/globalFit
-os.system("mkdir pdf/globalFit")
-os.system("mkdir png/globalFit")
+# os.system("mkdir pdf/globalFit")
+os.system("mkdir png/globalFit_"+version)
 for iov in IOV_list:
     # os.system("mkdir pdf/" + iov)
     os.system(

@@ -20,10 +20,10 @@ bool fitD = true; // Dijet (pT,ave)
 bool fitP = true; // Dijet (pT,probe)
 bool fitJ = true; // Dijet (pT,tag)
 
-string version_string = "tot_23";
+string version_string = "pnetreg_tot23_l2rel";
 const char * version = version_string.c_str();
 
-bool dijet = false;
+bool dijet = true;
 
 // Step 1. Slice 1D profile out of 2D in given range and draw it
 TProfile* drawEta(TProfile2D *p2, double ptmin, double ptmax,
@@ -245,7 +245,7 @@ void L2Res() {
   // fz = new TFile(Form("../dijet/rootfiles/jmenano_data_cmb_v22ul16.root"),"READ"); // Summer23 L2Res_V1
   // fzd = new TFile(Form("../dijet/rootfiles/jmenano_mc_cmb_v22ul16flatmc.root"),"READ"); // Summer23 L2Res_V1
   // fz = new TFile(Form("/work/mmalucch/L2L3Res_inputs/tot_23/zb/jme_bplusZ_merged_vX_run%s.root",cr),"READ"); // Summer23 L2Res_V1
-  fz = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/zb/jme_bplusZ_merged_%s_%s.root",version, cr,version),"READ"); // Summer23 L2Res_V1
+  fz = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/zb/jme_bplusZ_merged_%s_%s.root",version,version, cr),"READ"); // Summer23 L2Res_V1
   assert(fz && !fz->IsZombie());
 
   TDirectory *dz = fz->GetDirectory("data/l2res");

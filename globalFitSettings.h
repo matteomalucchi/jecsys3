@@ -39,8 +39,8 @@ struct fitShape {
   TF1 *func;
 };
 
-// Run complete fit or exclude dijet and no fit
-bool complete = true;
+// Run complete fit or exclude multijet and no fit
+bool complete = false;
 
 
 // Gaussian prior for fit parameters

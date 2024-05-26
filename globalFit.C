@@ -34,6 +34,7 @@
 #include "tdrstyle_mod22.C"
 #include "globalFitSettings.h"
 
+
 //using namespace globalFit;
 using namespace std;
 const bool debug = true;
@@ -873,11 +874,11 @@ void globalFitDraw(string run, string version) {
 
     if (debug) cout << "Draw plots" << endl << flush;
 
-    c1->SaveAs(Form("png/globalFit/globalFit_%s_%s_rjet_%s.png",crun,cv,_gf_undoJESref ? "initial": "closure" ));
-    if (plotPF) c1c->SaveAs(Form("png/globalFit/globalFit_%s_%s_pf_%s.png",crun,cv,_gf_undoJESref ? "initial": "closure" ));
-    if (usingMu) c1l->SaveAs(Form("png/globalFit/globalFit_%s_%s_mu_%s.png",crun,cv,_gf_undoJESref ? "initial": "closure" ));
+    c1->SaveAs(Form("pdf/globalFit_%s/globalFit_%s_%s_rjet_%s_%s.pdf",cv,crun,cv,_gf_undoJESref ? "initial": "closure", complete ? "complete" : "noMultiJet" ));
+    if (plotPF) c1c->SaveAs(Form("pdf/globalFit_%s/globalFit_%s_%s_pf_%s_%s.pdf",cv,crun,cv,_gf_undoJESref ? "initial": "closure" , complete ? "complete" : "noMultiJet"));
+    if (usingMu) c1l->SaveAs(Form("pdf/globalFit_%s/globalFit_%s_%s_mu_%s_%s.pdf",cv,crun,cv,_gf_undoJESref ? "initial": "closure", complete ? "complete" : "noMultiJet" ));
     //
-    if (saveROOT) c1->SaveAs(Form("png/globalFit/globalFit_%s_%s_rjet.root",crun,cv));
+    if (saveROOT) c1->SaveAs(Form("pdf/globalFit_%s/globalFit_%s_%s_rjet_%s_%s.root",cv,crun,cv,_gf_undoJESref ? "initial": "closure", complete ? "complete" : "noMultiJet" ));
 
     // Test
     c1->cd();
@@ -959,9 +960,9 @@ void globalFitDraw(string run, string version) {
     }
 
     if (string(crun)=="Run3")
-      c1->SaveAs(Form("png/globalFit/globalFit_%s_%s_rjet_wNHF_%s.png",crun,cv,_gf_undoJESref ? "initial": "closure" ));
+      c1->SaveAs(Form("pdf/globalFit_%s/globalFit_%s_%s_rjet_wNHF_%s_%s.pdf",cv,crun,cv,_gf_undoJESref ? "initial": "closure", complete ? "complete" : "noMultiJet"));
     else
-      c1->SaveAs(Form("png/globalFit/globalFit_%s_%s_rjet_%s.png",crun,cv, _gf_undoJESref ? "initial": "closure" ));
+      c1->SaveAs(Form("pdf/globalFit_%s/globalFit_%s_%s_rjet_%s_%s.pdf",cv,crun,cv, _gf_undoJESref ? "initial": "closure", complete ? "complete" : "noMultiJet" ));
   } // drawResults
 } // globalFitEtaBin
 
