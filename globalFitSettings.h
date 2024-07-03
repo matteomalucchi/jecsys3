@@ -39,7 +39,7 @@ struct fitShape {
   TF1 *func;
 };
 
-// Run complete fit or exclude multijet and no fit
+// Run complete fit or exclude multijet and "no fit"
 bool complete = false;
 
 

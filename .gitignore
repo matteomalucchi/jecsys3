@@ -40,4 +40,5 @@
 
 pdf/
 png/
-# rootfiles/
+rootfiles/L2Res*
+rootfiles/jecdata*

@@ -20,7 +20,7 @@ bool fitD = true; // Dijet (pT,ave)
 bool fitP = true; // Dijet (pT,probe)
 bool fitJ = true; // Dijet (pT,tag)
 
-string version_string = "pnetreg_tot23_l2rel";
+string version_string = "pnetreg_23prebpix_newchangesDP";
 const char * version = version_string.c_str();
 
 bool dijet = true;
@@ -224,7 +224,8 @@ void L2Res() {
   gROOT->ProcessLine(Form(".! mkdir pdf/L2Res_%s/vsEta", version));
   gROOT->ProcessLine(Form(".! mkdir pdf/L2Res_%s/vsPt", version));
 
-  string vrun[] = {"2023Cv123","2023Cv4","2023D"};
+  // string vrun[] = {"2023Cv123","2023Cv4","2023D"};
+  string vrun[] = {"2023Cv123","2023Cv4"};
   const int nrun = sizeof(vrun)/sizeof(vrun[0]);
   string vmc[] = {"Summer23","Summer23","Summer23BPIX"};
   const int nmc = sizeof(vmc)/sizeof(vmc[0]);
@@ -386,6 +387,15 @@ void L2Res() {
   vector<TF1*> vf1(p2d->GetNbinsX()+1);
   TH1D *hmin = p2d->ProjectionX(Form("hmin_%s",cr)); hmin->Reset();
   TH1D *hmax = p2d->ProjectionX(Form("hmax_%s",cr)); hmax->Reset();
+
+  gROOT->ProcessLine(Form(".! mkdir -p textfiles/L2Res_%s", version));
+  ofstream ofz(Form("textfiles/L2Res_%s/L2Res_summary_zjet_%s.txt", version,cr));
+  ofstream ofg(Form("textfiles/L2Res_%s/L2Res_summary_gjet_%s.txt", version,cr));
+  ofstream ofd(Form("textfiles/L2Res_%s/L2Res_summary_dijet_%s.txt", version,cr));
+  ofstream ofp(Form("textfiles/L2Res_%s/L2Res_summary_dijet_probe_%s.txt", version,cr));
+  ofstream ofj(Form("textfiles/L2Res_%s/L2Res_summary_dijet_tag_%s.txt", version,cr));
+  ofstream ofm(Form("textfiles/L2Res_%s/L2Res_summary_max_%s.txt", version,cr));
+
   for (int ieta = 1; ieta != p2d->GetNbinsX()+1; ++ieta) {
     //int ieta = p2d->GetXaxis()->FindBin(2.7);
     double etamin = p2d->GetXaxis()->GetBinCenter(ieta);
@@ -641,6 +651,51 @@ void L2Res() {
 
   if (ieta==1 || ieta==nxy) leg1->Draw("SAME");
   tex->DrawLatex(0.50,0.85,Form("[%1.3f,%1.3f]",eta1,eta2));
+
+  double max_deviation_jes;
+  double jes;
+  // save histograms on txt file
+  for (int ipt = 1; ipt != hzrf->GetNbinsX()+1; ++ipt) {
+    double pt = hzrf->GetXaxis()->GetBinLowEdge(ipt);
+    double emax1 = pt*cosh(eta1);
+    max_deviation_jes=1.;
+
+    if (emax1 < 13600.*0.5) {
+      // cout << "eta1: " << eta1 << " pt: "  << " max deviation: " << max_deviation_jes << endl;
+
+      jes=hzrf->GetBinContent(ipt);
+      max_deviation_jes = ((abs(max_deviation_jes-1.) < abs(jes-1.)) && (jes>0.))? jes : max_deviation_jes;
+      // save to file
+      ofz << eta1 << " " << pt << " " << jes << endl;
+      // cout << "eta1: " << eta1 << " pt: "  << " max deviation: " << max_deviation_jes << endl;
+
+      jes=hgrf->GetBinContent(ipt);
+      max_deviation_jes = ((abs(max_deviation_jes-1.) < abs(jes-1.)) && (jes>0.))? jes : max_deviation_jes;
+      ofg << eta1 << " " << pt << " " << jes << endl;
+      // cout << "eta1: " << eta1 << " pt: "  << " max deviation: " << max_deviation_jes << endl;
+
+      if (dijet) {
+            jes=hdrf->GetBinContent(ipt);
+            max_deviation_jes = ((abs(max_deviation_jes-1.) < abs(jes-1.)) && (jes>0.))? jes : max_deviation_jes;
+            ofd << eta1 << " " << pt << " " << jes << endl;
+            // cout << "eta1: " << eta1 << " pt: "  << " max deviation: " << max_deviation_jes << endl;
+
+            jes=hjrf->GetBinContent(ipt);
+            max_deviation_jes = ((abs(max_deviation_jes-1.) < abs(jes-1.)) && (jes>0.))? jes : max_deviation_jes;
+            ofj << eta1 << " " << pt << " " << jes << endl;
+            // cout << "eta1: " << eta1 << " pt: "  << " max deviation: " << max_deviation_jes << endl;
+
+            jes=hprf->GetBinContent(ipt);
+            max_deviation_jes = ((abs(max_deviation_jes-1.) < abs(jes-1.)) && (jes>0.))? jes : max_deviation_jes;
+            ofp << eta1 << " " << pt << " " << jes << endl;
+            // cout << "eta1: " << eta1 << " pt: "  << " max deviation: " << max_deviation_jes << endl;
+      }
+      max_deviation_jes = max_deviation_jes == 1. ? 0. : max_deviation_jes;
+      ofm << eta1 << " " << pt << " " << max_deviation_jes << endl;
+
+      // cout << "eta1: " << eta1 << " pt: " << pt << " z " << hzrf->GetBinContent(ipt) << " g " << hgrf->GetBinContent(ipt) << " d " << hdrf->GetBinContent(ipt) << " j " << hjrf->GetBinContent(ipt) << " p " << hprf->GetBinContent(ipt) << " max deviation: " << max_deviation_jes << endl;
+    }
+  }
 
 
   // Store results with uncertainty to output histogram
