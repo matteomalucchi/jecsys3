@@ -91,7 +91,7 @@ parser.add_argument(
 args = parser.parse_args()
 
 era_dict={
-    "2023Cv123":" Era C (early)"
+    "2023Cv123":"2023 Era C (early)"
 }
 
 def plot_2d_hist(histo_2d, fig_name):
@@ -101,12 +101,12 @@ def plot_2d_hist(histo_2d, fig_name):
 
     hep.cms.lumitext(
         f"{era_dict[args.era]} (13.6 TeV)",
-        fontsize=24,
+        # fontsize=24,
     )
     hep.cms.text(
-        text="SimulationPreliminary",
+        text="Preliminary",
         loc=0,
-        fontsize=24,
+        # fontsize=24,
     )
     ax.set_ylabel(r"$p_{T}^{reco}$ (GeV)", loc="top")
     ax.set_xlabel(r"|$\eta^{reco}$|", loc="right")
@@ -118,9 +118,11 @@ def plot_2d_hist(histo_2d, fig_name):
             + ("\nPNet incl. neutrinos" if "neutrino" in args.version else "\nPNet")
             + "\n"
             + (
-                r"$\sigma_{L2Res}$"
+                r"$\sigma_{Rel}$"
+                #r"$\sigma_{L2Res}$"
                 if "Unc" not in fig_name
-                else r"$\sigma_{L2Res}  \oplus  \sigma_{L3Res}$"
+                else r"$\sigma_{Rel}  \oplus  \sigma_{Abs}$"
+                #r"$\sigma_{L2Res}  \oplus  \sigma_{L3Res}$"
             )
         ),
         horizontalalignment="right",
@@ -139,35 +141,36 @@ def plot_2d_hist(histo_2d, fig_name):
         dpi=300,
     )
 
-    # convert the numpy array in a c array
-    eta_bins=histo_2d[1].ctypes.data_as(ctypes.POINTER(ctypes.c_double))
-    pt_bins=histo_2d[2].ctypes.data_as(ctypes.POINTER(ctypes.c_double))
+    if False:
+        # convert the numpy array in a c array
+        eta_bins=histo_2d[1].ctypes.data_as(ctypes.POINTER(ctypes.c_double))
+        pt_bins=histo_2d[2].ctypes.data_as(ctypes.POINTER(ctypes.c_double))
 
-    # dump histo in TH2D
-    hist_root = ROOT.TH2D(
-        f"{fig_name}_{args.version}",
-        f"{fig_name}_{args.version}",
-        len(histo_2d[1]) - 1,
-        eta_bins,
-        len(histo_2d[2]) - 1,
-        pt_bins,
-    )
-    for i in range(len(histo_2d[1]) - 1):
-        for j in range(len(histo_2d[2]) - 1):
-            hist_root.SetBinContent(i + 1, j + 1, histo_2d[0][i][j])
+        # dump histo in TH2D
+        hist_root = ROOT.TH2D(
+            f"{fig_name}_{args.version}",
+            f"{fig_name}_{args.version}",
+            len(histo_2d[1]) - 1,
+            eta_bins,
+            len(histo_2d[2]) - 1,
+            pt_bins,
+        )
+        for i in range(len(histo_2d[1]) - 1):
+            for j in range(len(histo_2d[2]) - 1):
+                hist_root.SetBinContent(i + 1, j + 1, histo_2d[0][i][j])
 
-    c = ROOT.TCanvas()
-    c.cd()
-    hist_root.Draw("colz")
-    c.Update()
-    c.Print(f"textfiles/L2Res_{args.version}/root_{fig_name}_{args.version}.png")
-    # save the histogram in a root file
-    file = ROOT.TFile(
-        f"textfiles/L2Res_{args.version}/{fig_name}_{args.version}.root", "RECREATE"
-    )
-    c.Write()
-    hist_root.Write()
-    file.Close()
+        c = ROOT.TCanvas()
+        c.cd()
+        hist_root.Draw("colz")
+        c.Update()
+        c.Print(f"textfiles/L2Res_{args.version}/root_{fig_name}_{args.version}.png")
+        # save the histogram in a root file
+        file = ROOT.TFile(
+            f"textfiles/L2Res_{args.version}/{fig_name}_{args.version}.root", "RECREATE"
+        )
+        c.Write()
+        hist_root.Write()
+        file.Close()
 
 
 # load txt file
@@ -237,7 +240,7 @@ for i in range(len(jes)):
 
 
 histo_2d = (jes, eta_bins_edges, pt_bins_edges)
-print(histo_2d)
+# print(histo_2d)
 
 histo_dict={}
 for i in range(len(jes)):
