@@ -40,7 +40,7 @@ struct fitShape {
 };
 
 // Run complete fit or exclude multijet and "no fit"
-bool complete = false;
+bool complete = true;
 
 
 // Gaussian prior for fit parameters

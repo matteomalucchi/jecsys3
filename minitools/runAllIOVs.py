@@ -9,8 +9,8 @@ import argparse
 # IOV_list= ['Run22CD','Run22E','Run22FG','Run23BC123','Run23C4D','Run3']
 # IOV_list= ['Run22CD','Run22E','Run22FG','Run23C123',
 #            'Run23C4','Run23D','Run23C4D']
-# IOV_list = ["Run23D", "Run23C123", "Run23C4"]
-IOV_list = ["Run23C123", "Run23C4"]
+IOV_list = ["Run23C123", "Run23C4","Run23D"]
+
 version = "tot_23_pnetreg_ok"
 
 parser = argparse.ArgumentParser(description="Run all IOVs")
@@ -25,7 +25,7 @@ version = args.version
 IOV_list=args.IOV_list
 
 # make pdf/globalFit
-os.system("mkdir pdf/globalFit_"+version)
+os.system(f"mkdir pdf/{version}/globalFit")
 # os.system("mkdir png/globalFit_"+version)
 for iov in IOV_list:
     # os.system("mkdir pdf/" + iov)

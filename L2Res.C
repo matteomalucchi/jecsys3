@@ -20,7 +20,7 @@ bool fitD = true; // Dijet (pT,ave)
 bool fitP = true; // Dijet (pT,probe)
 bool fitJ = true; // Dijet (pT,tag)
 
-string version_string = "pnetreg_23prebpix_newchangesDP";
+string version_string = "mc_truth_below15_pnetregneutrino";
 const char * version = version_string.c_str();
 
 bool dijet = true;
@@ -219,13 +219,12 @@ void L2Res() {
   TFile *fout = new TFile(Form("rootfiles/L2Res_%s.root", version),"RECREATE");
 
   // Make sure graphics output directories exists
-  gROOT->ProcessLine(".! mkdir pdf");
-  gROOT->ProcessLine(Form(".! mkdir pdf/L2Res_%s", version));
-  gROOT->ProcessLine(Form(".! mkdir pdf/L2Res_%s/vsEta", version));
-  gROOT->ProcessLine(Form(".! mkdir pdf/L2Res_%s/vsPt", version));
+  gROOT->ProcessLine(".! mkdir pdf/%s");
+  gROOT->ProcessLine(Form(".! mkdir pdf/%s/L2Res", version));
+  gROOT->ProcessLine(Form(".! mkdir pdf/%s/L2Res/vsEta", version));
+  gROOT->ProcessLine(Form(".! mkdir pdf/%s/L2Res/vsPt", version));
 
-  // string vrun[] = {"2023Cv123","2023Cv4","2023D"};
-  string vrun[] = {"2023Cv123","2023Cv4"};
+  string vrun[] = {"2023Cv123","2023Cv4","2023D"};
   const int nrun = sizeof(vrun)/sizeof(vrun[0]);
   string vmc[] = {"Summer23","Summer23","Summer23BPIX"};
   const int nmc = sizeof(vmc)/sizeof(vmc[0]);
@@ -374,7 +373,7 @@ void L2Res() {
 
   tex->DrawLatex(0.50,0.85,Form("[%1.3f,%1.3f]",eta1,eta2));
 
-  c13->SaveAs(Form("pdf/L2Res_%s/vsPt/L2Res_vsPt_%04d_%04d_%s_%s.pdf", version,
+  c13->SaveAs(Form("pdf/%s/L2Res/vsPt/L2Res_vsPt_%04d_%04d_%s_%s.pdf", version,
 		  int(1000.*eta1),int(1000.*eta2),cr,"c13"));
 
   // Create giant canvas for all eta bins (7*3=21; more in the future)
@@ -388,13 +387,13 @@ void L2Res() {
   TH1D *hmin = p2d->ProjectionX(Form("hmin_%s",cr)); hmin->Reset();
   TH1D *hmax = p2d->ProjectionX(Form("hmax_%s",cr)); hmax->Reset();
 
-  gROOT->ProcessLine(Form(".! mkdir -p textfiles/L2Res_%s", version));
-  ofstream ofz(Form("textfiles/L2Res_%s/L2Res_summary_zjet_%s.txt", version,cr));
-  ofstream ofg(Form("textfiles/L2Res_%s/L2Res_summary_gjet_%s.txt", version,cr));
-  ofstream ofd(Form("textfiles/L2Res_%s/L2Res_summary_dijet_%s.txt", version,cr));
-  ofstream ofp(Form("textfiles/L2Res_%s/L2Res_summary_dijet_probe_%s.txt", version,cr));
-  ofstream ofj(Form("textfiles/L2Res_%s/L2Res_summary_dijet_tag_%s.txt", version,cr));
-  ofstream ofm(Form("textfiles/L2Res_%s/L2Res_summary_max_%s.txt", version,cr));
+  gROOT->ProcessLine(Form(".! mkdir -p textfiles/%s", version));
+  ofstream ofz(Form("textfiles/%s/L2Res_summary_zjet_%s.txt", version,cr));
+  ofstream ofg(Form("textfiles/%s/L2Res_summary_gjet_%s.txt", version,cr));
+  ofstream ofd(Form("textfiles/%s/L2Res_summary_dijet_%s.txt", version,cr));
+  ofstream ofp(Form("textfiles/%s/L2Res_summary_dijet_probe_%s.txt", version,cr));
+  ofstream ofj(Form("textfiles/%s/L2Res_summary_dijet_tag_%s.txt", version,cr));
+  ofstream ofm(Form("textfiles/%s/L2Res_summary_max_%s.txt", version,cr));
 
   for (int ieta = 1; ieta != p2d->GetNbinsX()+1; ++ieta) {
     //int ieta = p2d->GetXaxis()->FindBin(2.7);
@@ -438,7 +437,7 @@ void L2Res() {
 
   tex->DrawLatex(0.50,0.85,Form("[%1.3f,%1.3f]",eta1,eta2));
 
-  c1->SaveAs(Form("pdf/L2Res_%s/vsPt/L2Res_vsPt_%04d_%04d_%s_%s.pdf", version,
+  c1->SaveAs(Form("pdf/%s/L2Res/vsPt/L2Res_vsPt_%04d_%04d_%s_%s.pdf", version,
 		  int(1000.*eta1),int(1000.*eta2),cr,"c1"));
 
 
@@ -471,7 +470,7 @@ void L2Res() {
 
   tex->DrawLatex(0.50,0.85,Form("[%1.3f,%1.3f]",eta1,eta2));
 
-  c2->SaveAs(Form("pdf/L2Res_%s/vsPt/L2Res_vsPt_%04d_%04d_%s_%s.pdf", version,
+  c2->SaveAs(Form("pdf/%s/L2Res/vsPt/L2Res_vsPt_%04d_%04d_%s_%s.pdf", version,
 		  int(1000.*eta1),int(1000*eta2),cr,"c2"));
 
   // Step 3. Draw data/MC ratio before normalization
@@ -494,7 +493,7 @@ void L2Res() {
 
   tex->DrawLatex(0.50,0.85,Form("[%1.3f,%1.3f]",eta1,eta2));
 
-  c3->SaveAs(Form("pdf/L2Res_%s/vsPt/L2Res_vsPt_%04d_%04d_%s_%s.pdf", version,
+  c3->SaveAs(Form("pdf/%s/L2Res/vsPt/L2Res_vsPt_%04d_%04d_%s_%s.pdf", version,
 		  int(1000.*eta1),int(1000.*eta2),cr,"c3"));
 
   // Step 4. Draw data/MC ratio of normalized JES
@@ -517,7 +516,7 @@ void L2Res() {
 
   tex->DrawLatex(0.50,0.85,Form("[%1.3f,%1.3f]",eta1,eta2));
 
-  c4->SaveAs(Form("pdf/L2Res_%s/vsPt/L2Res_vsPt_%04d_%04d_%s_%s.pdf", version,
+  c4->SaveAs(Form("pdf/%s/L2Res/vsPt/L2Res_vsPt_%04d_%04d_%s_%s.pdf", version,
 		  int(1000.*eta1),int(1000.*eta2),cr,"c4"));
 
 
@@ -615,7 +614,7 @@ void L2Res() {
 
   tex->DrawLatex(0.50,0.85,Form("[%1.3f,%1.3f]",eta1,eta2));
 
-  c5->SaveAs(Form("pdf/L2Res_%s/vsPt/L2Res_vsPt_%04d_%04d_%s_%s.pdf", version,
+  c5->SaveAs(Form("pdf/%s/L2Res/vsPt/L2Res_vsPt_%04d_%04d_%s_%s.pdf", version,
 		  int(1000.*eta1),int(1000.*eta2),cr,"c5"));
 
 
@@ -742,7 +741,7 @@ void L2Res() {
 
   } // for ieta
 
-  cx->SaveAs(Form("pdf/L2Res_%s/L2Res_AllEta_%s.pdf", version,cr));
+  cx->SaveAs(Form("pdf/%s/L2Res/L2Res_AllEta_%s.pdf", version,cr));
   cx->SetName(Form("cx_%s",cr));
 
   // Step 7. Draw summary of final results in a single plot
@@ -783,12 +782,12 @@ void L2Res() {
   legy->AddEntry(hy1000,"p_{T} = 1000 GeV","PLE");
   legy->AddEntry(hy3000,"p_{T} = 3000 GeV","PLE");
 
-  cy->SaveAs(Form("pdf/L2Res_%s/L2Res_Summary_%s.pdf", version,cr));
+  cy->SaveAs(Form("pdf/%s/L2Res/L2Res_Summary_%s.pdf", version,cr));
   cy->SetName(Form("cy_%s",cr));
 
   // Step 8. Print out text files
-  gROOT->ProcessLine(".! mkdir -p textfiles/Summer23_L2ResClosure");
-  ofstream ftxt(Form("textfiles/Summer23_L2ResClosure/Summer23Prompt23_Run%s_V1_DATA_L2Residual_AK4PFPuppi.txt",cr));
+  gROOT->ProcessLine(Form(".! mkdir -p textfiles/%s",version));
+  ofstream ftxt(Form("textfiles/%s/Summer23Prompt23_Run%s_V1_DATA_L2Residual_AK4PFPNet%s.txt",version,cr, TString(version).Contains("neutrino") ? "PlusNeutrino" : ""));
   ftxt << Form("{ 1 JetEta 1 JetPt 1./(%s) Correction L2Relative}",
 	       vf1[0]->GetExpFormula().Data()) << endl;
   for (int ieta = p2d->GetNbinsX(); ieta != 0; --ieta) {
@@ -856,7 +855,7 @@ void L2Res() {
     pd = drawEta(p2d,ptmin,ptmax,"Pz",kOpenDiamond,kBlack,"Dijet");
   }
 
-  c1->SaveAs(Form("pdf/L2Res_%s/vsEta/L2Res_vsEta_%04d_%04d_%s_%s.pdf", version,
+  c1->SaveAs(Form("pdf/%s/L2Res/vsEta/L2Res_vsEta_%04d_%04d_%s_%s.pdf", version,
 		  int(pt1),int(pt2),cr,"c1"));
 
 
@@ -886,7 +885,7 @@ void L2Res() {
     hd = drawNormEta(pd,"Pz",kOpenDiamond,kBlack);
   }
 
-  c2->SaveAs(Form("pdf/L2Res_%s/vsEta/L2Res_vsEta_%04d_%04d_%s_%s.pdf", version,
+  c2->SaveAs(Form("pdf/%s/L2Res/vsEta/L2Res_vsEta_%04d_%04d_%s_%s.pdf", version,
 		  int(pt1),int(pt2),cr,"c2"));
 
 
@@ -907,7 +906,7 @@ void L2Res() {
     hdr = drawRatio(pd->ProjectionX(),pdm,"Pz",kOpenDiamond,kBlack);
   }
 
-  c3->SaveAs(Form("pdf/L2Res_%s/vsEta/L2Res_vsEta_%04d_%04d_%s_%s.pdf", version,
+  c3->SaveAs(Form("pdf/%s/L2Res/vsEta/L2Res_vsEta_%04d_%04d_%s_%s.pdf", version,
 		  int(pt1),int(pt2),cr,"c3"));
 
 
@@ -928,7 +927,7 @@ void L2Res() {
     hdrn = drawRatio(hd,hdm,"Pz",kOpenDiamond,kBlack);
   }
 
-  c4->SaveAs(Form("pdf/L2Res_%s/vsEta/L2Res_vsEta_%04d_%04d_%s_%s.pdf", version,
+  c4->SaveAs(Form("pdf/%s/L2Res/vsEta/L2Res_vsEta_%04d_%04d_%s_%s.pdf", version,
 		  int(pt1),int(pt2),cr,"c4"));
 
   // Rename to avoid loop leakage and errors

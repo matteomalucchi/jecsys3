@@ -1209,7 +1209,8 @@ void reprocess(string epoch="", string version_string="", string closure="") {
       jec = getFJC("","","Summer22Prompt23_Run2023Cv123_V3_DATA_L2L3Residual");
       mcjec = getFJC("","Summer22Run3_V1_MC_L2Relative");
       */
-      jec = getFJC("","","Summer22Prompt23_Run2023Cv123_V3_DATA_L2L3Residual");
+      // jec = getFJC("","","Summer22Prompt23_Run2023Cv123_V3_DATA_L2L3Residual");
+      jec = getFJC("","","Summer23Prompt23_Run2023Cv123_V2_DATA_L2L3Residual_AK4PFPuppi");
       mcjec = getFJC("","Summer23Run3_V1_MC_L2Relative_AK4PUPPI");
     }
     //epoch=="Run23C" ||
@@ -1219,7 +1220,8 @@ void reprocess(string epoch="", string version_string="", string closure="") {
       jec = getFJC("","","Summer22Prompt23_Run2023Cv4_V3_DATA_L2L3Residual");
       mcjec = getFJC("","Summer22Run3_V1_MC_L2Relative");
       */
-      jec = getFJC("","","Summer22Prompt23_Run2023Cv4_V3_DATA_L2L3Residual");
+      // jec = getFJC("","","Summer22Prompt23_Run2023Cv4_V3_DATA_L2L3Residual");
+      jec = getFJC("","","Summer23Prompt23_Run2023Cv4_V2_DATA_L2L3Residual_AK4PFPuppi");
       mcjec = getFJC("","Summer23Run3_V1_MC_L2Relative_AK4PUPPI");
     }
     if (epoch=="Run23D") {
@@ -1227,7 +1229,7 @@ void reprocess(string epoch="", string version_string="", string closure="") {
       jec = getFJC("","","Summer22Prompt23_Run2023D_V3_DATA_L2L3Residual");
       mcjec = getFJC("","Summer22Run3_V1_MC_L2Relative");
       */
-      jec = getFJC("","","Summer22Prompt23_Run2023D_V3_DATA_L2L3Residual");
+      jec = getFJC("","","Summer23Prompt23_Run2023D_V2_DATA_L2L3Residual_AK4PFPuppi");
       mcjec = getFJC("","Summer23BPixRun3_V3_MC_L2Relative_AK4PUPPI");
     }
     if (epoch=="Run23C4D") { assert(false); exit(0); }
@@ -1290,13 +1292,16 @@ void reprocess(string epoch="", string version_string="", string closure="") {
       jecold = getFJC("","","Summer22EEPrompt22_Run2022G_V3_DATA_L2L3Residual");
     }
     if (epoch=="Run23B" || epoch=="Run23BC123" || epoch=="Run23C123") {
-      jecold = getFJC("","","Summer22Prompt23_Run2023Cv123_V3_DATA_L2L3Residual");
+      // jecold = getFJC("","","Summer22Prompt23_Run2023Cv123_V3_DATA_L2L3Residual");
+      jecold = getFJC("","","Summer23Prompt23_Run2023Cv123_V2_DATA_L2L3Residual_AK4PFPuppi");
     }
     if (epoch=="Run23C4") {
-      jecold = getFJC("","","Summer22Prompt23_Run2023Cv4_V3_DATA_L2L3Residual");
+      // jecold = getFJC("","","Summer22Prompt23_Run2023Cv4_V3_DATA_L2L3Residual");
+      jecold = getFJC("","","Summer23Prompt23_Run2023Cv4_V2_DATA_L2L3Residual_AK4PFPuppi");
     }
     if (epoch=="Run23D") {
-      jecold = getFJC("","","Summer22Prompt23_Run2023D_V3_DATA_L2L3Residual");
+      // jecold = getFJC("","","Summer22Prompt23_Run2023D_V3_DATA_L2L3Residual");
+      jecold = getFJC("","","Summer23Prompt23_Run2023D_V2_DATA_L2L3Residual_AK4PFPuppi");
     }
     if (epoch=="Run3") {
       // Combo done with jecdataRun3Data.root and createL2L3ResTextFile.C

@@ -196,8 +196,8 @@ void globalFitEtaBin(double etamin, double etamax, string run, string version, s
       cleanGraph(g);
     }
 
-    if (closure=="True")      _gf_undoJESref=false;
-    else       _gf_undoJESref=true;
+    if (closure=="True")      _gf_undoJESref=true;
+    else       _gf_undoJESref=false;
     // Undo previous L2L3Res, if so requested
     if (string(type)=="Rjet" && _gf_undoJESref) {
       if (debug) cout << "...undoing JES for " << type << endl << flush;
@@ -570,7 +570,7 @@ void globalFitDraw(string run, string version) {
     curdir->cd();
 
     // Create canvas
-    lumi_136TeV = Form("globalFit.C(\"%s\")",run.c_str());
+    lumi_136TeV = Form("%s (\"%s\")",TString(cv).Contains("neutrino") ? "PNet incl. neutrinos" : "PNet", run.c_str());
     if (run=="Run3") lumi_136TeV = "Run3, 64 fb^{-1}";
     //TH1D *h = tdrHist("h","JES",0.982+1e-5,1.025-1e-5); // ratio (hdm)
     TH1D *h = tdrHist("h","JES",
@@ -659,7 +659,7 @@ void globalFitDraw(string run, string version) {
     //leg2->AddEntry(l,"Run 3 avg.","L");
     //leg2->AddEntry(herr,"Total unc.","F");
     //leg2->AddEntry(herr,"Run2 total unc.","F");
-    leg2->AddEntry(herr,"Summer22_V3","F"); // Summer23
+    leg2->AddEntry(herr,"Summer23_V2","F"); // before was Summer22_V3
     leg2->AddEntry(gre,"Fit unc.","FL");
 
     // Separate canvas for CHF, NHF, NEF
@@ -874,11 +874,11 @@ void globalFitDraw(string run, string version) {
 
     if (debug) cout << "Draw plots" << endl << flush;
 
-    c1->SaveAs(Form("pdf/globalFit_%s/globalFit_%s_%s_rjet_%s_%s.pdf",cv,crun,cv,_gf_undoJESref ? "initial": "closure", complete ? "complete" : "noMultiJet" ));
-    if (plotPF) c1c->SaveAs(Form("pdf/globalFit_%s/globalFit_%s_%s_pf_%s_%s.pdf",cv,crun,cv,_gf_undoJESref ? "initial": "closure" , complete ? "complete" : "noMultiJet"));
-    if (usingMu) c1l->SaveAs(Form("pdf/globalFit_%s/globalFit_%s_%s_mu_%s_%s.pdf",cv,crun,cv,_gf_undoJESref ? "initial": "closure", complete ? "complete" : "noMultiJet" ));
+    c1->SaveAs(Form("pdf/%s/globalFit/globalFit_%s_%s_rjet_%s_%s.pdf",cv,crun,cv,_gf_undoJESref ? "closure" : "initial", complete ? "complete" : "noMultiJet" ));
+    if (plotPF) c1c->SaveAs(Form("pdf/%s/globalFit/globalFit_%s_%s_pf_%s_%s.pdf",cv,crun,cv,_gf_undoJESref ? "closure" : "initial" , complete ? "complete" : "noMultiJet"));
+    if (usingMu) c1l->SaveAs(Form("pdf/%s/globalFit/globalFit_%s_%s_mu_%s_%s.pdf",cv,crun,cv,_gf_undoJESref ? "closure" : "initial", complete ? "complete" : "noMultiJet" ));
     //
-    if (saveROOT) c1->SaveAs(Form("pdf/globalFit_%s/globalFit_%s_%s_rjet_%s_%s.root",cv,crun,cv,_gf_undoJESref ? "initial": "closure", complete ? "complete" : "noMultiJet" ));
+    if (saveROOT) c1->SaveAs(Form("pdf/%s/globalFit/globalFit_%s_%s_rjet_%s_%s.root",cv,crun,cv,_gf_undoJESref ? "closure" : "initial", complete ? "complete" : "noMultiJet" ));
 
     // Test
     c1->cd();
@@ -960,9 +960,9 @@ void globalFitDraw(string run, string version) {
     }
 
     if (string(crun)=="Run3")
-      c1->SaveAs(Form("pdf/globalFit_%s/globalFit_%s_%s_rjet_wNHF_%s_%s.pdf",cv,crun,cv,_gf_undoJESref ? "initial": "closure", complete ? "complete" : "noMultiJet"));
+      c1->SaveAs(Form("pdf/%s/globalFit/globalFit_%s_%s_rjet_wNHF_%s_%s.pdf",cv,crun,cv,_gf_undoJESref ? "closure" : "initial", complete ? "complete" : "noMultiJet"));
     else
-      c1->SaveAs(Form("pdf/globalFit_%s/globalFit_%s_%s_rjet_%s_%s.pdf",cv,crun,cv, _gf_undoJESref ? "initial": "closure", complete ? "complete" : "noMultiJet" ));
+      c1->SaveAs(Form("pdf/%s/globalFit/globalFit_%s_%s_rjet_%s_%s.pdf",cv,crun,cv, _gf_undoJESref ? "closure" : "initial", complete ? "complete" : "noMultiJet" ));
   } // drawResults
 } // globalFitEtaBin
 

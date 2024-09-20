@@ -18,6 +18,10 @@
 
 using namespace std;
 
+string version_string = "mc_truth_below15_pnetregneutrino";
+const char * version = version_string.c_str();
+
+
 const bool debug = true;
 
 void createL2L3ResTextFiles(string set, bool leg2=false);
@@ -33,7 +37,8 @@ void createL2L3ResTextFile() {
 		    0.75+1e-4,1.20-1e-4,"p_{T} (GeV)",ptmin,ptmax);
 		    //0.90+1e-4,1.30-1e-4,"p_{T} (GeV)",ptmin,ptmax);
 		    //0.88+1e-4,1.05-1e-4,"p_{T} (GeV)",ptmin,ptmax);
-  lumi_136TeV = "Run3, 63 fb^{-1}"; // Not including 23B
+  lumi_136TeV = Form("%s      Run3, 63 fb^{-1}",
+    TString(version).Contains("neutrino") ? "PNet incl. neutrinos" : "PNet"); // Not including 23B
  TCanvas *c1 = tdrCanvas("c1",h,8,11,kSquare);
   c1->SetLeftMargin(0.17);
   c1->SetRightMargin(0.03);
@@ -62,15 +67,16 @@ void createL2L3ResTextFile() {
   c1->Update();
   c1->SaveAs("pdf/createL2L3ResTextFile_Summer22_reV3_Run22CDE-22Sep2023_22FG-Prompt_23CD-Prompt_Run3-Combo.pdf");
   */
+  gROOT->ProcessLine(Form(".! mkdir -p pdf/%s",version));
 
   createL2L3ResTextFiles("Run23C123-Summer23",true);
   createL2L3ResTextFiles("Run23C4-Summer23",true);
   createL2L3ResTextFiles("Run23D-Summer23",true);
   c1->Update();
   //c1->SaveAs("pdf/createL2L3ResTextFile_Summer23_V1.pdf");
-  c1->SaveAs("pdf/createL2L3ResTextFile_Summer23_V2.pdf");
+  c1->SaveAs(Form("pdf/%s/createL2L3ResTextFile_Summer23_V1_%s.pdf", version,version));
 
-  
+
   /*
   // Produce Run2 year-averages for reprocess.C reference (jec, jecold)
   // Use files in jecsys2020 directory, not jecsys3
@@ -86,7 +92,7 @@ void createL2L3ResTextFile() {
 
 void createL2L3ResTextFiles(string set, bool leg2) {
 
-  //if (debug) 
+  //if (debug)
   cout << "****************************************************************\n";
   cout << "Warning: sscanf only works correctly when code is compiled (.C+)\n";
   cout << "****************************************************************\n";
@@ -128,15 +134,15 @@ void createL2L3ResTextFiles(string set, bool leg2) {
   }
   //else if (set=="Run23C123-Prompt") {
   else if (set=="Run23C123-Summer23") {
-    f = new TFile("rootfiles/jecdataRun23C123.root","READ"); isRun3=true;
+    f = new TFile(Form("rootfiles/jecdata_Run23C123_%s%s.root", version, "_initial"),"READ"); isRun3=true;
   }
   //else if (set=="Run23C4-Prompt") {
   else if (set=="Run23C4-Summer23") {
-    f = new TFile("rootfiles/jecdataRun23C4.root","READ"); isRun3=true;
+    f = new TFile(Form("rootfiles/jecdata_Run23C4_%s%s.root", version, "_initial"),"READ"); isRun3=true;
   }
   //else if (set=="Run23D-Prompt") {
   else if (set=="Run23D-Summer23") {
-    f = new TFile("rootfiles/jecdataRun23D.root","READ"); isRun3=true;
+    f = new TFile(Form("rootfiles/jecdata_Run23D_%s%s.root", version, "_initial"),"READ"); isRun3=true;
   }
   //else if (set=="Run23C4D-Prompt") {
   else if (set=="Run23C4D-Summer23") {
@@ -161,15 +167,15 @@ void createL2L3ResTextFiles(string set, bool leg2) {
 
   TF1 *f1 = new TF1(Form("f1_%s",set.c_str()),"[0]+[1]/x+[2]*log(x)/x+[3]*(pow(x/[4],[5])-1)/(pow(x/[4],[5])+1)+[6]*pow(x,-0.3051)+[7]*x",15,4500);
   f1->SetParameters(0.98, 0.1,0.01, 0.01,500.,1.3, 0.001, 0);
-  if (set=="2017H") 
+  if (set=="2017H")
     f1->SetParameters(0.99, 1.5,0.01, 0.01,1000.,1.3, 0.001, 0.);
   if (!isRun3)
     f1->FixParameter(7, 0.);
-  
+
   // To avoid division by zero errors
   f1->SetParLimits(4,10.,6500.);
   f1->SetParLimits(5,0.,10.);
-  
+
   map<string,int> color;
   color["2016BCDEF"] = kYellow+2;
   color["2016GH"] = kRed;
@@ -190,7 +196,7 @@ void createL2L3ResTextFiles(string set, bool leg2) {
   color["Run23C123-Summer23"] = kOrange+1;
   color["Run23C4-Summer23"] = kBlue;
   color["Run23D-Summer23"] = kMagenta;
-  
+
   h->Fit(f1,"QRN");
   h->Fit(f1,"QRNM");
   h->Fit(f1,"QRNM");
@@ -271,18 +277,24 @@ void createL2L3ResTextFiles(string set, bool leg2) {
   }
   */
   if (set=="Run23C123-Summer23") {
-    sin = "textFiles/Summer23_L2ResOnly/Summer23Prompt23_Run2023Cv123_V1_DATA_L2Residual_AK4PFPuppi.txt"; isNewL2Res = true;
-    sout = "textFiles/Summer23_L2ResOnly/Summer23Prompt23_Run2023Cv123_V2_DATA_L2L3Residual_AK4PFPuppi.txt";
+    sin = Form("textfiles/%s/Summer23Prompt23_Run2023Cv123_V1_DATA_L2Residual_AK4PFPNet%s.txt", version,
+              TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ; isNewL2Res = true;
+    sout = Form("textfiles/%s/Summer23Prompt23_Run2023Cv123_V1_DATA_L2L3Residual_AK4PFPNet%s.txt", version,
+              TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ;
   }
   if (set=="Run23C4-Summer23") {
-    sin = "textFiles/Summer23_L2ResOnly/Summer23Prompt23_Run2023Cv4_V1_DATA_L2Residual_AK4PFPuppi.txt"; isNewL2Res = true;
-    sout = "textFiles/Summer23_L2ResOnly/Summer23Prompt23_Run2023Cv4_V2_DATA_L2L3Residual_AK4PFPuppi.txt";
+    sin = Form("textfiles/%s/Summer23Prompt23_Run2023Cv4_V1_DATA_L2Residual_AK4PFPNet%s.txt", version,
+              TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ; isNewL2Res = true;
+    sout = Form("textfiles/%s/Summer23Prompt23_Run2023Cv4_V1_DATA_L2L3Residual_AK4PFPNet%s.txt", version,
+              TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ;
   }
   if (set=="Run23D-Summer23") {
-    sin = "textFiles/Summer23_L2ResOnly/Summer23Prompt23_Run2023D_V1_DATA_L2Residual_AK4PFPuppi.txt"; isNewL2Res = true;
-    sout = "textFiles/Summer23_L2ResOnly/Summer23Prompt23_Run2023D_V2_DATA_L2L3Residual_AK4PFPuppi.txt";
+    sin = Form("textfiles/%s/Summer23Prompt23_Run2023D_V1_DATA_L2Residual_AK4PFPNet%s.txt", version,
+              TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ; isNewL2Res = true;
+    sout = Form("textfiles/%s/Summer23Prompt23_Run2023D_V1_DATA_L2L3Residual_AK4PFPNet%s.txt", version,
+              TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ;
   }
-  
+
   if (set=="Run3-Combo") {
     sin = "textFiles/Run3_22Sep2023_v3/Summer22Prompt23_Run2023D_V3_DATA_L2Residual_AK4PFPUPPI.txt"; isL2Res = true; // placeholder L2Res
     sout = "textFiles/Run3_22Sep2023_reV3/Summer22Prompt23_Run3_reV3_DATA_L2L3Residual_AK4PFPUPPI.txt";
@@ -291,12 +303,12 @@ void createL2L3ResTextFiles(string set, bool leg2) {
   assert(sin!="");
   assert(sout!="");
   assert(sout!=sin);
-						       
+
   cout << "Reading in L2Residual file:" << endl
-       << "   " << sin << endl << flush;  
+       << "   " << sin << endl << flush;
   ifstream fin(sin.c_str());
   assert(fin.is_open());
-  
+
   cout << "Writing out L2L3Residual file:" << endl
        << "   " << sout << endl << flush;
   ofstream fout(sout.c_str());
@@ -321,12 +333,12 @@ void createL2L3ResTextFiles(string set, bool leg2) {
   }
   else {
     header = "{ 1 JetEta 1 JetPt [2]*([3]*([4]+[5]*TMath::Log(max([0],min([1],x))))*1./([6]+[7]/x+[8]*log(x)/x+[9]*(pow(x/[10],[11])-1)/(pow(x/[10],[11])+1)+[12]*pow(x,-0.3051))) Correction L2Relative}";
-  } 
+  }
   //([6]+[7]*100./3.*(TMath::Max(0.,1.03091-0.051154*pow(x,-0.154227))-TMath::Max(0.,1.03091-0.051154*TMath::Power(208.,-0.154227)))+[8]*0.021*(-1.+1./(1.+exp(-(TMath::Log(x)-5.030)/0.395))))) Correction L2Relative}
   if (debug) cout << "New L2L3Residual header:" << endl;
   if (debug) cout << header << endl;
   fout << header << endl;
-  
+
   string line;
   double etamin(0), etamax(0);
   int npar(0), xmin(0), xmax(0), ptmin0(0), ptmax1(0);
