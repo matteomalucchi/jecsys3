@@ -196,8 +196,11 @@ void globalFitEtaBin(double etamin, double etamax, string run, string version, s
       cleanGraph(g);
     }
 
-    if (closure=="True")      _gf_undoJESref=true;
-    else       _gf_undoJESref=false;
+    // if (closure=="True")      _gf_undoJESref=true;
+    // else       _gf_undoJESref=false;
+    _gf_undoJESref=false;
+
+
     // Undo previous L2L3Res, if so requested
     if (string(type)=="Rjet" && _gf_undoJESref) {
       if (debug) cout << "...undoing JES for " << type << endl << flush;

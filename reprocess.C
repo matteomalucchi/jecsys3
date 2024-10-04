@@ -130,15 +130,27 @@ void reprocess(string epoch="", string version_string="", string closure="") {
   //const char *cdz58p1 = "rootfiles/Sami_20230912"; // v58p1
   // v66 files used for 22Sep2023_V3 JECs
   if (epoch=="Run22CD") {
-    fz = new TFile("rootfiles/jme_bplusZ_2022CD_Zmm_sync_v66.root","READ");
-  }
-  if (epoch=="Run22E") {
-    fz = new TFile("rootfiles/jme_bplusZ_2022E_Zmm_sync_v66.root","READ");
-  }
-  if (epoch=="Run22FG") {
     //fz = new TFile("rootfiles/jme_bplusZ_2022FG_Zmm_sync_v66.root","READ");
     // 19Dec2023 update
-    fz = new TFile("rootfiles/jme_bplusZ_2022F_Zmm_sync_v66_19Dec.root","READ"); // TMP until FG available
+    fz = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/zb/jme_bplusZ_merged_%s_2022CD.root", version, version),"READ"); // Summer23 L2Res_V1
+    //exit(0);
+  }
+  if (epoch=="Run22E") {
+    //fz = new TFile("rootfiles/jme_bplusZ_2022FG_Zmm_sync_v66.root","READ");
+    // 19Dec2023 update
+    fz = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/zb/jme_bplusZ_merged_%s_2022E.root", version, version),"READ"); // Summer23 L2Res_V1
+    //exit(0);
+  }
+  if (epoch=="Run22F") {
+    //fz = new TFile("rootfiles/jme_bplusZ_2022FG_Zmm_sync_v66.root","READ");
+    // 19Dec2023 update
+    fz = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/zb/jme_bplusZ_merged_%s_2022F.root", version, version),"READ"); // Summer23 L2Res_V1
+    //exit(0);
+  }
+  if (epoch=="Run22G") {
+    //fz = new TFile("rootfiles/jme_bplusZ_2022FG_Zmm_sync_v66.root","READ");
+    // 19Dec2023 update
+    fz = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/zb/jme_bplusZ_merged_%s_2022G.root", version, version),"READ"); // Summer23 L2Res_V1
     //exit(0);
   }
   if (epoch=="Run23C123") {
@@ -258,22 +270,9 @@ void reprocess(string epoch="", string version_string="", string closure="") {
   // 22Sep2023 V3 used v32 files
   //TFile *fp = new TFile(Form("../gamjet/rootfiles/GamHistosRatio_%s_P8QCD_v32.root",mp[epoch]),"READ"); // L2L3Res_V3
   TFile *fp(0);
-  if (epoch=="Run22FG") {
-    //fp = new TFile(Form("../gamjet/rootfiles/GamHistosRatio_%s_P8QCD_19Dec_v33.root",mp[epoch]),"READ"); // 19Dec2023
-    assert(false);
-  }
-  else if (epoch=="Run23C123" || epoch=="Run23C4" || epoch=="Run23D") {
-    //fp = new TFile(Form("rootfiles/Summer23_noL2L3Res/GamHistosRatio_%s_P8_w2.root",mp[epoch]),"READ"); // Summer23 no QCD
-    //fp = new TFile(Form("../gamjet/rootfiles/GamHistosRatio_%s_P8QCD_w4.root",mp[epoch]),"READ"); // Summer23 no QCD with L2Res
-    //fp = new TFile(Form("rootfiles/Summer23_L2ResOnly/GamHistosRatio_%s_P8%s-noQCD_w4.root",mp[epoch],epoch=="Run23D" ? "BPix" : ""),"READ"); // Summer23 L2Res_V1 (noQCD)
-    // fp = new TFile(Form("rootfiles/Summer23_L2ResOnly/GamHistosRatio_%s_P8%sQCD_w6.root",mp[epoch],epoch=="Run23D" ? "BPix" : ""),"READ"); // Summer23 L2Res_V1 (withQCD)
-    fp = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/gam/GamHistosRatio_%s_P8%sQCD_%s.root",version, mp[epoch],epoch=="Run23D" ? "BPix" : "",version),"READ"); // Summer23 L2Res_V1 (withQCD)
-  }
-  else {
-    // fp = new TFile(Form("../gamjet/rootfiles/GamHistosRatio_%s_P8QCD_v32.root",mp[epoch]),"READ"); // L2L3Res_V3
-    fp = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/gam/GamHistosRatio_%s_P8QCD_%s.root",version,mp[epoch],version),"READ"); // L2L3Res_V3
-    assert(false);
-  }
+
+  fp = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/gam/GamHistosRatio_%s_P8%sQCD_%s.root",version, mp[epoch],epoch=="Run23D" ? "BPix" : "",version),"READ"); // Summer23 L2Res_V1 (withQCD)
+
   assert(fp && !fp->IsZombie());
 
   ////////////////////////////
@@ -340,14 +339,14 @@ void reprocess(string epoch="", string version_string="", string closure="") {
   mmjd["Run23C4D"] = "2023Cv4D";
   mmjd["Run3"] = "Run3";
   map<string,const char*> mmjm;
-  mmjm["Run22C"] = "Summer22MG";
-  mmjm["Run22D"] = "Summer22MG";
-  mmjm["Run22CD"] = "Summer22MG";
+  mmjm["Run22C"] = "2022QCD";
+  mmjm["Run22D"] = "2022QCD";
+  mmjm["Run22CD"] = "2022QCD";
   mmjm["Run22CDE"] = "Summer22MG";
-  mmjm["Run22E"] = "Summer22EEMG";
-  mmjm["Run22F"] = "Summer22EEMG";
-  mmjm["Run22G"] = "Summer22EEMG";
-  mmjm["Run22FG"] = "Summer22EEMG";
+  mmjm["Run22E"] = "2022EEQCD";
+  mmjm["Run22F"] = "2022EEQCD";
+  mmjm["Run22G"] = "2022EEQCD";
+  mmjm["Run22FG"] = "2022EEQCD";
   mmjm["Run23BC123"] = "Summer22MG";
   // mmjm["Run23C123"] = "Summer23MG";//GBPix";//"Summer22MG";
   // mmjm["Run23C4"] = "Summer23MG";//BPix";//"Summer22MG";
@@ -1183,12 +1182,12 @@ void reprocess(string epoch="", string version_string="", string closure="") {
       jec = getFJC("","","Winter22Run3_RunC_V2_DATA_L2L3Residual");
       mcjec = getFJC("","Winter22Run3_RunC_V2_DATA_L2Relative");
       */
-      jec = getFJC("","","Summer22-22Sep2023_Run2022CD_V3_DATA_L2L3Residual");
-      mcjec = getFJC("","Summer22Run3_V1_MC_L2Relative");
+      jec = getFJC("","","Summer22-22Sep2023_Run2022CD_V3_DATA_L2L3Residual_AK4PFPuppi");
+      mcjec = getFJC("","Summer22Run3_V1_MC_L2Relative_AK4PUPPI");
     }
     if (epoch=="Run22E") {
-      jec = getFJC("","","Summer22EE-22Sep2023_Run2022E_V3_DATA_L2L3Residual");
-      mcjec = getFJC("","Summer22EEVetoRun3_V1_MC_L2Relative");
+      jec = getFJC("","","Summer22EE-22Sep2023_Run2022E_V3_DATA_L2L3Residual_AK4PFPuppi");
+      mcjec = getFJC("","Summer22EEVetoRun3_V1_MC_L2Relative_AK4PUPPI");
     }
     if (epoch=="Run22F" || epoch=="Run22FG") {
       // because Sami used these for Zb (up to v59 at least?)
@@ -1196,12 +1195,12 @@ void reprocess(string epoch="", string version_string="", string closure="") {
       jec = getFJC("","","Winter23Prompt23_RunA_V1_DATA_L2L3Residual");
       mcjec = getFJC("","Winter23Prompt23_RunA_V1_DATA_L2Relative");
       */
-      jec = getFJC("","","Summer22EEPrompt22_Run2022F_V3_DATA_L2L3Residual");
-      mcjec = getFJC("","Summer22EEVetoRun3_V1_MC_L2Relative");
+      jec = getFJC("","","Summer22EEPrompt22_Run2022F_V3_DATA_L2L3Residual_AK4PFPuppi");
+      mcjec = getFJC("","Summer22EEVetoRun3_V1_MC_L2Relative_AK4PUPPI");
     }
     if (epoch=="Run22G") {
-      jec = getFJC("","","Summer22EEPrompt22_Run2022G_V3_DATA_L2L3Residual");
-      mcjec = getFJC("","Summer22EEVetoRun3_V1_MC_L2Relative");
+      jec = getFJC("","","Summer22EEPrompt22_Run2022G_V3_DATA_L2L3Residual_AK4PFPuppi");
+      mcjec = getFJC("","Summer22EEVetoRun3_V1_MC_L2Relative_AK4PUPPI");
     }
     if (epoch=="Run22EFG") { assert(false); exit(0); }
     if (epoch=="Run23B" || epoch=="Run23BC123" || epoch=="Run23C123") {
@@ -1237,8 +1236,8 @@ void reprocess(string epoch="", string version_string="", string closure="") {
       //jec = getFJC("","","Winter23Prompt23_RunA_V1_DATA_L2L3Residual");
       //mcjec = getFJC("","Winter23Prompt23_RunA_V1_DATA_L2Relative");
       // Combo done with jecdataRun3Data.root and createL2L3ResTextFile.C
-      jec = getFJC("","","Summer22Prompt23_Run3_reV3_DATA_L2L3Residual");
-      mcjec = getFJC("","Summer22Run3_V1_MC_L2Relative");
+      jec = getFJC("","","Summer22Prompt23_Run3_reV3_DATA_L2L3Residual_AK4PFPuppi");
+      mcjec = getFJC("","Summer22Run3_V1_MC_L2Relative_AK4PFPuppi");
     }
     assert(jec);
     assert(mcjec);
@@ -1278,18 +1277,18 @@ void reprocess(string epoch="", string version_string="", string closure="") {
 
     if (epoch=="Run22C" || epoch=="Run22D" || epoch=="Run22CD") {
       //jecold = getFJC("","","Winter22Run3_RunC_V2_DATA_L2L3Residual");
-      jecold = getFJC("","","Summer22-22Sep2023_Run2022CD_V3_DATA_L2L3Residual");
+      jecold = getFJC("","","Summer22-22Sep2023_Run2022CD_V3_DATA_L2L3Residual_AK4PFPuppi");
     }
     if (epoch=="Run22E") {
-      jecold = getFJC("","","Summer22EE-22Sep2023_Run2022E_V3_DATA_L2L3Residual");
+      jecold = getFJC("","","Summer22EE-22Sep2023_Run2022E_V3_DATA_L2L3Residual_AK4PFPuppi");
     }
-    if (epoch=="Run22F" || epoch=="Run22FG") {
+    if (epoch=="Run22F") {
       // because Sami used this (at least up to v59?)
       //jecold = getFJC("","","Winter23Prompt23_RunA_V1_DATA_L2L3Residual");
-      jecold = getFJC("","","Summer22EEPrompt22_Run2022F_V3_DATA_L2L3Residual");
+      jecold = getFJC("","","Summer22EEPrompt22_Run2022F_V3_DATA_L2L3Residual_AK4PFPuppi");
     }
-    if (epoch=="Run22F" || epoch=="Run22FG") {
-      jecold = getFJC("","","Summer22EEPrompt22_Run2022G_V3_DATA_L2L3Residual");
+    if (epoch=="Run22G") {
+      jecold = getFJC("","","Summer22EEPrompt22_Run2022G_V3_DATA_L2L3Residual_AK4PFPuppi");
     }
     if (epoch=="Run23B" || epoch=="Run23BC123" || epoch=="Run23C123") {
       // jecold = getFJC("","","Summer22Prompt23_Run2023Cv123_V3_DATA_L2L3Residual");

@@ -9,22 +9,32 @@ import argparse
 # IOV_list= ['Run22CD','Run22E','Run22FG','Run23BC123','Run23C4D','Run3']
 # IOV_list= ['Run22CD','Run22E','Run22FG','Run23C123',
 #            'Run23C4','Run23D','Run23C4D']
-IOV_list = ["Run23C123", "Run23C4","Run23D"]
+run23 = ["Run23C123", "Run23C4","Run23D"]
+run22 = ['Run22CD','Run22E']#]
 
 version = "tot_23_pnetreg_ok"
 
 parser = argparse.ArgumentParser(description="Run all IOVs")
 
 # The user can pass the IOV list, version, max number of files as an argument
-parser.add_argument("-i", '--IOV_list', nargs='+', default=IOV_list)
+parser.add_argument("-i", '--IOV_list', default="all")
 parser.add_argument("-v", "--version", default=version)
 parser.add_argument("-c", "--closure", default=False, action="store_true")
 args = parser.parse_args()
 
 version = args.version
-IOV_list=args.IOV_list
+
+if "23" in args.IOV_list :
+    IOV_list=run23
+elif "22" in args.IOV_list:
+    IOV_list=run22
+elif "all" in args.IOV_list:
+    IOV_list=run23+run22
+else:
+    raise ValueError("Invalid IOV_list")
 
 # make pdf/globalFit
+os.system(f"mkdir pdf/{version}/")
 os.system(f"mkdir pdf/{version}/globalFit")
 # os.system("mkdir png/globalFit_"+version)
 for iov in IOV_list:
@@ -51,7 +61,7 @@ for iov in IOV_list:
         + iov
         + "_"
         + version
-        + ("_closure" if args.closure else "_initial")
+        # + ("_closure" if args.closure else "_initial")
         + ".root"
     )
     os.system(mv)

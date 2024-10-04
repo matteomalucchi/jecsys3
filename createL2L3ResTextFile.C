@@ -18,8 +18,11 @@
 
 using namespace std;
 
-string version_string = "mc_truth_below15_pnetregneutrino";
+string version_string = "mc_truth_below15_2022_pnetreg";
 const char * version = version_string.c_str();
+
+string YEAR = "2022";
+
 
 
 const bool debug = true;
@@ -54,11 +57,6 @@ void createL2L3ResTextFile() {
 
   //h->SetMinimum(0.70+1e-4); // Summer22
   /*
-  createL2L3ResTextFiles("Run22CD-22Sep2023");
-  createL2L3ResTextFiles("Run22E-22Sep2023");
-  //createL2L3ResTextFiles("Run22FG-Prompt");
-  createL2L3ResTextFiles("Run22F-Prompt");
-  createL2L3ResTextFiles("Run22G-Prompt");
   createL2L3ResTextFiles("Run23C123-Prompt",true);
   createL2L3ResTextFiles("Run23C4-Prompt",true);
   createL2L3ResTextFiles("Run23D-Prompt",true);
@@ -69,12 +67,27 @@ void createL2L3ResTextFile() {
   */
   gROOT->ProcessLine(Form(".! mkdir -p pdf/%s",version));
 
+  if (YEAR == "2023" || YEAR == "all"){
   createL2L3ResTextFiles("Run23C123-Summer23",true);
   createL2L3ResTextFiles("Run23C4-Summer23",true);
   createL2L3ResTextFiles("Run23D-Summer23",true);
+  }
+  if (YEAR == "2022" || YEAR == "all"){
+  createL2L3ResTextFiles("Run22CD-22Sep2023",true);
+  createL2L3ResTextFiles("Run22E-22Sep2023",true);
+  createL2L3ResTextFiles("Run22F-Prompt",true);
+  createL2L3ResTextFiles("Run22G-Prompt",true);
+  }
   c1->Update();
+
+  string summer_str;
+  if (YEAR == "2023") {summer_str = "Summer23";}
+  if (YEAR == "2022") {summer_str = "Summer22";}
+  if (YEAR == "all") {summer_str = "Run3";}
+  const char * summer = summer_str.c_str();
+
   //c1->SaveAs("pdf/createL2L3ResTextFile_Summer23_V1.pdf");
-  c1->SaveAs(Form("pdf/%s/createL2L3ResTextFile_Summer23_V1_%s.pdf", version,version));
+  c1->SaveAs(Form("pdf/%s/createL2L3ResTextFile_%s_V1_%s.pdf", version,summer, version));
 
 
   /*
@@ -123,26 +136,31 @@ void createL2L3ResTextFiles(string set, bool leg2) {
     f = new TFile("../jecsys2020/rootfiles/jecdata2018ABCD.root","READ");
   }
   else if (set=="Run22CD-22Sep2023") {
-    f = new TFile("rootfiles/jecdataRun22CD.root","READ"); isRun3=true;
+    f = new TFile(Form("rootfiles/jecdata_Run22CD_%s.root", version),"READ"); isRun3=true;
   }
   else if (set=="Run22E-22Sep2023") {
-    f = new TFile("rootfiles/jecdataRun22E.root","READ"); isRun3=true;
+    f = new TFile(Form("rootfiles/jecdata_Run22E_%s.root", version),"READ"); isRun3=true;
   }
-  else if (set=="Run22F-Prompt" || set=="Run22G-Prompt" ||
-	   set=="Run22FG-Prompt") {
-    f = new TFile("rootfiles/jecdataRun22FG.root","READ"); isRun3=true;
+  else if (set=="Run22F-Prompt") {
+    f = new TFile(Form("rootfiles/jecdata_Run22F_%s.root", version),"READ"); isRun3=true;
+  }
+  else if (set=="Run22G-Prompt") {
+    f = new TFile(Form("rootfiles/jecdata_Run22G_%s.root", version),"READ"); isRun3=true;
+  }
+  else if (set=="Run22FG-Prompt") {
+    f = new TFile(Form("rootfiles/jecdata_Run22FG_%s.root", version),"READ"); isRun3=true;
   }
   //else if (set=="Run23C123-Prompt") {
   else if (set=="Run23C123-Summer23") {
-    f = new TFile(Form("rootfiles/jecdata_Run23C123_%s%s.root", version, "_initial"),"READ"); isRun3=true;
+    f = new TFile(Form("rootfiles/jecdata_Run23C123_%s%s.root", version, ""),"READ"); isRun3=true;
   }
   //else if (set=="Run23C4-Prompt") {
   else if (set=="Run23C4-Summer23") {
-    f = new TFile(Form("rootfiles/jecdata_Run23C4_%s%s.root", version, "_initial"),"READ"); isRun3=true;
+    f = new TFile(Form("rootfiles/jecdata_Run23C4_%s%s.root", version, ""),"READ"); isRun3=true;
   }
   //else if (set=="Run23D-Prompt") {
   else if (set=="Run23D-Summer23") {
-    f = new TFile(Form("rootfiles/jecdata_Run23D_%s%s.root", version, "_initial"),"READ"); isRun3=true;
+    f = new TFile(Form("rootfiles/jecdata_Run23D_%s%s.root", version, ""),"READ"); isRun3=true;
   }
   //else if (set=="Run23C4D-Prompt") {
   else if (set=="Run23C4D-Summer23") {
@@ -246,21 +264,45 @@ void createL2L3ResTextFiles(string set, bool leg2) {
    sout = Form("textfiles/%s_DATA_L2L3Residual_AK4PFchs.txt",run);
 
   bool isL2Res(false); bool isNewL2Res(false);
+  // if (set=="Run22CD-22Sep2023") {
+  //   sin = "textFiles/Run3_22Sep2023_v3/Summer22-22Sep2023_Run2022CD_V3_DATA_L2Residual_AK4PFPuppi.txt"; isL2Res = true;
+  //   sout = "textFiles/Run3_22Sep2023_reV3/Summer22-22Sep2023_Run2022CD_reV3_DATA_L2L3Residual_AK4PFPuppi.txt";
+  // }
+  // if (set=="Run22E-22Sep2023") {
+  //   sin = "textFiles/Run3_22Sep2023_v3/Summer22EE-22Sep2023_Run2022E_V3_DATA_L2Residual_AK4PFPuppi.txt"; isL2Res = true;
+  //   sout = "textFiles/Run3_22Sep2023_reV3/Summer22EE-22Sep2023_Run2022E_reV3_DATA_L2L3Residual_AK4PFPuppi.txt";
+  // }
+  // if (set=="Run22F-Prompt") {
+  //   sin = "textFiles/Run3_22Sep2023_v3/Summer22EEPrompt22_Run2022F_V3_DATA_L2Residual_AK4PFPuppi.txt"; isL2Res = true;
+  //   sout = "textFiles/Run3_22Sep2023_reV3/Summer22EEPrompt22_Run2022F_reV3_DATA_L2L3Residual_AK4PFPuppi.txt";
+  // }
+  // if (set=="Run22G-Prompt") {
+  //   sin = "textFiles/Run3_22Sep2023_v3/Summer22EEPrompt22_Run2022G_V3_DATA_L2Residual_AK4PFPuppi.txt";  isL2Res = true;
+  //   sout = "textFiles/Run3_22Sep2023_reV3/Summer22EEPrompt22_Run2022G_reV3_DATA_L2L3Residual_AK4PFPuppi.txt";
+  // }
   if (set=="Run22CD-22Sep2023") {
-    sin = "textFiles/Run3_22Sep2023_v3/Summer22-22Sep2023_Run2022CD_V3_DATA_L2Residual_AK4PFPuppi.txt"; isL2Res = true;
-    sout = "textFiles/Run3_22Sep2023_reV3/Summer22-22Sep2023_Run2022CD_reV3_DATA_L2L3Residual_AK4PFPuppi.txt";
+    sin = Form("textfiles/%s/Summer22-22Sep2023_Run2022CD_V1_DATA_L2Residual_AK4PFPNet%s.txt", version,
+              TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ; isNewL2Res = true;
+    sout = Form("textfiles/%s/Summer22-22Sep2023_Run2022CD_V1_DATA_L2L3Residual_AK4PFPNet%s.txt", version,
+              TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ;
   }
   if (set=="Run22E-22Sep2023") {
-    sin = "textFiles/Run3_22Sep2023_v3/Summer22EE-22Sep2023_Run2022E_V3_DATA_L2Residual_AK4PFPuppi.txt"; isL2Res = true;
-    sout = "textFiles/Run3_22Sep2023_reV3/Summer22EE-22Sep2023_Run2022E_reV3_DATA_L2L3Residual_AK4PFPuppi.txt";
+    sin = Form("textfiles/%s/Summer22EE-22Sep2023_Run2022E_V1_DATA_L2Residual_AK4PFPNet%s.txt", version,
+              TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ; isNewL2Res = true;
+    sout = Form("textfiles/%s/Summer22EE-22Sep2023_Run2022E_V1_DATA_L2L3Residual_AK4PFPNet%s.txt", version,
+              TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ;
   }
   if (set=="Run22F-Prompt") {
-    sin = "textFiles/Run3_22Sep2023_v3/Summer22EEPrompt22_Run2022F_V3_DATA_L2Residual_AK4PFPuppi.txt"; isL2Res = true;
-    sout = "textFiles/Run3_22Sep2023_reV3/Summer22EEPrompt22_Run2022F_reV3_DATA_L2L3Residual_AK4PFPuppi.txt";
+    sin = Form("textfiles/%s/Summer22EEPrompt22_Run2022F_V1_DATA_L2Residual_AK4PFPNet%s.txt", version,
+              TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ; isNewL2Res = true;
+    sout = Form("textfiles/%s/Summer22EEPrompt22_Run2022F_V1_DATA_L2L3Residual_AK4PFPNet%s.txt", version,
+              TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ;
   }
   if (set=="Run22G-Prompt") {
-    sin = "textFiles/Run3_22Sep2023_v3/Summer22EEPrompt22_Run2022G_V3_DATA_L2Residual_AK4PFPuppi.txt";  isL2Res = true;
-    sout = "textFiles/Run3_22Sep2023_reV3/Summer22EEPrompt22_Run2022G_reV3_DATA_L2L3Residual_AK4PFPuppi.txt";
+    sin = Form("textfiles/%s/Summer22EEPrompt22_Run2022G_V1_DATA_L2Residual_AK4PFPNet%s.txt", version,
+              TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ; isNewL2Res = true;
+    sout = Form("textfiles/%s/Summer22EEPrompt22_Run2022G_V1_DATA_L2L3Residual_AK4PFPNet%s.txt", version,
+              TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ;
   }
   /*
   if (set=="Run23C123-Prompt") {
@@ -350,6 +392,7 @@ void createL2L3ResTextFiles(string set, bool leg2) {
   while (getline(fin,line)) {
     if (cnt<cntmax && debug) cout << line << endl;
     if (isRun3 && isNewL2Res) {
+     cout << line.c_str() << endl;
       assert(sscanf(line.c_str(),"%lf %lf  %d  %d %d  %lf %lf %lf",
 		    &etamin, &etamax, &npar, &xmin, &xmax,
 		    &p0, &p1, &p2)==8);

@@ -28,8 +28,8 @@
   //     are already available in 'rootfiles/jecdata.root'
   string epoch = "Run22C";//"Run23B";//"Run3";//"RunCD";
   #ifdef epochname
-  std::cout << epoch.c_str()<< std::endl;
-  std::cout << inputepoch.c_str()<< std::endl;
+  // std::cout << epoch.c_str()<< std::endl;
+  // std::cout << inputepoch.c_str()<< std::endl;
   epoch = inputepoch;
   std::cout << epoch.c_str()<< std::endl;
   #endif

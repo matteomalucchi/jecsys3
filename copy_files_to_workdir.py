@@ -15,6 +15,6 @@ os.system(f"mkdir {work_dir}/zb")
 
 os.system(f"cp ~/dijet/rootfiles/{args.version}/*root /work/mmalucch/L2L3Res_inputs/{args.version}/dijet/")
 os.system(f"cp ~/gamjet-analysis/rootfiles/{args.version}/*root /work/mmalucch/L2L3Res_inputs/{args.version}/gam/")
-os.system(f"cp ~/ZbAnalysis/figures/{args.version}*/jme_bplusZ_merged*.root /work/mmalucch/L2L3Res_inputs/{args.version}/zb/")
+os.system(f"cp ~/ZbAnalysis/figures/{args.version}_*/jme_bplusZ_merged*.root /work/mmalucch/L2L3Res_inputs/{args.version}/zb/")
 
 print(f"find output in {work_dir}")

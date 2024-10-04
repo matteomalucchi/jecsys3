@@ -7,6 +7,7 @@
 #include "TF1.h"
 #include "TGraphErrors.h"
 #include "TMultiGraph.h"
+#include "TMath.h"
 
 #include <iostream>
 #include <fstream>
@@ -20,10 +21,13 @@ bool fitD = true; // Dijet (pT,ave)
 bool fitP = true; // Dijet (pT,probe)
 bool fitJ = true; // Dijet (pT,tag)
 
-string version_string = "mc_truth_below15_pnetregneutrino";
+string version_string = "mc_truth_below15_2022_pnetreg";
 const char * version = version_string.c_str();
 
+string YEAR = "2022";
+
 bool dijet = true;
+bool pdf = false;
 
 // Step 1. Slice 1D profile out of 2D in given range and draw it
 TProfile* drawEta(TProfile2D *p2, double ptmin, double ptmax,
@@ -70,7 +74,11 @@ TProfile* drawPt(TProfile2D *p2, double etamin, double etamax,
     _leg->AddEntry(p, Form("%s+jet",label.c_str()), "PLE");
     _leg->SetY1(_leg->GetY1()-0.05);
   }
-
+  // double jes;
+  // for (int ipt = 1; ipt != p2->GetNbinsY()+1; ++ipt) {
+  //   jes=  p->GetBinContent(ipt);
+  //   std::cout << label  << (draw=="HISTE"? " mc " : " data ") << " jes " << jes << " eta " << etamin << " " << etamax << " pt " << p->GetBinCenter(ipt) << " ipt " << ipt  << std::endl;
+  // }
   return p;
 } // drawPt
 
@@ -165,6 +173,13 @@ TH1D *drawCleaned(TH1D *h, double eta, string data, string draw,
     if (h->GetBinContent(i)>1.3 || h->GetBinContent(i)<0.3) {
       keep = false;
     }
+
+    // Remove nan values
+    if (isnan(h->GetBinContent(i))) {
+      cout << "NAN value found in " << h->GetName() << " at " << i << endl;
+      keep = false;
+    }
+
     // Remove BPIX bad point, HF bad point
     if (data=="J" || data=="P" || data=="D") {
       if (eta>1.653 && eta < 1.930 && pt>86 && pt<110) keep = false;
@@ -219,21 +234,61 @@ void L2Res() {
   TFile *fout = new TFile(Form("rootfiles/L2Res_%s.root", version),"RECREATE");
 
   // Make sure graphics output directories exists
-  gROOT->ProcessLine(".! mkdir pdf/%s");
-  gROOT->ProcessLine(Form(".! mkdir pdf/%s/L2Res", version));
-  gROOT->ProcessLine(Form(".! mkdir pdf/%s/L2Res/vsEta", version));
-  gROOT->ProcessLine(Form(".! mkdir pdf/%s/L2Res/vsPt", version));
+  gROOT->ProcessLine(Form(".! mkdir %s/%s", pdf? "pdf": "png", version));
+  gROOT->ProcessLine(Form(".! mkdir %s/%s/L2Res",pdf? "pdf": "png", version));
+  gROOT->ProcessLine(Form(".! mkdir %s/%s/L2Res/vsEta",pdf? "pdf": "png", version));
+  gROOT->ProcessLine(Form(".! mkdir %s/%s/L2Res/vsPt", pdf? "pdf": "png",version));
 
-  string vrun[] = {"2023Cv123","2023Cv4","2023D"};
+
+  std::vector<string> vrun_v;
+  std::vector<string> vmc_v;
+  std::vector<string> vsummer_v;
+  std::vector<string> vyear_v;
+
+
+  if (YEAR == "2023"){
+    vrun_v = {"2023Cv123","2023Cv4","2023D"};
+    vmc_v = {"Summer23","Summer23","Summer23BPIX"};
+    vsummer_v = {"Summer23Prompt23","Summer23Prompt23","Summer23Prompt23"};
+    vyear_v = {"2023","2023","2023"};}
+  else if (YEAR == "2022"){
+    vrun_v = {"2022CD","2022E","2022F","2022G"};
+    vmc_v = {"Summer22","Summer22EE","Summer22EE","Summer22EE"};
+    vsummer_v = {"Summer22-22Sep2023","Summer22EE-22Sep2023","Summer22EEPrompt22", "Summer22EEPrompt22"};
+    vyear_v = {"2022","2022EE","2022EE","2022EE"};}
+  else{
+    vrun_v = {"2023Cv123","2023Cv4","2023D", "2022CD","2022E","2022F","2022G"};
+    vmc_v = {"Summer23","Summer23","Summer23BPIX", "Summer22","Summer22EE","Summer22EE","Summer22EE"};
+    vsummer_v = {"Summer23Prompt23","Summer23Prompt23","Summer23Prompt23", "Summer22-22Sep2023","Summer22EE-22Sep2023","Summer22EEPrompt22", "Summer22EEPrompt22"};
+    vyear_v = {"2023","2023","2023", "2022","2022EE","2022EE","2022EE"};}
+
+  int num_runs=vrun_v.size();
+  string vrun[num_runs];
+  string vmc[num_runs];
+  string vsummer[num_runs];
+  string vyear[num_runs];
+
+  std::copy(vrun_v.begin(), vrun_v.end(), vrun);
+  std::copy(vmc_v.begin(), vmc_v.end(), vmc);
+  std::copy(vsummer_v.begin(), vsummer_v.end(), vsummer);
+  std::copy(vyear_v.begin(), vyear_v.end(), vyear);
+
   const int nrun = sizeof(vrun)/sizeof(vrun[0]);
-  string vmc[] = {"Summer23","Summer23","Summer23BPIX"};
   const int nmc = sizeof(vmc)/sizeof(vmc[0]);
+  std::cout << "nruns " << nrun << " nmc " << nmc << std::endl;
   assert(nmc==nrun);
   for (int irun = 0; irun != nrun; ++irun) {
     string run = vrun[irun];
     const char *cr = run.c_str();
     string mc = vmc[irun];
     const char *cm = mc.c_str();
+    string summer = vsummer[irun];
+    const char *cs = summer.c_str();
+    string year = vyear[irun];
+    const char *cyear = year.c_str();
+
+    std::cout << "runs " << run << " " << mc << " " << summer << " " << year << std::endl;
+
   // (No indent here for the resf of the loop, maybe function call later)
 
 
@@ -265,7 +320,7 @@ void L2Res() {
   // fgm = new TFile(run=="2023D" ? "rootfiles/Summer23_L2ResOnly/gamjet_all/GamHistosFill_mc_2023P8-BPix_w4.root" : "rootfiles/Summer23_L2ResOnly/gamjet_all/GamHistosFill_mc_2023P8_w4.root","READ"); // Summer23 L2Res_V1
   // fgm = new TFile(Form("../dijet/rootfiles/jmenano_mc_cmb_v22ul16flatmc.root"),"READ"); // Summer23 L2Res_V1
   // fgm = new TFile(run=="2023D" ? "/work/mmalucch/L2L3Res_inputs/tot_23/gam/GamHistosFill_mc_2023P8-BPix_tot_23.root" : "/work/mmalucch/L2L3Res_inputs/tot_23/gam/GamHistosFill_mc_2023P8-BPix_tot_23.root","READ"); // Summer23 L2Res_V1
-  fgm = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/gam/GamHistosFill_mc_2023P8%s_%s.root" ,version, run=="2023D" ? "-BPix" : "", version),"READ"); // Summer23 with L2Res
+  fgm = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/gam/GamHistosFill_mc_%sP8%s_%s.root" ,version, cyear, run=="2023D" ? "-BPix" : "", version),"READ"); // Summer23 with L2Res
   assert(fgm && !fgm->IsZombie());
 
   TDirectory *dg = fg->GetDirectory("Gamjet2");
@@ -285,8 +340,10 @@ void L2Res() {
   // fdm = new TFile(Form("rootfiles/Summer23_L2ResOnly/jmenano_mc_cmb_Summer23MG%s_v39_noRwPU_noSmearJets_25Feb2024_L2Res_v1.root",run=="2023D" ? "BPix" : ""),"READ");
   // fdm = new TFile(Form("../dijet/rootfiles/jmenano_mc_cmb_v22ul16flatmc.root"),"READ");
   // fdm = new TFile(Form("/work/mmalucch/L2L3Res_inputs/tot_23/dijet/jmenano_mc_cmb_Summer23MG%s_v38_Summer23MG_NoL2L3Res_Off_reweight_jets_test2.root",run=="2023D" ? "BPix" : ""),"READ");
-  fdm = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/dijet/jmenano_mc_cmb_QCD%s_%s.root", version, run=="2023D" ? "-BPix" : "", version),"READ"); // Summer23 with L2Res
+  fdm = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/dijet/jmenano_mc_cmb_%sQCD%s_%s.root", version, year == "2023" ? "": cyear, run=="2023D" ? "-BPix" : "", version),"READ"); // Summer23 with L2Res
   assert(fdm && !fdm->IsZombie());
+
+  std::cout << "mc dijet " << Form("/work/mmalucch/L2L3Res_inputs/%s/dijet/jmenano_mc_cmb_%sQCD%s_%s.root", version, year == "2023" ? "": cyear, run=="2023D" ? "-BPix" : "", version) << std::endl;
 
   TDirectory *dd = fd->GetDirectory("Dijet2");
   TDirectory *ddm = fdm->GetDirectory("Dijet2");
@@ -373,8 +430,8 @@ void L2Res() {
 
   tex->DrawLatex(0.50,0.85,Form("[%1.3f,%1.3f]",eta1,eta2));
 
-  c13->SaveAs(Form("pdf/%s/L2Res/vsPt/L2Res_vsPt_%04d_%04d_%s_%s.pdf", version,
-		  int(1000.*eta1),int(1000.*eta2),cr,"c13"));
+  c13->SaveAs(Form("%s/%s/L2Res/vsPt/L2Res_vsPt_%04d_%04d_%s_%s.%s",pdf? "pdf": "png", version,
+		  int(1000.*eta1),int(1000.*eta2),cr,"c13",pdf? "pdf": "png"));
 
   // Create giant canvas for all eta bins (7*3=21; more in the future)
   int nxy = p2d->GetNbinsX();
@@ -437,8 +494,8 @@ void L2Res() {
 
   tex->DrawLatex(0.50,0.85,Form("[%1.3f,%1.3f]",eta1,eta2));
 
-  c1->SaveAs(Form("pdf/%s/L2Res/vsPt/L2Res_vsPt_%04d_%04d_%s_%s.pdf", version,
-		  int(1000.*eta1),int(1000.*eta2),cr,"c1"));
+  c1->SaveAs(Form("%s/%s/L2Res/vsPt/L2Res_vsPt_%04d_%04d_%s_%s.%s", pdf? "pdf": "png",version,
+		  int(1000.*eta1),int(1000.*eta2),cr,"c1", pdf? "pdf": "png"));
 
 
   // Step 2. Project profile to histogram, normalize by |eta|<1.3
@@ -470,8 +527,8 @@ void L2Res() {
 
   tex->DrawLatex(0.50,0.85,Form("[%1.3f,%1.3f]",eta1,eta2));
 
-  c2->SaveAs(Form("pdf/%s/L2Res/vsPt/L2Res_vsPt_%04d_%04d_%s_%s.pdf", version,
-		  int(1000.*eta1),int(1000*eta2),cr,"c2"));
+  c2->SaveAs(Form("%s/%s/L2Res/vsPt/L2Res_vsPt_%04d_%04d_%s_%s.%s", pdf? "pdf": "png",version,
+		  int(1000.*eta1),int(1000*eta2),cr,"c2", pdf? "pdf": "png"));
 
   // Step 3. Draw data/MC ratio before normalization
   TH1D *h3 = tdrHist("h3","JES Data/MC",0.5,1.3);//0.80,1.15);
@@ -493,8 +550,8 @@ void L2Res() {
 
   tex->DrawLatex(0.50,0.85,Form("[%1.3f,%1.3f]",eta1,eta2));
 
-  c3->SaveAs(Form("pdf/%s/L2Res/vsPt/L2Res_vsPt_%04d_%04d_%s_%s.pdf", version,
-		  int(1000.*eta1),int(1000.*eta2),cr,"c3"));
+  c3->SaveAs(Form("%s/%s/L2Res/vsPt/L2Res_vsPt_%04d_%04d_%s_%s.%s", pdf? "pdf": "png",version,
+		  int(1000.*eta1),int(1000.*eta2),cr,"c3", pdf? "pdf": "png"));
 
   // Step 4. Draw data/MC ratio of normalized JES
   TH1D *h4 = tdrHist("h4","Rel. JES Data/MC",0.50,1.35);
@@ -516,8 +573,8 @@ void L2Res() {
 
   tex->DrawLatex(0.50,0.85,Form("[%1.3f,%1.3f]",eta1,eta2));
 
-  c4->SaveAs(Form("pdf/%s/L2Res/vsPt/L2Res_vsPt_%04d_%04d_%s_%s.pdf", version,
-		  int(1000.*eta1),int(1000.*eta2),cr,"c4"));
+  c4->SaveAs(Form("%s/%s/L2Res/vsPt/L2Res_vsPt_%04d_%04d_%s_%s.%s", pdf? "pdf": "png",version,
+		  int(1000.*eta1),int(1000.*eta2),cr,"c4", pdf? "pdf": "png"));
 
 
   // Step 5. Curate data and do final fit of response
@@ -614,8 +671,8 @@ void L2Res() {
 
   tex->DrawLatex(0.50,0.85,Form("[%1.3f,%1.3f]",eta1,eta2));
 
-  c5->SaveAs(Form("pdf/%s/L2Res/vsPt/L2Res_vsPt_%04d_%04d_%s_%s.pdf", version,
-		  int(1000.*eta1),int(1000.*eta2),cr,"c5"));
+  c5->SaveAs(Form("%s/%s/L2Res/vsPt/L2Res_vsPt_%04d_%04d_%s_%s.%s", pdf? "pdf": "png",version,
+		  int(1000.*eta1),int(1000.*eta2),cr,"c5", pdf? "pdf": "png"));
 
 
   // Step 6. Also draw final results into a giant canvas
@@ -741,7 +798,7 @@ void L2Res() {
 
   } // for ieta
 
-  cx->SaveAs(Form("pdf/%s/L2Res/L2Res_AllEta_%s.pdf", version,cr));
+  cx->SaveAs(Form("%s/%s/L2Res/L2Res_AllEta_%s.%s", pdf? "pdf": "png",version,cr, pdf? "pdf": "png"));
   cx->SetName(Form("cx_%s",cr));
 
   // Step 7. Draw summary of final results in a single plot
@@ -782,12 +839,12 @@ void L2Res() {
   legy->AddEntry(hy1000,"p_{T} = 1000 GeV","PLE");
   legy->AddEntry(hy3000,"p_{T} = 3000 GeV","PLE");
 
-  cy->SaveAs(Form("pdf/%s/L2Res/L2Res_Summary_%s.pdf", version,cr));
+  cy->SaveAs(Form("%s/%s/L2Res/L2Res_Summary_%s.%s", pdf? "pdf": "png",version,cr, pdf? "pdf": "png"));
   cy->SetName(Form("cy_%s",cr));
 
   // Step 8. Print out text files
   gROOT->ProcessLine(Form(".! mkdir -p textfiles/%s",version));
-  ofstream ftxt(Form("textfiles/%s/Summer23Prompt23_Run%s_V1_DATA_L2Residual_AK4PFPNet%s.txt",version,cr, TString(version).Contains("neutrino") ? "PlusNeutrino" : ""));
+  ofstream ftxt(Form("textfiles/%s/%s_Run%s_V1_DATA_L2Residual_AK4PFPNet%s.txt",version,cs,cr, TString(version).Contains("neutrino") ? "PlusNeutrino" : ""));
   ftxt << Form("{ 1 JetEta 1 JetPt 1./(%s) Correction L2Relative}",
 	       vf1[0]->GetExpFormula().Data()) << endl;
   for (int ieta = p2d->GetNbinsX(); ieta != 0; --ieta) {
@@ -855,8 +912,8 @@ void L2Res() {
     pd = drawEta(p2d,ptmin,ptmax,"Pz",kOpenDiamond,kBlack,"Dijet");
   }
 
-  c1->SaveAs(Form("pdf/%s/L2Res/vsEta/L2Res_vsEta_%04d_%04d_%s_%s.pdf", version,
-		  int(pt1),int(pt2),cr,"c1"));
+  c1->SaveAs(Form("%s/%s/L2Res/vsEta/L2Res_vsEta_%04d_%04d_%s_%s.%s", pdf? "pdf": "png",version,
+		  int(pt1),int(pt2),cr,"c1", pdf? "pdf": "png"));
 
 
   // Step 2. Project profile to histogram, normalize by |eta|<1.3
@@ -885,8 +942,8 @@ void L2Res() {
     hd = drawNormEta(pd,"Pz",kOpenDiamond,kBlack);
   }
 
-  c2->SaveAs(Form("pdf/%s/L2Res/vsEta/L2Res_vsEta_%04d_%04d_%s_%s.pdf", version,
-		  int(pt1),int(pt2),cr,"c2"));
+  c2->SaveAs(Form("%s/%s/L2Res/vsEta/L2Res_vsEta_%04d_%04d_%s_%s.%s", pdf? "pdf": "png",version,
+		  int(pt1),int(pt2),cr,"c2", pdf? "pdf": "png"));
 
 
   // Step 3. Draw data/MC ratio before normalization
@@ -906,8 +963,8 @@ void L2Res() {
     hdr = drawRatio(pd->ProjectionX(),pdm,"Pz",kOpenDiamond,kBlack);
   }
 
-  c3->SaveAs(Form("pdf/%s/L2Res/vsEta/L2Res_vsEta_%04d_%04d_%s_%s.pdf", version,
-		  int(pt1),int(pt2),cr,"c3"));
+  c3->SaveAs(Form("%s/%s/L2Res/vsEta/L2Res_vsEta_%04d_%04d_%s_%s.%s",pdf? "pdf": "png", version,
+		  int(pt1),int(pt2),cr,"c3", pdf? "pdf": "png"));
 
 
   // Step 4. Draw data/MC ratio of normalized JES
@@ -927,8 +984,8 @@ void L2Res() {
     hdrn = drawRatio(hd,hdm,"Pz",kOpenDiamond,kBlack);
   }
 
-  c4->SaveAs(Form("pdf/%s/L2Res/vsEta/L2Res_vsEta_%04d_%04d_%s_%s.pdf", version,
-		  int(pt1),int(pt2),cr,"c4"));
+  c4->SaveAs(Form("%s/%s/L2Res/vsEta/L2Res_vsEta_%04d_%04d_%s_%s.%s",pdf? "pdf": "png", version,
+		  int(pt1),int(pt2),cr,"c4", pdf? "pdf": "png"));
 
   // Rename to avoid loop leakage and errors
   h1->SetName(Form("h1_%s_%d",cr,ipt));
