@@ -67,10 +67,10 @@
   // }
   // cout<<"gaus_prior" << gaus_prior << endl;
 
-  #define gaus_prior
-  if  (epoch=="Run23C4" && closure=="False") {
-    #undef gaus_prior
-  }
+  // #define gaus_prior
+  // if  (epoch=="Run23C4" && closure=="False") {
+  //   #undef gaus_prior
+  // }
 
 
   // Run global fit

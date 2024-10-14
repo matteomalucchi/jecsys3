@@ -22,6 +22,7 @@ string version_string = "mc_truth_below15_2022_pnetreg";
 const char * version = version_string.c_str();
 
 string YEAR = "2022";
+bool DO_2022FG = false;
 
 
 
@@ -75,8 +76,9 @@ void createL2L3ResTextFile() {
   if (YEAR == "2022" || YEAR == "all"){
   createL2L3ResTextFiles("Run22CD-22Sep2023",true);
   createL2L3ResTextFiles("Run22E-22Sep2023",true);
-  createL2L3ResTextFiles("Run22F-Prompt",true);
-  createL2L3ResTextFiles("Run22G-Prompt",true);
+  createL2L3ResTextFiles("Run22F-22Sep2023",true);
+  createL2L3ResTextFiles("Run22G-22Sep2023",true);
+  if (DO_2022FG) createL2L3ResTextFiles("Run22FG-22Sep2023",true);
   }
   c1->Update();
 
@@ -141,13 +143,13 @@ void createL2L3ResTextFiles(string set, bool leg2) {
   else if (set=="Run22E-22Sep2023") {
     f = new TFile(Form("rootfiles/jecdata_Run22E_%s.root", version),"READ"); isRun3=true;
   }
-  else if (set=="Run22F-Prompt") {
+  else if (set=="Run22F-22Sep2023") {
     f = new TFile(Form("rootfiles/jecdata_Run22F_%s.root", version),"READ"); isRun3=true;
   }
-  else if (set=="Run22G-Prompt") {
+  else if (set=="Run22G-22Sep2023") {
     f = new TFile(Form("rootfiles/jecdata_Run22G_%s.root", version),"READ"); isRun3=true;
   }
-  else if (set=="Run22FG-Prompt") {
+  else if (set=="Run22FG-22Sep2023") {
     f = new TFile(Form("rootfiles/jecdata_Run22FG_%s.root", version),"READ"); isRun3=true;
   }
   //else if (set=="Run23C123-Prompt") {
@@ -202,9 +204,13 @@ void createL2L3ResTextFiles(string set, bool leg2) {
 
   color["Run22CD-22Sep2023"] = kGreen+2;
   color["Run22E-22Sep2023"] = kCyan+2;
-  //color["Run22FG-Prompt"] = kRed;
+  color["Run22F-22Sep2023"] = kRed;
+  color["Run22G-22Sep2023"] = kRed+2;
+  color["Run22FG-22Sep2023"] = kRed+3;
+  color["Run22FG-Prompt"] = kRed;
   color["Run22F-Prompt"] = kRed;
   color["Run22G-Prompt"] = kRed+2;
+
   color["Run23C123-Prompt"] = kOrange+1;
   //color["Run23C4D-Prompt"] = kMagenta+2;
   color["Run23C4-Prompt"] = kBlue;
@@ -293,15 +299,21 @@ void createL2L3ResTextFiles(string set, bool leg2) {
               TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ;
   }
   if (set=="Run22F-Prompt") {
-    sin = Form("textfiles/%s/Summer22EEPrompt22_Run2022F_V1_DATA_L2Residual_AK4PFPNet%s.txt", version,
+    sin = Form("textfiles/%s/Summer22EE_22Sep2023_Run2022F_V1_DATA_L2Residual_AK4PFPNet%s.txt", version,
               TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ; isNewL2Res = true;
-    sout = Form("textfiles/%s/Summer22EEPrompt22_Run2022F_V1_DATA_L2L3Residual_AK4PFPNet%s.txt", version,
+    sout = Form("textfiles/%s/Summer22EE_22Sep2023_Run2022F_V1_DATA_L2L3Residual_AK4PFPNet%s.txt", version,
               TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ;
   }
   if (set=="Run22G-Prompt") {
-    sin = Form("textfiles/%s/Summer22EEPrompt22_Run2022G_V1_DATA_L2Residual_AK4PFPNet%s.txt", version,
+    sin = Form("textfiles/%s/Summer22EE_22Sep2023_Run2022G_V1_DATA_L2Residual_AK4PFPNet%s.txt", version,
               TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ; isNewL2Res = true;
-    sout = Form("textfiles/%s/Summer22EEPrompt22_Run2022G_V1_DATA_L2L3Residual_AK4PFPNet%s.txt", version,
+    sout = Form("textfiles/%s/Summer22EE_22Sep2023_Run2022G_V1_DATA_L2L3Residual_AK4PFPNet%s.txt", version,
+              TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ;
+  }
+  if (set=="Run22FG-Prompt") {
+    sin = Form("textfiles/%s/Summer22EE_22Sep2023_Run2022FG_V1_DATA_L2Residual_AK4PFPNet%s.txt", version,
+              TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ; isNewL2Res = true;
+    sout = Form("textfiles/%s/Summer22EE_22Sep2023_Run2022FG_V1_DATA_L2L3Residual_AK4PFPNet%s.txt", version,
               TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ;
   }
   /*
@@ -319,21 +331,21 @@ void createL2L3ResTextFiles(string set, bool leg2) {
   }
   */
   if (set=="Run23C123-Summer23") {
-    sin = Form("textfiles/%s/Summer23Prompt23_Run2023Cv123_V1_DATA_L2Residual_AK4PFPNet%s.txt", version,
+    sin = Form("textfiles/%s/Summer23_22Sep2023_Run2023Cv123_V1_DATA_L2Residual_AK4PFPNet%s.txt", version,
               TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ; isNewL2Res = true;
-    sout = Form("textfiles/%s/Summer23Prompt23_Run2023Cv123_V1_DATA_L2L3Residual_AK4PFPNet%s.txt", version,
+    sout = Form("textfiles/%s/Summer23_22Sep2023_Run2023Cv123_V1_DATA_L2L3Residual_AK4PFPNet%s.txt", version,
               TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ;
   }
   if (set=="Run23C4-Summer23") {
-    sin = Form("textfiles/%s/Summer23Prompt23_Run2023Cv4_V1_DATA_L2Residual_AK4PFPNet%s.txt", version,
+    sin = Form("textfiles/%s/Summer23_22Sep2023_Run2023Cv4_V1_DATA_L2Residual_AK4PFPNet%s.txt", version,
               TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ; isNewL2Res = true;
-    sout = Form("textfiles/%s/Summer23Prompt23_Run2023Cv4_V1_DATA_L2L3Residual_AK4PFPNet%s.txt", version,
+    sout = Form("textfiles/%s/Summer23_22Sep2023_Run2023Cv4_V1_DATA_L2L3Residual_AK4PFPNet%s.txt", version,
               TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ;
   }
   if (set=="Run23D-Summer23") {
-    sin = Form("textfiles/%s/Summer23Prompt23_Run2023D_V1_DATA_L2Residual_AK4PFPNet%s.txt", version,
+    sin = Form("textfiles/%s/Summer23BPix_22Sep2023_Run2023D_V1_DATA_L2Residual_AK4PFPNet%s.txt", version,
               TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ; isNewL2Res = true;
-    sout = Form("textfiles/%s/Summer23Prompt23_Run2023D_V1_DATA_L2L3Residual_AK4PFPNet%s.txt", version,
+    sout = Form("textfiles/%s/Summer23_22Sep2023_Run2023D_V1_DATA_L2L3Residual_AK4PFPNet%s.txt", version,
               TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ;
   }
 

@@ -5,13 +5,14 @@ import sys
 
 parser = argparse.ArgumentParser(description="Move files")
 parser.add_argument("-v", "--version", required=True)
-parser.add_argument("-y", "--year", required=True)
+parser.add_argument("-y", "--year", default="all")
 parser.add_argument("-c", "--closure", default=False, action="store_true")
+parser.add_argument("-f", "--fast", default=False, action="store_true")
 args = parser.parse_args()
 
-os.system(f"python copy_files_to_workdir.py -v {args.version}")
-os.system(f"make clean")
-os.system(f"make")
+if not args.fast:
+    os.system(f"make clean")
+    os.system(f"make")
 os.system(f"python minitools/runAllIOVs.py -v {args.version} {'-c' if args.closure else ''} -i {args.year}")
 
 

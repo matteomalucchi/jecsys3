@@ -10,7 +10,7 @@ args = parser.parse_args()
 files = []
 for (dirpath, dirnames, filenames) in os.walk(args.input):
     for file in filenames:
-        if "vsEta" in file or "vsPt" in file:
+        if "vsEta" in file or "vsPt" in file or "pdf" not in file:
             continue
         fname=os.path.join(dirpath, file)
         files += fname

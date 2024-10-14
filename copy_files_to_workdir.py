@@ -1,11 +1,13 @@
 import os
 import argparse
 
-parser = argparse.ArgumentParser(description="Move files")
+
+parser = argparse.ArgumentParser(description="Copy files to a common directory")
 parser.add_argument("-v", "--version", required=True)
+parser.add_argument("-d", "--directory", default="/work/mmalucch/L2L3Res_inputs")
 args = parser.parse_args()
 
-work_dir=f"/work/mmalucch/L2L3Res_inputs/{args.version}/"
+work_dir=f"{args.directory}/{args.version}/"
 
 #mkdir
 os.system(f"mkdir {work_dir}")

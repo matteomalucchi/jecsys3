@@ -27,7 +27,30 @@ const char * version = version_string.c_str();
 string YEAR = "2022";
 
 bool dijet = true;
-bool pdf = false;
+bool pdf = true;
+bool REMOVE_NAN = true;
+// set to -1 to run on every era
+int ERA_TO_RUN = -1;
+bool DO_2022FG = false;
+
+
+TProfile2D* removeNAN(TProfile2D *p2) {
+  assert(p2);
+  TProfile2D *p2_noNAN= (TProfile2D*)p2->Clone();
+  // remove nan from the profile2d
+  for (int ieta = 1; ieta != p2_noNAN->GetNbinsX()+1; ++ieta) {
+    for (int ipt = 1; ipt != p2_noNAN->GetNbinsY()+1; ++ipt) {
+      if (isnan(p2_noNAN->GetBinContent(ieta,ipt))) {
+        // TODO here is wrong
+        p2_noNAN->SetBinContent(ieta,ipt,0.);
+        p2_noNAN->SetBinError(ieta,ipt,0.);
+        // p2_noNAN->Fill(ieta,ipt,0., 0.);
+        cout << "NAN value found in " << p2_noNAN->GetName() << " at eta " << p2_noNAN->GetXaxis()->GetBinCenter(ieta) << " and pt " << p2_noNAN->GetYaxis()->GetBinCenter(ipt) << "   ->   setting to " << p2_noNAN->GetBinContent(ieta,ipt) << endl;
+      }
+    }
+  }
+  return p2_noNAN;
+} // removeNAN
 
 // Step 1. Slice 1D profile out of 2D in given range and draw it
 TProfile* drawEta(TProfile2D *p2, double ptmin, double ptmax,
@@ -92,6 +115,17 @@ TH1D *drawNormEta(TProfile *p, string draw, int marker, int color) {
   h->Fit(f1,"QRN");
   f1->SetRange(0,5.2);
   h->Divide(f1);
+
+  if (REMOVE_NAN){
+    for (int i = 1; i != h->GetNbinsX()+1; ++i) {
+      if (isnan(h->GetBinContent(i)) || isnan(h->GetBinError(i))) {
+        cout << "NAN value found in " << h->GetName() << " at " << i << " drawNormEta" << endl;
+        h->SetBinContent(i, 0.);
+        h->SetBinError(i, 0.);
+      }
+    }
+  }
+
   tdrDraw(h,draw,marker,color,kSolid,-1,kNone);
 
   return h;
@@ -104,6 +138,15 @@ TH1D *drawNormPt(TProfile *p, TProfile *p13,
   string id = Form("%s_%s_%d_%d",p->GetName(),draw.c_str(),marker,color);
   TH1D *h = p->ProjectionX(Form("h%s",id.c_str()));
   h->Divide(p13);
+  if (REMOVE_NAN){
+    for (int i = 1; i != h->GetNbinsX()+1; ++i) {
+      if (isnan(h->GetBinContent(i)) || isnan(h->GetBinError(i))) {
+        cout << "NAN value found in " << h->GetName() << " at " << i << " drawNormPt" << endl;
+        h->SetBinContent(i, 0.);
+        h->SetBinError(i, 0.);
+      }
+    }
+  }
   tdrDraw(h,draw,marker,color,kSolid,-1,kNone);
 
   return h;
@@ -117,6 +160,16 @@ TH1D *drawRatio(TH1D *h, TH1D *hm, string draw, int marker, int color) {
 		   draw.c_str(), marker, color);
   TH1D *hr = (TH1D*)h->Clone(Form("hr_%s",id.c_str()));
   hr->Divide(hm);
+
+  if (REMOVE_NAN){
+    for (int i = 1; i != hr->GetNbinsX()+1; ++i) {
+      if (isnan(hr->GetBinContent(i)) || isnan(hr->GetBinError(i))) {
+        cout << "NAN value found in " << hr->GetName() << " at " << i << " drawRatio" << endl;
+        hr->SetBinContent(i, 0.);
+        hr->SetBinError(i, 0.);
+      }
+    }
+  }
 
   tdrDraw(hr,draw,marker,color,kSolid,-1,kNone);
 
@@ -170,16 +223,27 @@ TH1D *drawCleaned(TH1D *h, double eta, string data, string draw,
     }
 
     // Check that no points out of bound
-    if (h->GetBinContent(i)>1.3 || h->GetBinContent(i)<0.3) {
-      keep = false;
+    if (true){
+      if (eta<1.653 && (h->GetBinContent(i)>1.2 || h->GetBinContent(i)<0.8)) keep = false;
+      else if (eta<2.964  && (h->GetBinContent(i)>1.3 || h->GetBinContent(i)<0.7)) keep = false;
+      else if (eta<5.191  && (h->GetBinContent(i)>1.3 || h->GetBinContent(i)<0.3)) keep = false;
     }
+    else {
+      if (h->GetBinContent(i)>1.3 || h->GetBinContent(i)<0.3) keep = false;
+    }
+
 
     // Remove nan values
-    if (isnan(h->GetBinContent(i))) {
-      cout << "NAN value found in " << h->GetName() << " at " << i << endl;
+    if ((isnan(h->GetBinContent(i)) || isnan(h->GetBinError(i))) && !REMOVE_NAN) {
+      cout << "NAN value found in " << h->GetName() << " at " << i << " drawCleaned" <<endl;
       keep = false;
     }
 
+    // Remove values for which the error is too large
+    if (h->GetBinError(i)>0.1){
+      keep = false;
+      cout << "Error too large in " << h->GetName() << " at " << i << " " << h->GetBinContent(i) << " " << h->GetBinError(i) << endl;
+    }
     // Remove BPIX bad point, HF bad point
     if (data=="J" || data=="P" || data=="D") {
       if (eta>1.653 && eta < 1.930 && pt>86 && pt<110) keep = false;
@@ -188,6 +252,7 @@ TH1D *drawCleaned(TH1D *h, double eta, string data, string draw,
 
     // Remove points we don't want to keep
     if (!keep) {
+
       hc->SetBinContent(i, 0.);
       hc->SetBinError(i, 0.);
     }
@@ -249,18 +314,18 @@ void L2Res() {
   if (YEAR == "2023"){
     vrun_v = {"2023Cv123","2023Cv4","2023D"};
     vmc_v = {"Summer23","Summer23","Summer23BPIX"};
-    vsummer_v = {"Summer23Prompt23","Summer23Prompt23","Summer23Prompt23"};
+    vsummer_v = {"Summer23_22Sep2023","Summer23_22Sep2023","Summer23BPix_22Sep2023"};
     vyear_v = {"2023","2023","2023"};}
   else if (YEAR == "2022"){
-    vrun_v = {"2022CD","2022E","2022F","2022G"};
-    vmc_v = {"Summer22","Summer22EE","Summer22EE","Summer22EE"};
-    vsummer_v = {"Summer22-22Sep2023","Summer22EE-22Sep2023","Summer22EEPrompt22", "Summer22EEPrompt22"};
-    vyear_v = {"2022","2022EE","2022EE","2022EE"};}
+    vrun_v = {"2022CD","2022E","2022F","2022G","2022FG"};
+    vmc_v = {"Summer22","Summer22EE","Summer22EE","Summer22EE","Summer22EE"};
+    vsummer_v = {"Summer22_22Sep2023","Summer22EE_22Sep2023","Summer22EE_22Sep2023", "Summer22EE_22Sep2023", "Summer22EE_22Sep2023"};
+    vyear_v = {"2022","2022EE","2022EE","2022EE","2022EE"};}
   else{
-    vrun_v = {"2023Cv123","2023Cv4","2023D", "2022CD","2022E","2022F","2022G"};
-    vmc_v = {"Summer23","Summer23","Summer23BPIX", "Summer22","Summer22EE","Summer22EE","Summer22EE"};
-    vsummer_v = {"Summer23Prompt23","Summer23Prompt23","Summer23Prompt23", "Summer22-22Sep2023","Summer22EE-22Sep2023","Summer22EEPrompt22", "Summer22EEPrompt22"};
-    vyear_v = {"2023","2023","2023", "2022","2022EE","2022EE","2022EE"};}
+    vrun_v = {"2023Cv123","2023Cv4","2023D", "2022CD","2022E","2022F","2022G","2022FG"};
+    vmc_v = {"Summer23","Summer23","Summer23BPIX", "Summer22","Summer22EE","Summer22EE","Summer22EE","Summer22EE"};
+    vsummer_v = {"Summer23_22Sep2023","Summer23_22Sep2023","Summer23BPix_22Sep2023", "Summer22_22Sep2023","Summer22EE_22Sep2023","Summer22EE_22Sep2023", "Summer22EE_22Sep2023", "Summer22EE_22Sep2023"};
+    vyear_v = {"2023","2023","2023", "2022","2022EE","2022EE","2022EE","2022EE"};}
 
   int num_runs=vrun_v.size();
   string vrun[num_runs];
@@ -273,8 +338,8 @@ void L2Res() {
   std::copy(vsummer_v.begin(), vsummer_v.end(), vsummer);
   std::copy(vyear_v.begin(), vyear_v.end(), vyear);
 
-  const int nrun = sizeof(vrun)/sizeof(vrun[0]);
-  const int nmc = sizeof(vmc)/sizeof(vmc[0]);
+  const int nrun = sizeof(vrun)/sizeof(vrun[0]) - (DO_2022FG ? 0 : 1);
+  const int nmc = sizeof(vmc)/sizeof(vmc[0]) - (DO_2022FG ? 0 : 1);
   std::cout << "nruns " << nrun << " nmc " << nmc << std::endl;
   assert(nmc==nrun);
   for (int irun = 0; irun != nrun; ++irun) {
@@ -287,7 +352,9 @@ void L2Res() {
     string year = vyear[irun];
     const char *cyear = year.c_str();
 
-    std::cout << "runs " << run << " " << mc << " " << summer << " " << year << std::endl;
+    if (irun!=ERA_TO_RUN && ERA_TO_RUN != -1) continue;
+
+    std::cout << "\n\n\n RUN " << run << " " << mc << " " << summer << " " << year << std::endl;
 
   // (No indent here for the resf of the loop, maybe function call later)
 
@@ -343,7 +410,7 @@ void L2Res() {
   fdm = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/dijet/jmenano_mc_cmb_%sQCD%s_%s.root", version, year == "2023" ? "": cyear, run=="2023D" ? "-BPix" : "", version),"READ"); // Summer23 with L2Res
   assert(fdm && !fdm->IsZombie());
 
-  std::cout << "mc dijet " << Form("/work/mmalucch/L2L3Res_inputs/%s/dijet/jmenano_mc_cmb_%sQCD%s_%s.root", version, year == "2023" ? "": cyear, run=="2023D" ? "-BPix" : "", version) << std::endl;
+  // std::cout << "mc dijet " << Form("/work/mmalucch/L2L3Res_inputs/%s/dijet/jmenano_mc_cmb_%sQCD%s_%s.root", version, year == "2023" ? "": cyear, run=="2023D" ? "-BPix" : "", version) << std::endl;
 
   TDirectory *dd = fd->GetDirectory("Dijet2");
   TDirectory *ddm = fdm->GetDirectory("Dijet2");
@@ -365,6 +432,19 @@ void L2Res() {
   TProfile2D *p2pm = (TProfile2D*)ddm->Get("p2m0pf"); assert(p2pm);
   TProfile2D *p2d = (TProfile2D*)dd->Get("p2m0"); assert(p2d);
   TProfile2D *p2dm = (TProfile2D*)ddm->Get("p2m0"); assert(p2dm);
+
+  if (false){
+    p2z=removeNAN(p2z);
+    p2zm=removeNAN(p2zm);
+    p2g=removeNAN(p2g);
+    p2gm=removeNAN(p2gm);
+    p2j=removeNAN(p2j);
+    p2jm=removeNAN(p2jm);
+    p2p=removeNAN(p2p);
+    p2pm=removeNAN(p2pm);
+    p2d=removeNAN(p2d);
+    p2dm=removeNAN(p2dm);
+  }
 
   /*
   // Use common file instead
@@ -697,11 +777,10 @@ void L2Res() {
   tdrDraw(hjrn,"Pz",kOpenDiamond,kGreen-9);
 
   //f0->Draw("SAME");
-  f1->Draw("SAME");
-  //f2->Draw("SAME");
-  f3->Draw("SAME");
-  f4->Draw("SAME");
+  // f1->Draw("SAME");
   f2->Draw("SAME");
+  // f3->Draw("SAME");
+  // f4->Draw("SAME");
 
   mg->Draw();
 

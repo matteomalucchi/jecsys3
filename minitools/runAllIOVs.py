@@ -1,6 +1,7 @@
 #! /usr/bin/python
 import os
 import argparse
+import time
 
 # IOV_list= ['2016ULAPV','2016UL','2018UL','Run2']
 # IOV_list= ['Run22C','Run22D','Run22CD','Run22E','Run22F','Run22G','Run22FG',
@@ -10,7 +11,9 @@ import argparse
 # IOV_list= ['Run22CD','Run22E','Run22FG','Run23C123',
 #            'Run23C4','Run23D','Run23C4D']
 run23 = ["Run23C123", "Run23C4","Run23D"]
-run22 = ['Run22CD','Run22E']#]
+run22 = ['Run22CD','Run22E','Run22F','Run22G','Run22FG']
+run22 = ['Run22F','Run22G']
+
 
 version = "tot_23_pnetreg_ok"
 
@@ -38,9 +41,24 @@ os.system(f"mkdir pdf/{version}/")
 os.system(f"mkdir pdf/{version}/globalFit")
 # os.system("mkdir png/globalFit_"+version)
 for iov in IOV_list:
-    # os.system("mkdir pdf/" + iov)
+    with open("globalFitSettings.h") as file:
+        filedata = file.read()
+    # find line that starts with string version =
+    for line in filedata.split("\n"):
+        if line.startswith("bool _gf_penalizeFitPars"):
+            line_new = f"bool _gf_penalizeFitPars = {'false' if 'G' in iov and '22' in iov else 'true'};"
+            print(line_new)
+            break
+    # modify line
+    filedata = filedata.replace(line, line_new)
+
+    with open("globalFitSettings.h", "w") as file:
+        file.write(filedata)
+
+    time.sleep(10)
+
     os.system(
-        "root -b -q 'mk_reprocess_RunEpoch.C(\""
+        "root -l -b -q 'mk_reprocess_RunEpoch.C(\""
         + iov
         + '","'
         + version

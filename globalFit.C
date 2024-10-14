@@ -38,7 +38,7 @@
 //using namespace globalFit;
 using namespace std;
 const bool debug = true;
-const bool saveROOT = false;
+const bool saveROOT = true;
 const bool plotPF = false; // plot PF composition
 
 // Helper functions to draw fit uncertainty band for arbitrary TF1
@@ -391,8 +391,10 @@ void globalFitEtaBin(double etamin, double etamax, string run, string version, s
   // Run fitter (multiple times if needed)
   const int nfit = 2;//1;
   cnt = 0;
-  for (int i = 0; i != nfit; ++i)
+  for (int i = 0; i != nfit; ++i){
     fitter->ExecuteCommand("MINI", 0, 0);
+    cout << "Fit " << i << " done" << endl;
+  }
   TMatrixD emat(ntot, ntot);
   gMinuit->mnemat(emat.GetMatrixArray(), ntot);
 
@@ -412,6 +414,7 @@ void globalFitEtaBin(double etamin, double etamax, string run, string version, s
     vpar[i] = fitter->GetParameter(i);
     verr[i] = fitter->GetParError(i);
   }
+  cout <<"Executing jesFitter with ntot = " << ntot <<  " flag = " << flag << endl;
   jesFitter(ntot, grad, chi2_gbl, tmp_par, flag);
 
   for (int i = 0; i != ntot; ++i) {
@@ -425,14 +428,24 @@ void globalFitEtaBin(double etamin, double etamax, string run, string version, s
   for (unsigned int i = 0; i != _vdt.size(); ++i) {
     TGraphErrors *gout = _vdt[i].output;
     _obs = _vdt[i].type; // for _jesFit
+    auto it = datasets.find(_vdt[i].name);
     for (int j = 0; j != gout->GetN(); ++j) {
       double x = gout->GetX()[j];
       double y = gout->GetY()[j];
       double ey = gout->GetEY()[j];
-      chi2_data += pow((y - _jesFit->Eval(x)) / ey, 2);
-      double ey_minerr = sqrt(pow(ey,2) + pow(globalErrMin,2));
-      chi2_data_minerr += pow((y - _jesFit->Eval(x)) / ey_minerr, 2);
-      ++ndt;
+      if (isnan(y) || isnan(ey)){
+      //   gout->SetPoint(j, x, 0);
+      //   gout->SetPointError(j, x, 1);
+
+      cout<< *it << " " << x << " " << y << " " << ey << " " << _jesFit->Eval(x) << endl;
+      }
+      // else{
+        chi2_data += pow((y - _jesFit->Eval(x)) / ey, 2);
+        double ey_minerr = sqrt(pow(ey,2) + pow(globalErrMin,2));
+        chi2_data_minerr += pow((y - _jesFit->Eval(x)) / ey_minerr, 2);
+        ++ndt;
+      // }
+
     }
   }
 
@@ -573,7 +586,7 @@ void globalFitDraw(string run, string version) {
     curdir->cd();
 
     // Create canvas
-    lumi_136TeV = Form("%s (\"%s\")",TString(cv).Contains("neutrino") ? "PNet incl. neutrinos" : "PNet", run.c_str());
+    lumi_136TeV = Form("%s %s",TString(cv).Contains("neutrino") ? "PNet incl. neutrinos" : "PNet", run.c_str());
     if (run=="Run3") lumi_136TeV = "Run3, 64 fb^{-1}";
     //TH1D *h = tdrHist("h","JES",0.982+1e-5,1.025-1e-5); // ratio (hdm)
     TH1D *h = tdrHist("h","JES",
@@ -662,7 +675,7 @@ void globalFitDraw(string run, string version) {
     //leg2->AddEntry(l,"Run 3 avg.","L");
     //leg2->AddEntry(herr,"Total unc.","F");
     //leg2->AddEntry(herr,"Run2 total unc.","F");
-    leg2->AddEntry(herr,"Summer23_V2","F"); // before was Summer22_V3
+    leg2->AddEntry(herr, TString(crun).Contains("23") ? "Summer23" : "Summer22", "F");
     leg2->AddEntry(gre,"Fit unc.","FL");
 
     // Separate canvas for CHF, NHF, NEF
@@ -730,7 +743,7 @@ void globalFitDraw(string run, string version) {
       if (name=="hdm_mpfchs1_multijet" || name=="mpfchs1_multijet_a100" ||
 	  name=="ptchs_multijet_a100") {
 	//if (TString(name.c_str()).Contains("multijet")) {
-	tdrDraw(gi,"Pz",kOpenTriangleUp,kGray+1);//_gf_color[name]);
+	// tdrDraw(gi,"Pz",kOpenTriangleUp,kGray+1);//_gf_color[name]);
 
 	TGraphErrors *go2 = (TGraphErrors*)_vdt[i].output2->Clone(Form("go2_%d",i));
 	// Remove overlapping range from up and down extrapolations
@@ -992,10 +1005,14 @@ Double_t jesFit(Double_t *x, Double_t *p) {
     int idx = v[i].idx;   assert(idx>=0);
     TF1 *f1 = v[i].func;  assert(f1);
     double par = p[idx];
-    if (v[i].ispos) par = max(par,0.);
+    if (v[i].ispos ) par = max(par,0.);
+    // if (isnan(par)) par = 0.;
     //if (v[i].ispos) par = min(1.,max(par,0.));
 
     var += par * f1->Eval(pt) * 0.01; // fullSimShapes in %'s
+    if (isnan(var) || isnan(par) || isnan(f1->Eval(pt))) {
+      cout << "jesFit: " << pt << " " << var << " " << jesref << " " << par << " " << f1->Eval(pt) << endl;
+    }
   } // for i in mshape
 
   return (var / jesref);
@@ -1032,6 +1049,8 @@ void jesFitter(Int_t& npar, Double_t* grad, Double_t& chi2, Double_t* par,
       TGraphErrors *gout  = _vdt[ig].output; assert(gout);
       TGraphErrors *gout2 = _vdt[ig].output2;
 
+      // cout << "jesFitter: " << name << " " << type << " " << ig << endl;
+
       for (int i = 0; i != gin->GetN(); ++i) {
 
 	// Retrieve central value and uncertainty for this point
@@ -1039,12 +1058,23 @@ void jesFitter(Int_t& npar, Double_t* grad, Double_t& chi2, Double_t* par,
 	double data = gin->GetY()[i];
 	double sigma = gin->GetEY()[i];
 
+  if (isnan(data) || isnan(sigma)) {
+    cout << "setting nan in jesFitter to zero : " << name << " " << pt << " " << data << " " << sigma << endl;
+    data = 0.;
+    sigma = 1.;
+    gin->SetPoint(i, pt, data);
+    gin->SetPointError(i, gin->GetEX()[i], sigma);
+    cout << "set nan in jesFitter to zero : " << name << " " << pt << " " << data << " " << sigma << endl;
+  }
+
 	// Calculate fit value at this point
 	for (int ipar = 0; ipar != _jesFit->GetNpar(); ++ipar) {
 	  _jesFit->SetParameter(ipar, par[ipar]);
+    // cout << "jesFitter: " << ipar << " " << par[ipar] << endl;
 	}
 	_obs = type;
 	double fit = _jesFit->EvalPar(&pt,par);
+  // cout << "jesFitter: " << name << " " << pt << " " << data << " " << sigma << " " << fit << endl;
 
 	// For multijet balancing, multiply data by reference JES
 	//if (TString(name.c_str()).Contains("multijet")) {

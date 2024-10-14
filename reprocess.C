@@ -153,6 +153,13 @@ void reprocess(string epoch="", string version_string="", string closure="") {
     fz = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/zb/jme_bplusZ_merged_%s_2022G.root", version, version),"READ"); // Summer23 L2Res_V1
     //exit(0);
   }
+  if (epoch=="Run22FG") {
+    //fz = new TFile("rootfiles/jme_bplusZ_2022FG_Zmm_sync_v66.root","READ");
+    // 19Dec2023 update
+    fz = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/zb/jme_bplusZ_merged_%s_2022FG.root", version, version),"READ"); // Summer23 L2Res_V1
+    cout << Form("/work/mmalucch/L2L3Res_inputs/%s/zb/jme_bplusZ_merged_%s_2022FG.root", version, version) << endl;
+    //exit(0);
+  }
   if (epoch=="Run23C123") {
     //fz = new TFile("rootfiles/jme_bplusZ_2023C123_Zmm_sync_v66.root","READ");
     //fz = new TFile("rootfiles/Summer23_noL2L3Res/jme_bplusZ_2023Cv123_Zmm_sync_v69.root","READ"); // Summer23
@@ -1195,11 +1202,13 @@ void reprocess(string epoch="", string version_string="", string closure="") {
       jec = getFJC("","","Winter23Prompt23_RunA_V1_DATA_L2L3Residual");
       mcjec = getFJC("","Winter23Prompt23_RunA_V1_DATA_L2Relative");
       */
-      jec = getFJC("","","Summer22EEPrompt22_Run2022F_V3_DATA_L2L3Residual_AK4PFPuppi");
+      // jec = getFJC("","","Summer22EEPrompt22_Run2022F_V3_DATA_L2L3Residual_AK4PFPuppi");
+      jec = getFJC("","","Summer22EE_22Sep2023_RunF_V1_DATA_L2L3Residual_AK4PFPuppi");
       mcjec = getFJC("","Summer22EEVetoRun3_V1_MC_L2Relative_AK4PUPPI");
     }
     if (epoch=="Run22G") {
-      jec = getFJC("","","Summer22EEPrompt22_Run2022G_V3_DATA_L2L3Residual_AK4PFPuppi");
+      // jec = getFJC("","","Summer22EEPrompt22_Run2022G_V3_DATA_L2L3Residual_AK4PFPuppi");
+      jec = getFJC("","","Summer22EE_22Sep2023_RunG_V1_DATA_L2L3Residual_AK4PFPuppi");
       mcjec = getFJC("","Summer22EEVetoRun3_V1_MC_L2Relative_AK4PUPPI");
     }
     if (epoch=="Run22EFG") { assert(false); exit(0); }
@@ -1282,13 +1291,15 @@ void reprocess(string epoch="", string version_string="", string closure="") {
     if (epoch=="Run22E") {
       jecold = getFJC("","","Summer22EE-22Sep2023_Run2022E_V3_DATA_L2L3Residual_AK4PFPuppi");
     }
-    if (epoch=="Run22F") {
+    if (epoch=="Run22F" || epoch=="Run22FG") {
       // because Sami used this (at least up to v59?)
       //jecold = getFJC("","","Winter23Prompt23_RunA_V1_DATA_L2L3Residual");
-      jecold = getFJC("","","Summer22EEPrompt22_Run2022F_V3_DATA_L2L3Residual_AK4PFPuppi");
+      // jecold = getFJC("","","Summer22EEPrompt22_Run2022F_V3_DATA_L2L3Residual_AK4PFPuppi");
+      jecold = getFJC("","","Summer22EE_22Sep2023_RunF_V1_DATA_L2L3Residual_AK4PFPuppi");
     }
     if (epoch=="Run22G") {
-      jecold = getFJC("","","Summer22EEPrompt22_Run2022G_V3_DATA_L2L3Residual_AK4PFPuppi");
+      // jecold = getFJC("","","Summer22EEPrompt22_Run2022G_V3_DATA_L2L3Residual_AK4PFPuppi");
+      jecold = getFJC("","","Summer22EE_22Sep2023_RunG_V1_DATA_L2L3Residual_AK4PFPuppi");
     }
     if (epoch=="Run23B" || epoch=="Run23BC123" || epoch=="Run23C123") {
       // jecold = getFJC("","","Summer22Prompt23_Run2023Cv123_V3_DATA_L2L3Residual");
