@@ -373,8 +373,12 @@ void reprocess(string epoch="", string version_string="", string closure="") {
   //TFile *fmjm = new TFile(Form("rootfiles/Summer23_noL2L3Res/jmenano_mc_cmb_%s_v36_Summer23.root",mmjm[epoch]),"READ"); // Summer23_V1
   // TFile *fmjd = new TFile(Form("rootfiles/Summer23_L2ResOnly/jmenano_data_cmb_%s_JME_v39_noRwPU_noSmearJets_25Feb2024_L2Res_v1.root",mmjd[epoch]),"READ"); // Summer23_V1
   // TFile *fmjm = new TFile(Form("rootfiles/Summer23_L2ResOnly/jmenano_mc_cmb_%s_v39_noRwPU_noSmearJets_25Feb2024_L2Res_v1.root",mmjm[epoch]),"READ"); // Summer23 L2Res_V1
+
   TFile *fmjd = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/dijet/jmenano_data_cmb_%s_JME_%s.root",version,mmjd[epoch],version),"READ"); // Summer23_V1
   TFile *fmjm = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/dijet/jmenano_mc_cmb_%s_%s.root",version,mmjm[epoch],version),"READ"); // Summer23 L2Res_V1
+  // TFile *fmjd = new TFile(Form("/work/mmalucch/L2L3Res_inputs/mc_truth_below15_2022_pnetreg/dijet/jmenano_data_cmb_2022F_JME_mc_truth_below15_2022_pnetreg.root"),"READ"); //when not dijet
+  // TFile *fmjm = new TFile(Form("/work/mmalucch/L2L3Res_inputs/mc_truth_below15_2022_pnetreg/dijet/jmenano_mc_cmb_2022EEQCD_mc_truth_below15_2022_pnetreg.root"),"READ"); // when not dijet
+
   //
   //TFile *fmjd = new TFile(Form("../dijet/rootfiles/jmenano_data_cmb_%s_JME_v35a.root",mmjd[epoch]),"READ"); // L2L3Res_V3
   //TFile *fmjm = new TFile(Form("../dijet/rootfiles/jmenano_mc_out_%s_v35a.root",mmjm[epoch]),"READ"); // L2L3Res_V3

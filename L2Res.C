@@ -21,10 +21,10 @@ bool fitD = true; // Dijet (pT,ave)
 bool fitP = true; // Dijet (pT,probe)
 bool fitJ = true; // Dijet (pT,tag)
 
-string version_string = "mc_truth_below15_2022_pnetreg";
+string version_string = "standardJetPt";
 const char * version = version_string.c_str();
 
-string YEAR = "2022";
+string YEAR = "2023";
 
 bool dijet = true;
 bool pdf = true;
@@ -97,11 +97,11 @@ TProfile* drawPt(TProfile2D *p2, double etamin, double etamax,
     _leg->AddEntry(p, Form("%s+jet",label.c_str()), "PLE");
     _leg->SetY1(_leg->GetY1()-0.05);
   }
-  // double jes;
-  // for (int ipt = 1; ipt != p2->GetNbinsY()+1; ++ipt) {
-  //   jes=  p->GetBinContent(ipt);
-  //   std::cout << label  << (draw=="HISTE"? " mc " : " data ") << " jes " << jes << " eta " << etamin << " " << etamax << " pt " << p->GetBinCenter(ipt) << " ipt " << ipt  << std::endl;
-  // }
+  double jes;
+  for (int ipt = 1; ipt != p2->GetNbinsY()+1; ++ipt) {
+    jes=  p->GetBinContent(ipt);
+    std::cout << label <<" " << id << " " << (draw=="HISTE"? " mc " : " data ") << " jes " << jes << " eta " << etamin << " " << etamax << " pt " << p->GetBinCenter(ipt) << " ipt " << ipt  << " drawPt" << std::endl;
+  }
   return p;
 } // drawPt
 
@@ -111,11 +111,6 @@ TH1D *drawNormEta(TProfile *p, string draw, int marker, int color) {
   assert(p);
   string id = Form("%s_%s_%d_%d",p->GetName(),draw.c_str(),marker,color);
   TH1D *h = p->ProjectionX(Form("h%s",id.c_str()));
-  TF1 *f1 = new TF1(Form("f1%s_",id.c_str()),"[0]",0,1.305);
-  h->Fit(f1,"QRN");
-  f1->SetRange(0,5.2);
-  h->Divide(f1);
-
   if (REMOVE_NAN){
     for (int i = 1; i != h->GetNbinsX()+1; ++i) {
       if (isnan(h->GetBinContent(i)) || isnan(h->GetBinError(i))) {
@@ -125,6 +120,11 @@ TH1D *drawNormEta(TProfile *p, string draw, int marker, int color) {
       }
     }
   }
+  TF1 *f1 = new TF1(Form("f1%s_",id.c_str()),"[0]",0,1.305);
+  h->Fit(f1,"QRN");
+  f1->SetRange(0,5.2);
+  h->Divide(f1);
+
 
   tdrDraw(h,draw,marker,color,kSolid,-1,kNone);
 
@@ -137,7 +137,6 @@ TH1D *drawNormPt(TProfile *p, TProfile *p13,
   assert(p13);
   string id = Form("%s_%s_%d_%d",p->GetName(),draw.c_str(),marker,color);
   TH1D *h = p->ProjectionX(Form("h%s",id.c_str()));
-  h->Divide(p13);
   if (REMOVE_NAN){
     for (int i = 1; i != h->GetNbinsX()+1; ++i) {
       if (isnan(h->GetBinContent(i)) || isnan(h->GetBinError(i))) {
@@ -147,6 +146,7 @@ TH1D *drawNormPt(TProfile *p, TProfile *p13,
       }
     }
   }
+  h->Divide(p13);
   tdrDraw(h,draw,marker,color,kSolid,-1,kNone);
 
   return h;
@@ -159,8 +159,6 @@ TH1D *drawRatio(TH1D *h, TH1D *hm, string draw, int marker, int color) {
   string id = Form("%s_%s_%s_%d_%d", h->GetName(), hm->GetName(),
 		   draw.c_str(), marker, color);
   TH1D *hr = (TH1D*)h->Clone(Form("hr_%s",id.c_str()));
-  hr->Divide(hm);
-
   if (REMOVE_NAN){
     for (int i = 1; i != hr->GetNbinsX()+1; ++i) {
       if (isnan(hr->GetBinContent(i)) || isnan(hr->GetBinError(i))) {
@@ -170,6 +168,8 @@ TH1D *drawRatio(TH1D *h, TH1D *hm, string draw, int marker, int color) {
       }
     }
   }
+  hr->Divide(hm);
+
 
   tdrDraw(hr,draw,marker,color,kSolid,-1,kNone);
 
@@ -240,7 +240,7 @@ TH1D *drawCleaned(TH1D *h, double eta, string data, string draw,
     }
 
     // Remove values for which the error is too large
-    if (h->GetBinError(i)>0.1){
+    if (h->GetBinError(i)>0.3){
       keep = false;
       cout << "Error too large in " << h->GetName() << " at " << i << " " << h->GetBinContent(i) << " " << h->GetBinError(i) << endl;
     }
@@ -338,8 +338,8 @@ void L2Res() {
   std::copy(vsummer_v.begin(), vsummer_v.end(), vsummer);
   std::copy(vyear_v.begin(), vyear_v.end(), vyear);
 
-  const int nrun = sizeof(vrun)/sizeof(vrun[0]) - (DO_2022FG ? 0 : 1);
-  const int nmc = sizeof(vmc)/sizeof(vmc[0]) - (DO_2022FG ? 0 : 1);
+  const int nrun = sizeof(vrun)/sizeof(vrun[0]) - ((DO_2022FG || YEAR == "2023") ? 0 : 1);
+  const int nmc = sizeof(vmc)/sizeof(vmc[0]) - ((DO_2022FG || YEAR == "2023") ? 0 : 1);
   std::cout << "nruns " << nrun << " nmc " << nmc << std::endl;
   assert(nmc==nrun);
   for (int irun = 0; irun != nrun; ++irun) {
@@ -363,10 +363,6 @@ void L2Res() {
   // Load Z+jet
   TFile *fz(0);
   TFile *fzd(0);
-  // fz = new TFile(Form("rootfiles/Summer23_L2ResOnly/jme_bplusZ_%s_Zmm_sync_v70.root",cr),"READ"); // Summer23 L2Res_V1
-  // fz = new TFile(Form("../dijet/rootfiles/jmenano_data_cmb_v22ul16.root"),"READ"); // Summer23 L2Res_V1
-  // fzd = new TFile(Form("../dijet/rootfiles/jmenano_mc_cmb_v22ul16flatmc.root"),"READ"); // Summer23 L2Res_V1
-  // fz = new TFile(Form("/work/mmalucch/L2L3Res_inputs/tot_23/zb/jme_bplusZ_merged_vX_run%s.root",cr),"READ"); // Summer23 L2Res_V1
   fz = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/zb/jme_bplusZ_merged_%s_%s.root",version,version, cr),"READ"); // Summer23 L2Res_V1
   assert(fz && !fz->IsZombie());
 
@@ -378,15 +374,8 @@ void L2Res() {
 
   // Load G+jet
   TFile *fg(0), *fgm(0);
-  // fg = new TFile(Form("rootfiles/Summer23_L2ResOnly/gamjet_all/GamHistosFill_data_%s_w4.root",cr),"READ"); // Summer23 with L2Res
-  // fg = new TFile(Form("../dijet/rootfiles/jmenano_data_cmb_v22ul16.root"),"READ"); // Summer23 with L2Res
-  // fg = new TFile(Form("/work/mmalucch/L2L3Res_inputs/tot_23/gam/GamHistosFill_data_%s_tot_23.root",cr),"READ"); // Summer23 with L2Res
   fg = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/gam/GamHistosFill_data_%s_%s.root",version, cr, version),"READ"); // Summer23 with L2Res
   assert(fg && !fg->IsZombie());
-  //
-  // fgm = new TFile(run=="2023D" ? "rootfiles/Summer23_L2ResOnly/gamjet_all/GamHistosFill_mc_2023P8-BPix_w4.root" : "rootfiles/Summer23_L2ResOnly/gamjet_all/GamHistosFill_mc_2023P8_w4.root","READ"); // Summer23 L2Res_V1
-  // fgm = new TFile(Form("../dijet/rootfiles/jmenano_mc_cmb_v22ul16flatmc.root"),"READ"); // Summer23 L2Res_V1
-  // fgm = new TFile(run=="2023D" ? "/work/mmalucch/L2L3Res_inputs/tot_23/gam/GamHistosFill_mc_2023P8-BPix_tot_23.root" : "/work/mmalucch/L2L3Res_inputs/tot_23/gam/GamHistosFill_mc_2023P8-BPix_tot_23.root","READ"); // Summer23 L2Res_V1
   fgm = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/gam/GamHistosFill_mc_%sP8%s_%s.root" ,version, cyear, run=="2023D" ? "-BPix" : "", version),"READ"); // Summer23 with L2Res
   assert(fgm && !fgm->IsZombie());
 
@@ -398,17 +387,15 @@ void L2Res() {
 
   // Load dijet
   TFile *fd(0), *fdm(0);
-  // fd = new TFile(Form("rootfiles/Summer23_L2ResOnly/jmenano_data_cmb_%s_JME_v39_noRwPU_noSmearJets_25Feb2024_L2Res_v1.root",cr),"READ"); // Summer23 L2Res_V1
-  // fd = new TFile(Form("../dijet/rootfiles/jmenano_data_cmb_v22ul16.root"),"READ"); // Summer23 L2Res_V1
-  // fd = new TFile(Form("/work/mmalucch/L2L3Res_inputs/tot_23/dijet/jmenano_data_cmb_%s_ZB_v38_Summer23MG_NoL2L3Res_Off_reweight_jets_test2.root",cr),"READ"); // Summer23 L2Res_V1
   fd = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/dijet/jmenano_data_cmb_%s_JME_%s.root",version, cr, version),"READ"); // Summer23 with L2Res
+  if (!dijet) fd = new TFile(Form("/work/mmalucch/L2L3Res_inputs/mc_truth_below15_2022_pnetreg/dijet/jmenano_data_cmb_2022F_JME_mc_truth_below15_2022_pnetreg.root"),"READ"); // Summer23 with L2Res
   assert(fd && !fd->IsZombie());
-  //
-  // fdm = new TFile(Form("rootfiles/Summer23_L2ResOnly/jmenano_mc_cmb_Summer23MG%s_v39_noRwPU_noSmearJets_25Feb2024_L2Res_v1.root",run=="2023D" ? "BPix" : ""),"READ");
-  // fdm = new TFile(Form("../dijet/rootfiles/jmenano_mc_cmb_v22ul16flatmc.root"),"READ");
-  // fdm = new TFile(Form("/work/mmalucch/L2L3Res_inputs/tot_23/dijet/jmenano_mc_cmb_Summer23MG%s_v38_Summer23MG_NoL2L3Res_Off_reweight_jets_test2.root",run=="2023D" ? "BPix" : ""),"READ");
   fdm = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/dijet/jmenano_mc_cmb_%sQCD%s_%s.root", version, year == "2023" ? "": cyear, run=="2023D" ? "-BPix" : "", version),"READ"); // Summer23 with L2Res
+  if (!dijet) fdm = new TFile(Form("/work/mmalucch/L2L3Res_inputs/mc_truth_below15_2022_pnetreg/dijet/jmenano_mc_cmb_2022EEQCD_mc_truth_below15_2022_pnetreg.root"),"READ"); // Summer23 with L2Res
   assert(fdm && !fdm->IsZombie());
+
+  if (!dijet) cout << "Dijet not available: using Z+jet and gamma+jet only" << endl;
+
 
   // std::cout << "mc dijet " << Form("/work/mmalucch/L2L3Res_inputs/%s/dijet/jmenano_mc_cmb_%sQCD%s_%s.root", version, year == "2023" ? "": cyear, run=="2023D" ? "-BPix" : "", version) << std::endl;
 
@@ -426,12 +413,14 @@ void L2Res() {
   TProfile2D *p2gm = (TProfile2D*)dgm->Get("p2m0"); assert(p2gm);
 
   // Dijet: x:eta, y:pT,avp (others p2m0tc for pT,tag, p2m0pf for pT,probe )
-  TProfile2D *p2j = (TProfile2D*)dd->Get("p2m0tc"); assert(p2j);
-  TProfile2D *p2jm = (TProfile2D*)ddm->Get("p2m0tc"); assert(p2jm);
-  TProfile2D *p2p = (TProfile2D*)dd->Get("p2m0pf"); assert(p2p);
-  TProfile2D *p2pm = (TProfile2D*)ddm->Get("p2m0pf"); assert(p2pm);
-  TProfile2D *p2d = (TProfile2D*)dd->Get("p2m0"); assert(p2d);
-  TProfile2D *p2dm = (TProfile2D*)ddm->Get("p2m0"); assert(p2dm);
+  TProfile2D *p2j, *p2jm, *p2p, *p2pm, *p2d, *p2dm;
+  p2j = (TProfile2D*)dd->Get("p2m0tc"); assert(p2j);
+  p2jm = (TProfile2D*)ddm->Get("p2m0tc"); assert(p2jm);
+  p2p = (TProfile2D*)dd->Get("p2m0pf"); assert(p2p);
+  p2pm = (TProfile2D*)ddm->Get("p2m0pf"); assert(p2pm);
+  p2d = (TProfile2D*)dd->Get("p2m0"); assert(p2d);
+  p2dm = (TProfile2D*)ddm->Get("p2m0"); assert(p2dm);
+
 
   if (false){
     p2z=removeNAN(p2z);

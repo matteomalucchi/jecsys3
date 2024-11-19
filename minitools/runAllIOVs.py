@@ -12,7 +12,7 @@ import time
 #            'Run23C4','Run23D','Run23C4D']
 run23 = ["Run23C123", "Run23C4","Run23D"]
 run22 = ['Run22CD','Run22E','Run22F','Run22G','Run22FG']
-run22 = ['Run22F','Run22G']
+# run22 = ['Run22FG']
 
 
 version = "tot_23_pnetreg_ok"
