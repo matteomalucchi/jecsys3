@@ -18,10 +18,10 @@
 
 using namespace std;
 
-string version_string = "standardJetPt";
+string version_string = "rescaleMass_removeCorrectEvents_removeNAN_pnetreg_mctruth15";
 const char * version = version_string.c_str();
 
-string YEAR = "2023";
+string YEAR = "all";
 bool DO_2022FG = false;
 
 

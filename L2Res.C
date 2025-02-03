@@ -21,14 +21,14 @@ bool fitD = true; // Dijet (pT,ave)
 bool fitP = true; // Dijet (pT,probe)
 bool fitJ = true; // Dijet (pT,tag)
 
-string version_string = "standardJetPt";
+string version_string = "rescaleMass_removeCorrectEvents_removeNAN_pnetreg_mctruth15";
 const char * version = version_string.c_str();
 
-string YEAR = "2023";
+string YEAR = "all";
 
 bool dijet = true;
 bool pdf = true;
-bool REMOVE_NAN = true;
+bool REMOVE_NAN = false;
 // set to -1 to run on every era
 int ERA_TO_RUN = -1;
 bool DO_2022FG = false;
@@ -234,7 +234,7 @@ TH1D *drawCleaned(TH1D *h, double eta, string data, string draw,
 
 
     // Remove nan values
-    if ((isnan(h->GetBinContent(i)) || isnan(h->GetBinError(i))) && !REMOVE_NAN) {
+    if ((isnan(h->GetBinContent(i)) || isnan(h->GetBinError(i))) && false) {
       cout << "NAN value found in " << h->GetName() << " at " << i << " drawCleaned" <<endl;
       keep = false;
     }

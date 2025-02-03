@@ -13,10 +13,9 @@ args = parser.parse_args()
 if not args.fast:
     os.system(f"make clean")
     os.system(f"make")
+    
 os.system(f"python minitools/runAllIOVs.py -v {args.version} {'-c' if args.closure else ''} -i {args.year}")
 
-
-# sys.exit()
 
 for file_name in ["L2Res", "createL2L3ResTextFile"]:
     with open(f"{file_name}.C") as file:

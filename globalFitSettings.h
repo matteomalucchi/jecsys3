@@ -44,7 +44,7 @@ bool complete = true;
 
 
 // Gaussian prior for fit parameters
-bool _gf_penalizeFitPars = true;
+bool _gf_penalizeFitPars = false;
 
 // Downweight PF compositin data to get broad features
 double _gf_fitPFcomp_minErr = 0.001;
