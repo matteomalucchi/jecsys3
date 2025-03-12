@@ -1010,9 +1010,9 @@ Double_t jesFit(Double_t *x, Double_t *p) {
     //if (v[i].ispos) par = min(1.,max(par,0.));
 
     var += par * f1->Eval(pt) * 0.01; // fullSimShapes in %'s
-    if (isnan(var) || isnan(par) || isnan(f1->Eval(pt))) {
-      cout << "jesFit: " << pt << " " << var << " " << jesref << " " << par << " " << f1->Eval(pt) << endl;
-    }
+    //if (isnan(var) || isnan(par) || isnan(f1->Eval(pt))) {
+    //  cout << "jesFit: " << pt << " " << var << " " << jesref << " " << par << " " << f1->Eval(pt) << endl;
+    //}
   } // for i in mshape
 
   return (var / jesref);

@@ -2,7 +2,7 @@
 
 Compute the L2L3Residuals calibration within the JetMET group of CMS as described by the [JERC](https://cms-jerc.web.cern.ch/) sub-group. This is done by combining the outputs from the [photon+jet](https://github.com/matteomalucchi/gamjet-analysis), [dijet](https://github.com/matteomalucchi/dijet) and [Z+jet](https://gitlab.cern.ch/mmalucch/ZbAnalysis) analyses.
 
-## Dependencies
+## **Dependencies**
 
 An installation of ROOT is required to run the scripts.
 
@@ -11,7 +11,7 @@ An installation of ROOT is required to run the scripts.
 Copy the outputs of the different analyses to a common directory with
 
 ```bash
-python copy_files_to_workdir.py -v version
+python arrange_L2L3Res_inputs.py -v version -o work
 ```
 
 Run for 2022+2023 recompiling the libraries

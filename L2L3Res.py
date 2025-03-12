@@ -13,8 +13,14 @@ args = parser.parse_args()
 if not args.fast:
     os.system(f"make clean")
     os.system(f"make")
-    
-os.system(f"python minitools/runAllIOVs.py -v {args.version} {'-c' if args.closure else ''} -i {args.year}")
+
+
+closure = args.closure
+if "closure" in args.version:
+    closure = True
+
+print(f"Running for version {args.version} and year {args.year} with closure {closure}")
+os.system(f"python minitools/runAllIOVs.py -v {args.version} {'-c' if closure else ''} -i {args.year}")
 
 
 for file_name in ["L2Res", "createL2L3ResTextFile"]:

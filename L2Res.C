@@ -21,10 +21,10 @@ bool fitD = true; // Dijet (pT,ave)
 bool fitP = true; // Dijet (pT,probe)
 bool fitJ = true; // Dijet (pT,tag)
 
-string version_string = "rescaleMass_removeCorrectEvents_removeNAN_pnetreg_mctruth15";
+string version_string = "rescaleMass_removeCorrectEvents_removeNAN_pnetregneutrino_mctruth15_closure";
 const char * version = version_string.c_str();
 
-string YEAR = "all";
+string YEAR = "2023";
 
 bool dijet = true;
 bool pdf = true;
@@ -314,17 +314,17 @@ void L2Res() {
   if (YEAR == "2023"){
     vrun_v = {"2023Cv123","2023Cv4","2023D"};
     vmc_v = {"Summer23","Summer23","Summer23BPIX"};
-    vsummer_v = {"Summer23_22Sep2023","Summer23_22Sep2023","Summer23BPix_22Sep2023"};
+    vsummer_v = {"Summer23-22Sep2023","Summer23-22Sep2023","Summer23BPix-22Sep2023"};
     vyear_v = {"2023","2023","2023"};}
   else if (YEAR == "2022"){
     vrun_v = {"2022CD","2022E","2022F","2022G","2022FG"};
     vmc_v = {"Summer22","Summer22EE","Summer22EE","Summer22EE","Summer22EE"};
-    vsummer_v = {"Summer22_22Sep2023","Summer22EE_22Sep2023","Summer22EE_22Sep2023", "Summer22EE_22Sep2023", "Summer22EE_22Sep2023"};
+    vsummer_v = {"Summer22-22Sep2023","Summer22EE-22Sep2023","Summer22EE-22Sep2023", "Summer22EE-22Sep2023", "Summer22EE-22Sep2023"};
     vyear_v = {"2022","2022EE","2022EE","2022EE","2022EE"};}
   else{
     vrun_v = {"2023Cv123","2023Cv4","2023D", "2022CD","2022E","2022F","2022G","2022FG"};
     vmc_v = {"Summer23","Summer23","Summer23BPIX", "Summer22","Summer22EE","Summer22EE","Summer22EE","Summer22EE"};
-    vsummer_v = {"Summer23_22Sep2023","Summer23_22Sep2023","Summer23BPix_22Sep2023", "Summer22_22Sep2023","Summer22EE_22Sep2023","Summer22EE_22Sep2023", "Summer22EE_22Sep2023", "Summer22EE_22Sep2023"};
+    vsummer_v = {"Summer23-22Sep2023","Summer23-22Sep2023","Summer23BPix-22Sep2023", "Summer22-22Sep2023","Summer22EE-22Sep2023","Summer22EE-22Sep2023", "Summer22EE-22Sep2023", "Summer22EE-22Sep2023"};
     vyear_v = {"2023","2023","2023", "2022","2022EE","2022EE","2022EE","2022EE"};}
 
   int num_runs=vrun_v.size();
