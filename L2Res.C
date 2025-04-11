@@ -21,10 +21,10 @@ bool fitD = true; // Dijet (pT,ave)
 bool fitP = true; // Dijet (pT,probe)
 bool fitJ = true; // Dijet (pT,tag)
 
-string version_string = "rescaleMass_removeCorrectEvents_removeNAN_pnetregneutrino_mctruth15_closure";
+string version_string = "rescaleMass_removeCorrectEvents_removeNAN_pnetreg_mctruth15_NewRunCrabSkim";
 const char * version = version_string.c_str();
 
-string YEAR = "2023";
+string YEAR = "2022";
 
 bool dijet = true;
 bool pdf = true;
@@ -100,7 +100,7 @@ TProfile* drawPt(TProfile2D *p2, double etamin, double etamax,
   double jes;
   for (int ipt = 1; ipt != p2->GetNbinsY()+1; ++ipt) {
     jes=  p->GetBinContent(ipt);
-    std::cout << label <<" " << id << " " << (draw=="HISTE"? " mc " : " data ") << " jes " << jes << " eta " << etamin << " " << etamax << " pt " << p->GetBinCenter(ipt) << " ipt " << ipt  << " drawPt" << std::endl;
+    // std::cout << label <<" " << id << " " << (draw=="HISTE"? " mc " : " data ") << " jes " << jes << " eta " << etamin << " " << etamax << " pt " << p->GetBinCenter(ipt) << " ipt " << ipt  << " drawPt" << std::endl;
   }
   return p;
 } // drawPt

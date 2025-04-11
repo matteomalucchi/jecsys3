@@ -36,6 +36,11 @@ elif "all" in args.IOV_list:
 else:
     raise ValueError("Invalid IOV_list")
 
+
+closure = args.closure
+if "closure" in version:
+    closure = True
+
 # make pdf/globalFit
 os.system(f"mkdir pdf/{version}/")
 os.system(f"mkdir pdf/{version}/globalFit")
@@ -63,7 +68,7 @@ for iov in IOV_list:
         + '","'
         + version
         + '","'
-        + str(args.closure)
+        + str(closure)
         + "\")'"
     )
 
@@ -79,7 +84,7 @@ for iov in IOV_list:
         + iov
         + "_"
         + version
-        # + ("_closure" if args.closure else "_initial")
+        # + ("_closure" if closure else "_initial")
         + ".root"
     )
     os.system(mv)
@@ -87,7 +92,7 @@ for iov in IOV_list:
 # mv = (
 #     "mv rootfiles/jecdataRun3Data.root rootfiles/jecdataRun3Data_"
 #     + version
-#     + ("_closure" if args.closure else "_initial")
+#     + ("_closure" if closure else "_initial")
 #     + ".root"
 # )
 # os.system(mv)
