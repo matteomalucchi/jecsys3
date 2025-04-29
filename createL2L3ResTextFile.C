@@ -18,7 +18,7 @@
 
 using namespace std;
 
-string version_string = "rescaleMass_removeCorrectEvents_removeNAN_pnetreg_mctruth15_NewRunCrabSkim";
+string version_string = "rescaleMass_removeCorrectEvents_removeNAN_StandardPt_mctruth15_NewRunCrabSkim";
 const char * version = version_string.c_str();
 
 string YEAR = "2022";

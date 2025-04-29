@@ -21,7 +21,7 @@ bool fitD = true; // Dijet (pT,ave)
 bool fitP = true; // Dijet (pT,probe)
 bool fitJ = true; // Dijet (pT,tag)
 
-string version_string = "rescaleMass_removeCorrectEvents_removeNAN_pnetreg_mctruth15_NewRunCrabSkim";
+string version_string = "rescaleMass_removeCorrectEvents_removeNAN_StandardPt_mctruth15_NewRunCrabSkim";
 const char * version = version_string.c_str();
 
 string YEAR = "2022";
@@ -234,7 +234,7 @@ TH1D *drawCleaned(TH1D *h, double eta, string data, string draw,
 
 
     // Remove nan values
-    if ((isnan(h->GetBinContent(i)) || isnan(h->GetBinError(i))) && false) {
+    if ((isnan(h->GetBinContent(i)) || isnan(h->GetBinError(i))) && REMOVE_NAN) {
       cout << "NAN value found in " << h->GetName() << " at " << i << " drawCleaned" <<endl;
       keep = false;
     }
@@ -700,6 +700,13 @@ void L2Res() {
 		    "[0]+[1]*log10(0.01*x)+[2]*pow(log10(0.01*x),2)"
 		    "+[3]/(x/10.)",15.,3500.);
 
+  // 2022 shape
+  TF1 *f5 =  new TF1(Form("f5_%d_%s",ieta,cr),
+		    "1./([2]*([3]*([4]+TMath::Log(max([0],min([1],x)))"
+        "*([5]+TMath::Log(max([0],min([1],x)))*[6])+[7]/x)))",15.,3500.);
+  
+
+
   // Sequential fitting with more and more parameters
   // Extra parameters are of size of expected prior uncertainty
   f0->SetParameter(0,1.000);
@@ -715,6 +722,12 @@ void L2Res() {
 		    f3->GetParameter(2),f2->GetParameter(2));
   f4->SetParLimits(2,-0.5,0.5); // offset no more than 50% at 10 GeV
   mg->Fit(f4,"QRN");
+  
+  // 2022 shape
+  f5->SetParameters(30, 500, 1.0, 1.0, 1.0, 0.0, 0.0, -1.0);
+	f5->FixParameter(0,30);
+  mg->Fit(f5,"QRN");
+  
 
   // Bonus: constrain barrel f2 fit to flat if not significant
   if (eta<1.3 && false) {
@@ -731,12 +744,15 @@ void L2Res() {
 
   // Keep track of log-lin+1/x for text files
   vf1[ieta-1] = f2;
+  // vf1[ieta-1] = TString(cr).Contains("23") ? f2 : f5;
 
   f0->Draw("SAME"); f0->SetLineColor(kMagenta+2); f0->SetLineStyle(kDashed);
   f1->Draw("SAME"); f1->SetLineColor(kBlue);
   f2->Draw("SAME"); f2->SetLineColor(kGreen+1);
   f3->Draw("SAME"); f3->SetLineColor(kOrange+2);
   f4->Draw("SAME"); f4->SetLineColor(kRed);
+  f5->Draw("SAME"); f5->SetLineColor(kCyan+2);
+
 
   tex->DrawLatex(0.50,0.85,Form("[%1.3f,%1.3f]",eta1,eta2));
 
@@ -767,7 +783,14 @@ void L2Res() {
 
   //f0->Draw("SAME");
   // f1->Draw("SAME");
+  // if String(cr).Contains("23"){
+  //   f2->Draw("SAME");
+  // }
+  // else{
+  //   f5->Draw("SAME");
+  // }
   f2->Draw("SAME");
+  // f5->Draw("SAME");
   // f3->Draw("SAME");
   // f4->Draw("SAME");
 
@@ -920,7 +943,7 @@ void L2Res() {
     double eta2 = -p2d->GetXaxis()->GetBinLowEdge(ieta);
     TF1 *f1 = vf1[ieta-1];
     ftxt << Form("  %+1.3f %+1.3f  %d  %d %4d  ", eta1, eta2,
-		 2 + f1->GetNpar(),  10, int(6800. / cosh(eta2)));
+		 2 + f1->GetNpar(),  15, int(6800. / cosh(eta2)));
     for (int i = 0; i != f1->GetNpar(); ++i) {
       ftxt << Form(" %7.4f",f1->GetParameter(i));
     }
@@ -931,7 +954,7 @@ void L2Res() {
     double eta2 = p2d->GetXaxis()->GetBinLowEdge(ieta+1);
     TF1 *f1 = vf1[ieta-1];
     ftxt << Form("  %+1.3f %+1.3f  %d  %d %4d  ", eta1, eta2,
-		 2 + f1->GetNpar(),  10, int(6800. / cosh(eta1)));
+		 2 + f1->GetNpar(),  15, int(6800. / cosh(eta1)));
     for (int i = 0; i != f1->GetNpar(); ++i) {
       ftxt << Form(" %7.4f",f1->GetParameter(i));
     }
