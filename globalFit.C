@@ -13,6 +13,15 @@
 // Author: Mikko Voutilainen
 //
 // Notes: enable systematic source offsetting?
+
+
+// Order of the functions:
+// - globalFitEtaBin (load everything)
+// - jesFit  --> used for _jesFit
+// - jesFitter (fit function) -> gets parameters from _jesFit 
+
+
+
 #include "TFile.h"
 #include "TF1.h"
 #include "TMatrixD.h"
@@ -40,6 +49,7 @@ using namespace std;
 const bool debug = true;
 const bool saveROOT = true;
 const bool plotPF = false; // plot PF composition
+const bool removeGrayMultijet = false; 
 
 // Helper functions to draw fit uncertainty band for arbitrary TF1
 Double_t fitError(Double_t *x, Double_t *p);
@@ -239,7 +249,7 @@ void globalFitEtaBin(double etamin, double etamax, string run, string version, s
     }
 
     // Multijet special
-    if (g2) { //string(name2)!="") {
+    if (g2 && true) { //string(name2)!="") {
       data.input2 = (TGraphErrors*)g2->Clone(Form("%s_in2",name2));
       data.output2 = (TGraphErrors*)g2->Clone(Form("%s_out2",name2));
     }
@@ -740,8 +750,8 @@ void globalFitDraw(string run, string version) {
       if (_gf_size[name]==0)   _gf_size[name] = 1.0;
 
       tdrDraw(go,"Pz",_gf_marker[name],_gf_color[name]);
-      if (name=="hdm_mpfchs1_multijet" || name=="mpfchs1_multijet_a100" ||
-	  name=="ptchs_multijet_a100") {
+      if ((name=="hdm_mpfchs1_multijet" || name=="mpfchs1_multijet_a100" ||
+	  name=="ptchs_multijet_a100")&& true) {
 	//if (TString(name.c_str()).Contains("multijet")) {
 	// tdrDraw(gi,"Pz",kOpenTriangleUp,kGray+1);//_gf_color[name]);
 
@@ -755,8 +765,10 @@ void globalFitDraw(string run, string version) {
 	for (int i = go2->GetN()-1; i != -1; --i) {
 	  if (go2->GetX()[i]>ptsplit*sqrt(crecoil)) go2->RemovePoint(i);
 	}
+  if (!removeGrayMultijet){
 
 	tdrDraw(go2,"Pz",kFullTriangleDown,kGray+2);
+  }
 	go2->SetMarkerSize(0.8);
 	go->SetMarkerSize(0.8);
       }
@@ -1078,8 +1090,8 @@ void jesFitter(Int_t& npar, Double_t* grad, Double_t& chi2, Double_t* par,
 
 	// For multijet balancing, multiply data by reference JES
 	//if (TString(name.c_str()).Contains("multijet")) {
-	if (name=="hdm_mpfchs1_multijet" || name=="mpfchs1_multijet_a100" ||
-	    name=="ptchs_multijet_a100") {
+	if ((name=="hdm_mpfchs1_multijet" || name=="mpfchs1_multijet_a100" ||
+	    name=="ptchs_multijet_a100")&& true) {
 	  assert(gin2);
 	  double ptref = gin2->GetY()[i] * pt;
 	  double fitRef = _jesFit->EvalPar(&ptref,par);
@@ -1126,7 +1138,7 @@ void jesFitter(Int_t& npar, Double_t* grad, Double_t& chi2, Double_t* par,
 	gout->SetPoint(i, pt, data + shifts);
 
 	// For multijets, store also downward extrapolation
-	if (TString(name.c_str()).Contains("multijet")) {
+	if ((TString(name.c_str()).Contains("multijet"))&& !removeGrayMultijet) {
 	  double jes = _jesFit->EvalPar(&pt, par);
 	  double ptref = pt * gin2->GetY()[i];
 	  double jesref = _jesFit->EvalPar(&ptref, par);
