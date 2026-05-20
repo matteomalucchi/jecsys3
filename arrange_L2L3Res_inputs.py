@@ -12,15 +12,18 @@ HOME_DIR = "/afs/cern.ch/user/j/jessy/workspace/private/CMS/PNET_Regression/Resi
 
 parser = argparse.ArgumentParser(description="Copy files to a common directory")
 parser.add_argument("-v", "--version", required=True)
+parser.add_argument("--vZjet", default=None, help="Version of Zjet to copy (if different from dijet and gamjet)")
 parser.add_argument("-o", "--option", default="copy", help="What to do with the files (copy, backup, rm)")
 
 args = parser.parse_args()
+vZjet = args.vZjet if args.vZjet else args.version
 
 if args.option == "copy":
     # get workdir
     copy_dir= os.environ.get("copy_dir", ".")
     main_dir=f"{copy_dir}/{L2L3RES_DIR}/{args.version}"
     #mkdir
+    subprocess.run(f"mkdir {L2L3RES_DIR}", shell=True)
     subprocess.run(f"mkdir {main_dir}", shell=True)
     #breakpoint()
     if DIJET:
@@ -36,7 +39,7 @@ if args.option == "copy":
     if ZJET:
         print("Copying ZbAnalysis")
         subprocess.run(f"mkdir {main_dir}/zb", shell=True)
-        subprocess.run(f"cp {HOME_DIR}/ZbAnalysis/figures/{args.version}_*/jme_bplusZ_merged*.root {main_dir}/zb/", shell=True)
+        subprocess.run(f"cp {HOME_DIR}/ZbAnalysis/figures/{vZjet}_*/jme_bplusZ_merged*.root {main_dir}/zb/", shell=True)
 
     print(f"Copied output in {main_dir}")
 

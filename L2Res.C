@@ -21,10 +21,10 @@ bool fitD = true; // Dijet (pT,ave)
 bool fitP = true; // Dijet (pT,probe)
 bool fitJ = true; // Dijet (pT,tag)
 
-string version_string = "rescaleMass_removeCorrectEvents_removeNAN_pnetreg_mctruth15_NewRunCrabSkim_closure";
+string version_string = "upartreg_neutrino_v1";
 const char * version = version_string.c_str();
 
-string YEAR = "2022";
+string YEAR = "24";
 
 bool dijet = true;
 bool pdf = true;
@@ -314,7 +314,7 @@ void L2Res() {
     vrun_v = {"2024C","2024D","2024E","2024F","2024G","2024H","2024I"};
     vmc_v = {"Summer24","Summer24","Summer24","Summer24","Summer24","Summer24","Summer24"};
     vsummer_v = {"Summer24","Summer24","Summer24","Summer24","Summer24","Summer24","Summer24"};
-    vyear_v = {"2024","2024","2024","2024","2024","2024","2024"};}
+    vyear_v = {"2024","2024","2024","2024","2024","2024","2024"};
   }
   else if (YEAR == "2023" || YEAR == "23"){
     vrun_v = {"2023Cv123","2023Cv4","2023D"};
@@ -368,7 +368,7 @@ void L2Res() {
   // Load Z+jet
   TFile *fz(0);
   TFile *fzd(0);
-  fz = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/zb/jme_bplusZ_merged_%s_%s.root",version,version, cr),"READ"); // Summer23 L2Res_V1
+  fz = new TFile(Form("/afs/cern.ch/user/j/jessy/workspace/private/CMS/PNET_Regression/Residuals/jecsys3/L2L3Res_inputs/%s/zb/jme_bplusZ_merged_%s_%s.root",version,version, cr),"READ"); // Summer23 L2Res_V1
   assert(fz && !fz->IsZombie());
 
   TDirectory *dz = fz->GetDirectory("data/l2res");
@@ -379,9 +379,9 @@ void L2Res() {
 
   // Load G+jet
   TFile *fg(0), *fgm(0);
-  fg = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/gam/GamHistosFill_data_%s_%s.root",version, cr, version),"READ"); // Summer23 with L2Res
+  fg = new TFile(Form("/afs/cern.ch/user/j/jessy/workspace/private/CMS/PNET_Regression/Residuals/jecsys3/L2L3Res_inputs/%s/gam/GamHistosFill_data_%s_%s.root",version, cr, version),"READ"); // Summer23 with L2Res
   assert(fg && !fg->IsZombie());
-  fgm = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/gam/GamHistosFill_mc_%sP8%s_%s.root" ,version, cyear, run=="2023D" ? "-BPix" : "", version),"READ"); // Summer23 with L2Res
+  fgm = new TFile(Form("/afs/cern.ch/user/j/jessy/workspace/private/CMS/PNET_Regression/Residuals/jecsys3/L2L3Res_inputs/%s/gam/GamHistosFill_mc_%sP8%s_%s.root" ,version, cyear, run=="2023D" ? "-BPix" : "", version),"READ"); // Summer23 with L2Res
   assert(fgm && !fgm->IsZombie());
 
   TDirectory *dg = fg->GetDirectory("Gamjet2");

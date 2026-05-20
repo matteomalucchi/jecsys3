@@ -131,7 +131,7 @@ void globalFitEtaBin(double etamin, double etamax, string run, string version, s
   // Open file created by minitools/runAllIOVs.py and recombine.C
   const char *crun = run.c_str();
   const char *cv = version.c_str();
-  TFile *f = new TFile(Form("rootfiles/jecdata%s.root",crun),"UPDATE");
+  TFile *f = new TFile(Form("rootfiles/jecdata_%s_%s.root",crun,cv),"UPDATE");
   assert(f && !f->IsZombie());
 
   // Prepare links to all relevant subdirectories
@@ -575,7 +575,7 @@ void globalFitDraw(string run, string version) {
   // Load globalFit fit results
   const char *crun = run.c_str();
   const char *cv = version.c_str();
-  TFile *f = new TFile(Form("rootfiles/jecdata%s.root",run.c_str()),"READ");
+  TFile *f = new TFile(Form("rootfiles/jecdata_%s_%s.root",run.c_str(),version.c_str()),"READ");
   assert(f && !f->IsZombie());
 
   curdir->cd();

@@ -112,7 +112,7 @@ void reprocess(string epoch="", string version_string="", string closure="") {
   TDirectory *curdir = gDirectory;
 
   const char *cep = epoch.c_str();
-  TFile *fout = new TFile(Form("rootfiles/jecdata%s_%s.root", cep, version), "RECREATE");
+  TFile *fout = new TFile(Form("rootfiles/jecdata_%s_%s.root", cep, version), "RECREATE");
 
   ////////////////////////////
   // Z+jet                  //
@@ -179,25 +179,25 @@ void reprocess(string epoch="", string version_string="", string closure="") {
     fz = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/zb/jme_bplusZ_merged_%s_2023D.root", version, version),"READ"); // Summer23 L2Res_V1
   }
   if (epoch=="Run24C") {
-    fz = new TFile(Form("/afs/cern.ch/user/j/jessy/workspace/private/CMS/PNET_Regression/Residuals/ZbAnalysis/rootfiles/%s/jme_bplusZ_merged_%s_2024C.root", version, version),"READ"); // Summer23 L2Res_V1
+    fz = new TFile(Form("/afs/cern.ch/user/j/jessy/workspace/private/CMS/PNET_Regression/Residuals/jecsys3/L2L3Res_inputs/%s/zb/jme_bplusZ_merged_%s_2024C.root", version, version),"READ"); // Summer23 L2Res_V1
   }
   if (epoch=="Run24D") {
-    fz = new TFile(Form("/afs/cern.ch/user/j/jessy/workspace/private/CMS/PNET_Regression/Residuals/ZbAnalysis/rootfiles/%s/jme_bplusZ_merged_%s_2024D.root", version, version),"READ"); // Summer23 L2Res_V1
+    fz = new TFile(Form("/afs/cern.ch/user/j/jessy/workspace/private/CMS/PNET_Regression/Residuals/jecsys3/L2L3Res_inputs/%s/zb/jme_bplusZ_merged_%s_2024D.root", version, version),"READ"); // Summer23 L2Res_V1
   }
   if (epoch=="Run24E") {
-    fz = new TFile(Form("/afs/cern.ch/user/j/jessy/workspace/private/CMS/PNET_Regression/Residuals/ZbAnalysis/rootfiles/%s/jme_bplusZ_merged_%s_2024E.root", version, version),"READ"); // Summer23 L2Res_V1
+    fz = new TFile(Form("/afs/cern.ch/user/j/jessy/workspace/private/CMS/PNET_Regression/Residuals/jecsys3/L2L3Res_inputs/%s/zb/jme_bplusZ_merged_%s_2024E.root", version, version),"READ"); // Summer23 L2Res_V1
   }
   if (epoch=="Run24F") {
-    fz = new TFile(Form("/afs/cern.ch/user/j/jessy/workspace/private/CMS/PNET_Regression/Residuals/ZbAnalysis/rootfiles/%s/jme_bplusZ_merged_%s_2024F.root", version, version),"READ"); // Summer23 L2Res_V1
+    fz = new TFile(Form("/afs/cern.ch/user/j/jessy/workspace/private/CMS/PNET_Regression/Residuals/jecsys3/L2L3Res_inputs/%s/zb/jme_bplusZ_merged_%s_2024F.root", version, version),"READ"); // Summer23 L2Res_V1
   }
   if (epoch=="Run24G") {
-    fz = new TFile(Form("/afs/cern.ch/user/j/jessy/workspace/private/CMS/PNET_Regression/Residuals/ZbAnalysis/rootfiles/%s/jme_bplusZ_merged_%s_2024G.root", version, version),"READ"); // Summer23 L2Res_V1
+    fz = new TFile(Form("/afs/cern.ch/user/j/jessy/workspace/private/CMS/PNET_Regression/Residuals/jecsys3/L2L3Res_inputs/%s/zb/jme_bplusZ_merged_%s_2024G.root", version, version),"READ"); // Summer23 L2Res_V1
   }
   if (epoch=="Run24H") {
-    fz = new TFile(Form("/afs/cern.ch/user/j/jessy/workspace/private/CMS/PNET_Regression/Residuals/ZbAnalysis/rootfiles/%s/jme_bplusZ_merged_%s_2024H.root", version, version),"READ"); // Summer23 L2Res_V1
+    fz = new TFile(Form("/afs/cern.ch/user/j/jessy/workspace/private/CMS/PNET_Regression/Residuals/jecsys3/L2L3Res_inputs/%s/zb/jme_bplusZ_merged_%s_2024H.root", version, version),"READ"); // Summer23 L2Res_V1
   }
   if (epoch=="Run24I") {
-    fz = new TFile(Form("/afs/cern.ch/user/j/jessy/workspace/private/CMS/PNET_Regression/Residuals/ZbAnalysis/rootfiles/%s/jme_bplusZ_merged_%s_2024I.root", version, version),"READ"); // Summer23 L2Res_V1
+    fz = new TFile(Form("/afs/cern.ch/user/j/jessy/workspace/private/CMS/PNET_Regression/Residuals/jecsys3/L2L3Res_inputs/%s/zb/jme_bplusZ_merged_%s_2024I.root", version, version),"READ"); // Summer23 L2Res_V1
   }
   if (epoch=="Run3") {
     //fz = new TFile(Form("%s/jme_bplusZ_Run3_Zmm_sync_v59.root",cdz58p1),"READ"); // Sami's combo
@@ -1294,35 +1294,31 @@ void reprocess(string epoch="", string version_string="", string closure="") {
     }
     if (epoch=="Run23C4D") { assert(false); exit(0); }
     if (epoch=="Run24C") {
-      jec = getFJC("","","Summer24Prompt24_Run2024C_V2_DATA_L2L3Residual_AK4PFPuppi");
-      mcjec = getFJC("","Summer24Prompt24_V1_MC_L2Relative_AK4PFPuppi");
-    }
-    if (epoch=="Run24C") {
-      jec = getFJC("","","Summer24Prompt24_Run2024C_V2_DATA_L2L3Residual_AK4PFPuppi");
+      jec = getFJC("","","Summer24Prompt24_RunCnib1_V1_DATA_L2L3Residual_AK4PFPuppi");
       mcjec = getFJC("","Summer24Prompt24_V1_MC_L2Relative_AK4PFPuppi");
     }
     if (epoch=="Run24D") {
-      jec = getFJC("","","Summer24Prompt24_Run2024D_V2_DATA_L2L3Residual_AK4PFPuppi");
+      jec = getFJC("","","Summer24Prompt24_RunDnib1_V1_DATA_L2L3Residual_AK4PFPuppi");
       mcjec = getFJC("","Summer24Prompt24_V1_MC_L2Relative_AK4PFPuppi");
     }
     if (epoch=="Run24E") {
-      jec = getFJC("","","Summer24Prompt24_Run2024E_V2_DATA_L2L3Residual_AK4PFPuppi");
+      jec = getFJC("","","Summer24Prompt24_RunEnib1_V1_DATA_L2L3Residual_AK4PFPuppi");
       mcjec = getFJC("","Summer24Prompt24_V1_MC_L2Relative_AK4PFPuppi");
     }
     if (epoch=="Run24F") {
-      jec = getFJC("","","Summer24Prompt24_Run2024F_V2_DATA_L2L3Residual_AK4PFPuppi");
+      jec = getFJC("","","Summer24Prompt24_RunFnib1_V1_DATA_L2L3Residual_AK4PFPuppi");
       mcjec = getFJC("","Summer24Prompt24_V1_MC_L2Relative_AK4PFPuppi");
     }
     if (epoch=="Run24G") {
-      jec = getFJC("","","Summer24Prompt24_Run2024G_V2_DATA_L2L3Residual_AK4PFPuppi");
+      jec = getFJC("","","Summer24Prompt24_RunGnib1_V1_DATA_L2L3Residual_AK4PFPuppi");
       mcjec = getFJC("","Summer24Prompt24_V1_MC_L2Relative_AK4PFPuppi");
     }
     if (epoch=="Run24H") {
-      jec = getFJC("","","Summer24Prompt24_Run2024H_V2_DATA_L2L3Residual_AK4PFPuppi");
+      jec = getFJC("","","Summer24Prompt24_RunHnib1_V1_DATA_L2L3Residual_AK4PFPuppi");
       mcjec = getFJC("","Summer24Prompt24_V1_MC_L2Relative_AK4PFPuppi");
     }
     if (epoch=="Run24I") {
-      jec = getFJC("","","Summer24Prompt24_Run2024I_V2_DATA_L2L3Residual_AK4PFPuppi");
+      jec = getFJC("","","Summer24Prompt24_RunInib1_V1_DATA_L2L3Residual_AK4PFPuppi");
       mcjec = getFJC("","Summer24Prompt24_V1_MC_L2Relative_AK4PFPuppi");
     }
     if (epoch=="Run3") {
@@ -1398,25 +1394,25 @@ void reprocess(string epoch="", string version_string="", string closure="") {
       jecold = getFJC("","","Summer23Prompt23_Run2023D_V2_DATA_L2L3Residual_AK4PFPuppi");
     }
     if (epoch=="Run24C") {
-      jecold = getFJC("","","Summer24Prompt24_Run2024C_V2_DATA_L2L3Residual_AK4PFPuppi");
+      jecold = getFJC("","","Summer24Prompt24_RunCnib1_V1_DATA_L2L3Residual_AK4PFPuppi"); 
     }
     if (epoch=="Run24D") {
-      jecold = getFJC("","","Summer24Prompt24_Run2024D_V2_DATA_L2L3Residual_AK4PFPuppi");
+      jecold = getFJC("","","Summer24Prompt24_RunDnib1_V1_DATA_L2L3Residual_AK4PFPuppi");
     }
     if (epoch=="Run24E") {
-      jecold = getFJC("","","Summer24Prompt24_Run2024E_V2_DATA_L2L3Residual_AK4PFPuppi");
+      jecold = getFJC("","","Summer24Prompt24_RunEnib1_V1_DATA_L2L3Residual_AK4PFPuppi");
     }
     if (epoch=="Run24F") {
-      jecold = getFJC("","","Summer24Prompt24_Run2024F_V2_DATA_L2L3Residual_AK4PFPuppi");
+      jecold = getFJC("","","Summer24Prompt24_RunFnib1_V1_DATA_L2L3Residual_AK4PFPuppi");
     }
     if (epoch=="Run24G") {
-      jecold = getFJC("","","Summer24Prompt24_Run2024G_V2_DATA_L2L3Residual_AK4PFPuppi");
+      jecold = getFJC("","","Summer24Prompt24_RunGnib1_V1_DATA_L2L3Residual_AK4PFPuppi");
     }
     if (epoch=="Run24H") {
-      jecold = getFJC("","","Summer24Prompt24_Run2024H_V2_DATA_L2L3Residual_AK4PFPuppi");
+      jecold = getFJC("","","Summer24Prompt24_RunHnib1_V1_DATA_L2L3Residual_AK4PFPuppi");
     }
     if (epoch=="Run24I") {
-      jecold = getFJC("","","Summer24Prompt24_Run2024I_V2_DATA_L2L3Residual_AK4PFPuppi");
+      jecold = getFJC("","","Summer24Prompt24_RunInib1_V1_DATA_L2L3Residual_AK4PFPuppi");
     }
     if (epoch=="Run3") {
       // Combo done with jecdataRun3Data.root and createL2L3ResTextFile.C

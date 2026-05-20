@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#!/usr/bin/env python3
 import os
 import argparse
 import time
@@ -78,18 +78,18 @@ for iov in IOV_list:
 # os.system("root -b -q 'mk_reprocess_RunEpoch.C(\"Run3\")'")
 
 # mv jecdata*.root
-for iov in IOV_list:
-    mv = (
-        "mv rootfiles/jecdata"
-        + iov
-        + ".root rootfiles/jecdata_"
-        + iov
-        + "_"
-        + version
-        # + ("_closure" if closure else "_initial")
-        + ".root"
-    )
-    os.system(mv)
+# for iov in IOV_list:
+#     mv = (
+#         "mv rootfiles/jecdata"
+#         + iov
+#         + ".root rootfiles/jecdata_"
+#         + iov
+#         + "_"
+#         + version
+#         # + ("_closure" if closure else "_initial")
+#         + ".root"
+#     )
+#     os.system(mv)
 
 # mv = (
 #     "mv rootfiles/jecdataRun3Data.root rootfiles/jecdataRun3Data_"

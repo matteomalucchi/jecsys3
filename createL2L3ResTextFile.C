@@ -18,10 +18,10 @@
 
 using namespace std;
 
-string version_string = "rescaleMass_removeCorrectEvents_removeNAN_pnetreg_mctruth15_NewRunCrabSkim_closure";
+string version_string = "upartreg_neutrino_v1";
 const char * version = version_string.c_str();
 
-string YEAR = "2022";
+string YEAR = "24";
 bool DO_2022FG = false;
 
 
@@ -182,7 +182,7 @@ void createL2L3ResTextFiles(string set, bool leg2) {
     f = new TFile("rootfiles/jecdataRun23C4D.root","READ"); isRun3=true;
   }
   else if (TString(set).Contains("Run24") || TString(set).Contains("Run23") || TString(set).Contains("Run22")) {
-    f = new TFile(Form("rootfiles/jecdata%s_%s.root",set.c_str(), version),"READ"); isRun3=true;
+    f = new TFile(Form("rootfiles/jecdata_%s_%s.root",set.c_str(), version),"READ"); isRun3=true;
   }
   else if (set=="Run3-Combo") {
     // use input to the global fit for pre-fit average JEC
