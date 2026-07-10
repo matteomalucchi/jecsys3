@@ -53,7 +53,7 @@ for iov in IOV_list:
     # find line that starts with string version =
     for line in filedata.split("\n"):
         if line.startswith("bool _gf_penalizeFitPars"):
-            line_new = f"bool _gf_penalizeFitPars = {'false' if 'G' in iov and '22' in iov else 'true'};"
+            line_new = f"bool _gf_penalizeFitPars = {'false' if (('G' in iov and '22') or ((('F' in iov) or ('G' in iov)) and '24' in iov)) else 'true'};"
             print(line_new)
             break
     # modify line

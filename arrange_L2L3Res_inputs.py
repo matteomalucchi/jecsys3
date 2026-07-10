@@ -2,9 +2,9 @@ import os
 import argparse
 import subprocess
 
-DIJET=False
+DIJET=True
 GAMJET=False
-ZJET=True
+ZJET=False
 
 L2L3RES_DIR="L2L3Res_inputs"
 HOME_DIR = "/afs/cern.ch/user/j/jessy/workspace/private/CMS/PNET_Regression/Residuals/"
