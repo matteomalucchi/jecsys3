@@ -17,13 +17,13 @@ bool skipG = false;//false;//true
 // Patch [2.853,2.964] minimum statistical uncertainty (for trig bias?)
 double patchErr29 = 0.005; // added in quadrature to stat unc
 
-string version_string = "rescaleMass_removeCorrectEvents_removeNAN_pnetreg_mctruth15_closure";
+string version_string = "rescaleMass_removeCorrectEvents_removeNAN_pnetregneutrino_mctruth15_NewRunCrabSkim_closure";
 const char * version = version_string.c_str();
 
 string base_path_string = "/work/mmalucch/L2L3Res_inputs/";
 const char * base_path = base_path_string.c_str();
 
-string YEAR = "2023";
+string YEAR = "2022";
 
 // Calculate JER with MPFX. If JER13 not given, calculate it
 TH1D *getJER(TProfile2D *p2s, TProfile2D *p2x, TH1D *hjer13,
@@ -315,7 +315,7 @@ TH1D *drawH2JERSF(TH2D *h2, double pt, string draw, int marker, int color) {
   return h;
 } // drawH2JERSF
 
-void JERSF_update() {
+void JERSF() {
 
   // Set graphical styles
   setTDRStyle();
