@@ -23,7 +23,7 @@ print(f"Running for version {args.version} and year {args.year} with closure {cl
 os.system(f"python minitools/runAllIOVs.py -v {args.version} {'-c' if closure else ''} -i {args.year}")
 
 
-for file_name in ["L2Res", "createL2L3ResTextFile"]:
+for file_name in ["L2Res", "createL2L3ResTextFile", "JERSF"]:
     with open(f"{file_name}.C") as file:
         filedata = file.read()
 
