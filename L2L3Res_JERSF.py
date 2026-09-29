@@ -22,8 +22,11 @@ if "closure" in args.version:
 print(f"Running for version {args.version} and year {args.year} with closure {closure}")
 os.system(f"python3 minitools/runAllIOVs.py -v {args.version} {'-c' if closure else ''} -i {args.year}")
 
+file_list = ["L2Res", "createL2L3ResTextFile"]
+if closure:
+    file_list.append("JERSF")
 
-for file_name in ["L2Res", "createL2L3ResTextFile", "JERSF"]:
+for file_name in file_list:
     with open(f"{file_name}.C") as file:
         filedata = file.read()
 

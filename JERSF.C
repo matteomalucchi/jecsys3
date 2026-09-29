@@ -17,13 +17,13 @@ bool skipG = false;//false;//true
 // Patch [2.853,2.964] minimum statistical uncertainty (for trig bias?)
 double patchErr29 = 0.005; // added in quadrature to stat unc
 
-string version_string = "rescaleMass_removeCorrectEvents_removeNAN_pnetregneutrino_mctruth15_NewRunCrabSkim_closure";
+string version_string = "upartreg_v1_closure";
 const char * version = version_string.c_str();
 
-string base_path_string = "/work/mmalucch/L2L3Res_inputs/";
+string base_path_string = "/afs/cern.ch/user/j/jessy/workspace/private/CMS/PNET_Regression/Residuals/jecsys3/L2L3Res_inputs/";
 const char * base_path = base_path_string.c_str();
 
-string YEAR = "2022";
+string YEAR = "2024";
 
 // Calculate JER with MPFX. If JER13 not given, calculate it
 TH1D *getJER(TProfile2D *p2s, TProfile2D *p2x, TH1D *hjer13,
@@ -353,7 +353,13 @@ void JERSF() {
   std::vector<string> vsummer_v;
   std::vector<string> vyear_v;
 
-  if (YEAR == "2023"){
+  if (YEAR == "2024"){
+    vrun_v = {"2024C","2024D","2024E","2024F","2024G","2024H","2024I"};
+    vmc_v = {"Summer24","Summer24","Summer24","Summer24","Summer24","Summer24","Summer24"};
+    vsummer_v = {"Summer24","Summer24","Summer24","Summer24","Summer24","Summer24","Summer24"};
+    vyear_v = {"2024","2024","2024","2024","2024","2024","2024"};
+  }
+  else if (YEAR == "2023"){
     vrun_v = {"2023Cv123","2023Cv4","2023D"};
     vmc_v = {"Summer23","Summer23","Summer23BPIX"};
     vsummer_v = {"Summer23-22Sep2023","Summer23-22Sep2023","Summer23BPix-22Sep2023"};
@@ -736,7 +742,7 @@ void JERSF() {
     //f = new TFile(Form("rootfiles/Prompt2024/v121_v2_Jet/jmenano_data_cmb_%s_Rereco_JME_v121_v2.root",cr),"READ"); // V9M re-reco
     //else
     //f = new TFile(Form("rootfiles/Prompt2024/v121_v2_Jet/jmenano_data_cmb_%s_JME_v121_v2.root",cr),"READ"); // V9M prompt
-    string dijet_file_data = mf["24V9M"]["Jet"][cr];
+    string dijet_file_data = mf[version]["Jet"][cr];
     cout << "Dijet file (Data) : " << dijet_file_data << endl;
     f = new TFile(dijet_file_data.c_str(),"READ"); 
     //f = new TFile(Form("rootfiles/Prompt2024/v113_2024/jmenano_data_cmb_%s_JME_v113_2024.root",cr),"READ"); // V7M closure (cmb still missing)
@@ -749,7 +755,7 @@ void JERSF() {
     //else
     //fm = new TFile(Form("rootfiles/Prompt2024/v109_2024/jmenano_mc_out_Winter24MGV14_v109_%s.root",cr),"READ"); // Winter24
     //fm = new TFile("rootfiles/Prompt2024/v121_v2_Jet/jmenano_mc_out_Summer24MG_PU69_v121_v2.root","READ"); // V9M
-    string dijet_file_mc = mf["24V9M"]["Jet"]["MC"];
+    string dijet_file_mc = mf[version]["Jet"]["MC"];
     cout << "Dijet file (MC) : " << dijet_file_mc << endl;
     fm = new TFile(dijet_file_mc.c_str(),"READ");
     fm = (TFile*)fm->GetDirectory("HLT_MC");
@@ -778,9 +784,10 @@ void JERSF() {
     //fz = new TFile(Form("rootfiles/Prompt2024/v97_Zmm/jme_Zj_2024CDEReprocessing_v1_%s_Zmm_pileup_69200_V8M_v97.root",cr),"READ"); // V9M re-reco
     //else
     //fz = new TFile(Form("rootfiles/Prompt2024/v97_Zmm/jme_Zj_%s_Zmm_pileup_69200_V8M_v97.root",cr),"READ"); // V9M prompt
-    string zmm_file = mf["24V9M"]["Zmm"][cr];
+    string zmm_file = mf[version]["Zmm"][cr];
     cout << "Zmm file : " << zmm_file << endl;
     fz = new TFile(zmm_file.c_str(),"READ");
+    fzm = fz;
     //fz = new TFile("rootfiles/Prompt2024/jme_bplusZ_2024BC_Zmm_sync_v80golden.root","READ"); // 3/fb closure
     //fg = new TFile(Form("rootfiles/Prompt2024/GamHistosFill_data_%s_w12.root",cr),"READ"); // DCSOnly
     //fg = new TFile(Form("rootfiles/Prompt2024/GamHistosFill_data_%s_w13.root",cr),"READ"); // DCSOnly
@@ -812,8 +819,8 @@ void JERSF() {
     //fgm = new TFile(Form("rootfiles/Prompt2024/GamHistosFill_mc_winter2024P8_%s-pu_w38.root",cr),"READ"); // Winter24 photon+jet only
     //fgm = new TFile("rootfiles/Prompt2024/w48_Gam/GamHistosFill_mc_summer2024P8_pu-2024CDEFGHI_w48.root","READ"); // V9M Summer24 (also PTG version?)
 
-    fg = new TFile(mf["24V9M"]["Gam"][cr].c_str(),"READ");
-    fgm = new TFile(mf["24V9M"]["Gam"]["MC"].c_str(),"READ");
+    fg = new TFile(mf[version]["Gam"][cr].c_str(),"READ");
+    fgm = new TFile(mf[version]["Gam"]["MC"].c_str(),"READ");
   }
   else if (tr.Contains("2025")) {
     //f = new TFile(Form("rootfiles/Prompt2025/Jet_v129/jmenano_data_cmb_%s_JME_v129.root",cr),"READ"); // V9M prompt
@@ -938,7 +945,7 @@ void JERSF() {
   //TH1D *h0d = tdrHist("h0d","JER SF",0.5+eps,3.0-eps);
   TH1D *h0d = tdrHist("h0d","JER SF",0.5+eps,2.0-eps);
   if (skipG) h0d->GetYaxis()->SetRangeUser(0.75+eps,1.5-eps);
-  lumi_136TeV = Form("%s - %s - %s",TString(version).Contains("neutrino") ? "PNet incl. neutrinos" : "PNet",cr,cm);
+  lumi_136TeV = Form("%s%s - %s - %s", TString(version).Contains("upart") ? "UparT" : "PNet", TString(version).Contains("neutrino") ? " incl. neutrinos" : "", cr, cm);
   extraText = "Private";
   TCanvas *c0 = tdrDiCanvas(Form("c13_%s",cr),h0,h0d,8,11);
 
@@ -1140,7 +1147,7 @@ void JERSF() {
   
   TH1D *h = tdrHist(Form("h_%d_%s",ieta,cr),"JER",0,0.45);
   TH1D *hd = tdrHist(Form("hd_%d_%s",ieta,cr),"Data/MC",0.5,2.5);
-  lumi_136TeV = Form("%s - %s - %s",TString(version).Contains("neutrino") ? "PNet incl. neutrinos" : "PNet",cr,cm);
+  lumi_136TeV = Form("%s%s - %s - %s", TString(version).Contains("upart") ? "UparT" : "PNet", TString(version).Contains("neutrino") ? " incl. neutrinos" : "", cr, cm);
   extraText = "Private";
   TCanvas *c1 = tdrDiCanvas(Form("c11_%d_%s",ieta,cr),h,hd,8,33);
 
@@ -1388,7 +1395,7 @@ void JERSF() {
   // Draw summary of final results in a single plot
   double ymin(0.9), ymax(2.8);
   TH1D *hy = tdrHist("hy","JER SF",ymin,ymax,"|#eta|",0,5.2);
-  lumi_136TeV = Form("%s - %s - %s",TString(version).Contains("neutrino") ? "PNet incl. neutrinos" : "PNet",cr,cm);
+  lumi_136TeV = Form("%s%s - %s - %s", TString(version).Contains("upart") ? "UparT" : "PNet", TString(version).Contains("neutrino") ? " incl. neutrinos" : "", cr, cm);
   extraText = "Private";
   TCanvas *cy = tdrCanvas("cy",hy,8,33,kSquare);
 
@@ -1459,8 +1466,8 @@ void JERSF() {
   //ofstream ftxt(Form("textfiles/Prompt24/Prompt24_%s_JRV7M_MC_SF_AK4PFPuppi.txt",cr));
   //ofstream ftxt(Form("textfiles/Prompt24/Prompt24_%s_JRV9M_MC_SF_AK4PFPuppi.txt",cr));
   gROOT->ProcessLine(Form(".! mkdir -p textfiles/%s", version));
-  ofstream ftxt(Form("textfiles/%s/%s_%s_JRV1_MC_SF_AK4PFPuppiPNetRegression%s.txt",version, cs, cr,TString(version).Contains("neutrino") ? "PlusNeutrino" : "") );
-  cout << "Writing JER SF text file: " << Form("textfiles/%s/%s_%s_JRV1_MC_SF_AK4PFPuppiPNetRegression%s.txt",version, cs, cr,TString(version).Contains("neutrino") ? "PlusNeutrino" : "") << endl;
+  ofstream ftxt(Form("textfiles/%s/%s_%s_JRV1_MC_SF_AK4PFPuppi%sRegression%s.txt",version, cs, cr,TString(version).Contains("upart") ? "UparT" : "PNet",TString(version).Contains("neutrino") ? "PlusNeutrino" : "") );
+  cout << "Writing JER SF text file: " << Form("textfiles/%s/%s_%s_JRV1_MC_SF_AK4PFPuppi%sRegression%s.txt",version, cs, cr,TString(version).Contains("upart") ? "UparT" : "PNet",TString(version).Contains("neutrino") ? "PlusNeutrino" : "") << endl;  
   // ofstream ftxt(TString(cr).Contains("25") ? Form("textfiles/Prompt25/Prompt25_%s_JRV2M_MC_SF_AK4PFPuppi.txt",cr) : Form("textfiles/ReReco24/ReReco24_%s_JRV9M_MC_SF_AK4PFPuppi.txt",cr));
   ftxt << "{1 JetEta 1 JetPt "
       << "sqrt([0]*fabs([0])/(x*x)+[1]*[1]/x+[2]*[2])/"
