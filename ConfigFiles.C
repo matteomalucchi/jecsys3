@@ -334,4 +334,223 @@ mf["upartreg_neutrino_v1_closure"]["Gam"]["2024I"] = "L2L3Res_inputs/upartreg_ne
 // Gam+jet MC file for UPART regression with neutrinos Closure
 mf["upartreg_neutrino_v1_closure"]["Gam"]["MC"] = "L2L3Res_inputs/upartreg_neutrino_v1_closure/gam/GamHistosFill_mc_2024P8_upartreg_neutrino_v1_closure.root";
 
+// Dijet Data files for PNET regression
+mf["pnetreg_v1"]["Jet"]["2025C"] = "L2L3Res_inputs/pnetreg_v1/dijet/jmenano_data_cmb_2025C_JME_pnetreg_v1.root";
+mf["pnetreg_v1"]["Jet"]["2025D"] = "L2L3Res_inputs/pnetreg_v1/dijet/jmenano_data_cmb_2025D_JME_pnetreg_v1.root";
+mf["pnetreg_v1"]["Jet"]["2025E"] = "L2L3Res_inputs/pnetreg_v1/dijet/jmenano_data_cmb_2025E_JME_pnetreg_v1.root";
+mf["pnetreg_v1"]["Jet"]["2025F"] = "L2L3Res_inputs/pnetreg_v1/dijet/jmenano_data_cmb_2025F_JME_pnetreg_v1.root";
+mf["pnetreg_v1"]["Jet"]["2025G"] = "L2L3Res_inputs/pnetreg_v1/dijet/jmenano_data_cmb_2025G_JME_pnetreg_v1.root";
+// Dijet MC file for PNET regression
+mf["pnetreg_v1"]["Jet"]["MC"] = "L2L3Res_inputs/pnetreg_v1/dijet/jmenano_mc_out_2025QCD_pnetreg_v1.root";
+
+// Dijet Data files for PNET regression Closure
+mf["pnetreg_v1_closure"]["Jet"]["2025C"] = "L2L3Res_inputs/pnetreg_v1_closure/dijet/jmenano_data_cmb_2025C_JME_pnetreg_v1_closure.root";
+mf["pnetreg_v1_closure"]["Jet"]["2025D"] = "L2L3Res_inputs/pnetreg_v1_closure/dijet/jmenano_data_cmb_2025D_JME_pnetreg_v1_closure.root";
+mf["pnetreg_v1_closure"]["Jet"]["2025E"] = "L2L3Res_inputs/pnetreg_v1_closure/dijet/jmenano_data_cmb_2025E_JME_pnetreg_v1_closure.root";
+mf["pnetreg_v1_closure"]["Jet"]["2025F"] = "L2L3Res_inputs/pnetreg_v1_closure/dijet/jmenano_data_cmb_2025F_JME_pnetreg_v1_closure.root";
+mf["pnetreg_v1_closure"]["Jet"]["2025G"] = "L2L3Res_inputs/pnetreg_v1_closure/dijet/jmenano_data_cmb_2025G_JME_pnetreg_v1_closure.root";
+// Dijet MC file for PNET regression Closure
+mf["pnetreg_v1_closure"]["Jet"]["MC"] = "L2L3Res_inputs/pnetreg_v1_closure/dijet/jmenano_mc_out_2025QCD_pnetreg_v1_closure.root";
+
+
+// Dijet Data files for PNET regression with neutrinos
+mf["pnetreg_neutrino_v1"]["Jet"]["2025C"] = "L2L3Res_inputs/pnetreg_neutrino_v1/dijet/jmenano_data_cmb_2025C_JME_pnetreg_neutrino_v1.root";
+mf["pnetreg_neutrino_v1"]["Jet"]["2025D"] = "L2L3Res_inputs/pnetreg_neutrino_v1/dijet/jmenano_data_cmb_2025D_JME_pnetreg_neutrino_v1.root";
+mf["pnetreg_neutrino_v1"]["Jet"]["2025E"] = "L2L3Res_inputs/pnetreg_neutrino_v1/dijet/jmenano_data_cmb_2025E_JME_pnetreg_neutrino_v1.root";
+mf["pnetreg_neutrino_v1"]["Jet"]["2025F"] = "L2L3Res_inputs/pnetreg_neutrino_v1/dijet/jmenano_data_cmb_2025F_JME_pnetreg_neutrino_v1.root";
+mf["pnetreg_neutrino_v1"]["Jet"]["2025G"] = "L2L3Res_inputs/pnetreg_neutrino_v1/dijet/jmenano_data_cmb_2025G_JME_pnetreg_neutrino_v1.root";
+// Dijet MC file for PNET regression with neutrinos
+mf["pnetreg_neutrino_v1"]["Jet"]["MC"] = "L2L3Res_inputs/pnetreg_neutrino_v1/dijet/jmenano_mc_out_2025QCD_pnetreg_neutrino_v1.root";
+
+// Dijet Data files for PNET regression with neutrinos Closure
+mf["pnetreg_neutrino_v1_closure"]["Jet"]["2025C"] = "L2L3Res_inputs/pnetreg_neutrino_v1_closure/dijet/jmenano_data_cmb_2025C_JME_pnetreg_neutrino_v1_closure.root";
+mf["pnetreg_neutrino_v1_closure"]["Jet"]["2025D"] = "L2L3Res_inputs/pnetreg_neutrino_v1_closure/dijet/jmenano_data_cmb_2025D_JME_pnetreg_neutrino_v1_closure.root";
+mf["pnetreg_neutrino_v1_closure"]["Jet"]["2025E"] = "L2L3Res_inputs/pnetreg_neutrino_v1_closure/dijet/jmenano_data_cmb_2025E_JME_pnetreg_neutrino_v1_closure.root";
+mf["pnetreg_neutrino_v1_closure"]["Jet"]["2025F"] = "L2L3Res_inputs/pnetreg_neutrino_v1_closure/dijet/jmenano_data_cmb_2025F_JME_pnetreg_neutrino_v1_closure.root";
+mf["pnetreg_neutrino_v1_closure"]["Jet"]["2025G"] = "L2L3Res_inputs/pnetreg_neutrino_v1_closure/dijet/jmenano_data_cmb_2025G_JME_pnetreg_neutrino_v1_closure.root";
+// Dijet MC file for PNET regression with neutrinos Closure
+mf["pnetreg_neutrino_v1_closure"]["Jet"]["MC"] = "L2L3Res_inputs/pnetreg_neutrino_v1_closure/dijet/jmenano_mc_out_2025QCD_pnetreg_neutrino_v1_closure.root";
+
+// Dijet Data files for UPART regression
+mf["upartreg_v1"]["Jet"]["2025C"] = "L2L3Res_inputs/upartreg_v1/dijet/jmenano_data_cmb_2025C_JME_upartreg_v1.root";
+mf["upartreg_v1"]["Jet"]["2025D"] = "L2L3Res_inputs/upartreg_v1/dijet/jmenano_data_cmb_2025D_JME_upartreg_v1.root";
+mf["upartreg_v1"]["Jet"]["2025E"] = "L2L3Res_inputs/upartreg_v1/dijet/jmenano_data_cmb_2025E_JME_upartreg_v1.root";
+mf["upartreg_v1"]["Jet"]["2025F"] = "L2L3Res_inputs/upartreg_v1/dijet/jmenano_data_cmb_2025F_JME_upartreg_v1.root";
+mf["upartreg_v1"]["Jet"]["2025G"] = "L2L3Res_inputs/upartreg_v1/dijet/jmenano_data_cmb_2025G_JME_upartreg_v1.root";
+// Dijet MC file for UPART regression
+mf["upartreg_v1"]["Jet"]["MC"] = "L2L3Res_inputs/upartreg_v1/dijet/jmenano_mc_out_2025QCD_upartreg_v1.root";
+
+// Dijet Data files for UPART regression Closure
+mf["upartreg_v1_closure"]["Jet"]["2025C"] = "L2L3Res_inputs/upartreg_v1_closure/dijet/jmenano_data_cmb_2025C_JME_upartreg_v1_closure.root";
+mf["upartreg_v1_closure"]["Jet"]["2025D"] = "L2L3Res_inputs/upartreg_v1_closure/dijet/jmenano_data_cmb_2025D_JME_upartreg_v1_closure.root";
+mf["upartreg_v1_closure"]["Jet"]["2025E"] = "L2L3Res_inputs/upartreg_v1_closure/dijet/jmenano_data_cmb_2025E_JME_upartreg_v1_closure.root";
+mf["upartreg_v1_closure"]["Jet"]["2025F"] = "L2L3Res_inputs/upartreg_v1_closure/dijet/jmenano_data_cmb_2025F_JME_upartreg_v1_closure.root";
+mf["upartreg_v1_closure"]["Jet"]["2025G"] = "L2L3Res_inputs/upartreg_v1_closure/dijet/jmenano_data_cmb_2025G_JME_upartreg_v1_closure.root";
+// Dijet MC file for UPART regression Closure
+mf["upartreg_v1_closure"]["Jet"]["MC"] = "L2L3Res_inputs/upartreg_v1_closure/dijet/jmenano_mc_out_2025QCD_upartreg_v1_closure.root";
+
+// Dijet Data files for UPART regression with neutrinos
+mf["upartreg_neutrino_v1"]["Jet"]["2025C"] = "L2L3Res_inputs/upartreg_neutrino_v1/dijet/jmenano_data_cmb_2025C_JME_upartreg_neutrino_v1.root";
+mf["upartreg_neutrino_v1"]["Jet"]["2025D"] = "L2L3Res_inputs/upartreg_neutrino_v1/dijet/jmenano_data_cmb_2025D_JME_upartreg_neutrino_v1.root";
+mf["upartreg_neutrino_v1"]["Jet"]["2025E"] = "L2L3Res_inputs/upartreg_neutrino_v1/dijet/jmenano_data_cmb_2025E_JME_upartreg_neutrino_v1.root";
+mf["upartreg_neutrino_v1"]["Jet"]["2025F"] = "L2L3Res_inputs/upartreg_neutrino_v1/dijet/jmenano_data_cmb_2025F_JME_upartreg_neutrino_v1.root";
+mf["upartreg_neutrino_v1"]["Jet"]["2025G"] = "L2L3Res_inputs/upartreg_neutrino_v1/dijet/jmenano_data_cmb_2025G_JME_upartreg_neutrino_v1.root";
+// Dijet MC file for UPART regression with neutrinos
+mf["upartreg_neutrino_v1"]["Jet"]["MC"] = "L2L3Res_inputs/upartreg_neutrino_v1/dijet/jmenano_mc_out_2025QCD_upartreg_neutrino_v1.root";
+
+// Dijet Data files for UPART regression with neutrinos Closure
+mf["upartreg_neutrino_v1_closure"]["Jet"]["2025C"] = "L2L3Res_inputs/upartreg_neutrino_v1_closure/dijet/jmenano_data_cmb_2025C_JME_upartreg_neutrino_v1_closure.root";
+mf["upartreg_neutrino_v1_closure"]["Jet"]["2025D"] = "L2L3Res_inputs/upartreg_neutrino_v1_closure/dijet/jmenano_data_cmb_2025D_JME_upartreg_neutrino_v1_closure.root";
+mf["upartreg_neutrino_v1_closure"]["Jet"]["2025E"] = "L2L3Res_inputs/upartreg_neutrino_v1_closure/dijet/jmenano_data_cmb_2025E_JME_upartreg_neutrino_v1_closure.root";
+mf["upartreg_neutrino_v1_closure"]["Jet"]["2025F"] = "L2L3Res_inputs/upartreg_neutrino_v1_closure/dijet/jmenano_data_cmb_2025F_JME_upartreg_neutrino_v1_closure.root";
+mf["upartreg_neutrino_v1_closure"]["Jet"]["2025G"] = "L2L3Res_inputs/upartreg_neutrino_v1_closure/dijet/jmenano_data_cmb_2025G_JME_upartreg_neutrino_v1_closure.root";
+// Dijet MC file for UPART regression with neutrinos Closure
+mf["upartreg_neutrino_v1_closure"]["Jet"]["MC"] = "L2L3Res_inputs/upartreg_neutrino_v1_closure/dijet/jmenano_mc_out_2025QCD_upartreg_neutrino_v1_closure.root";
+
+
+// Z+jet Data files for PNET regression
+mf["pnetreg_v1"]["Zmm"]["2025C"] = "L2L3Res_inputs/pnetreg_v1/zb/jme_bplusZ_merged_pnetreg_v1_2025C.root";
+mf["pnetreg_v1"]["Zmm"]["2025D"] = "L2L3Res_inputs/pnetreg_v1/zb/jme_bplusZ_merged_pnetreg_v1_2025D.root";
+mf["pnetreg_v1"]["Zmm"]["2025E"] = "L2L3Res_inputs/pnetreg_v1/zb/jme_bplusZ_merged_pnetreg_v1_2025E.root";
+mf["pnetreg_v1"]["Zmm"]["2025F"] = "L2L3Res_inputs/pnetreg_v1/zb/jme_bplusZ_merged_pnetreg_v1_2025F.root";
+mf["pnetreg_v1"]["Zmm"]["2025G"] = "L2L3Res_inputs/pnetreg_v1/zb/jme_bplusZ_merged_pnetreg_v1_2025G.root";
+// Z+jet MC file for PNET regression
+mf["pnetreg_v1"]["Zmm"]["MC"] = "";
+
+// Z+jet Data files for PNET regression Closure
+mf["pnetreg_v1_closure"]["Zmm"]["2025C"] = "L2L3Res_inputs/pnetreg_v1_closure/zb/jme_bplusZ_merged_pnetreg_v1_closure_2025C.root";
+mf["pnetreg_v1_closure"]["Zmm"]["2025D"] = "L2L3Res_inputs/pnetreg_v1_closure/zb/jme_bplusZ_merged_pnetreg_v1_closure_2025D.root";
+mf["pnetreg_v1_closure"]["Zmm"]["2025E"] = "L2L3Res_inputs/pnetreg_v1_closure/zb/jme_bplusZ_merged_pnetreg_v1_closure_2025E.root";
+mf["pnetreg_v1_closure"]["Zmm"]["2025F"] = "L2L3Res_inputs/pnetreg_v1_closure/zb/jme_bplusZ_merged_pnetreg_v1_closure_2025F.root";
+mf["pnetreg_v1_closure"]["Zmm"]["2025G"] = "L2L3Res_inputs/pnetreg_v1_closure/zb/jme_bplusZ_merged_pnetreg_v1_closure_2025G.root";
+// Z+jet MC file for PNET regression Closure
+mf["pnetreg_v1_closure"]["Zmm"]["MC"] = "";
+
+// Z+jet Data files for PNET regression with neutrinos
+mf["pnetreg_neutrino_v1"]["Zmm"]["2025C"] = "L2L3Res_inputs/pnetreg_neutrino_v1/zb/jme_bplusZ_merged_pnetreg_neutrino_v1_2025C.root";
+mf["pnetreg_neutrino_v1"]["Zmm"]["2025D"] = "L2L3Res_inputs/pnetreg_neutrino_v1/zb/jme_bplusZ_merged_pnetreg_neutrino_v1_2025D.root";
+mf["pnetreg_neutrino_v1"]["Zmm"]["2025E"] = "L2L3Res_inputs/pnetreg_neutrino_v1/zb/jme_bplusZ_merged_pnetreg_neutrino_v1_2025E.root";
+mf["pnetreg_neutrino_v1"]["Zmm"]["2025F"] = "L2L3Res_inputs/pnetreg_neutrino_v1/zb/jme_bplusZ_merged_pnetreg_neutrino_v1_2025F.root";
+mf["pnetreg_neutrino_v1"]["Zmm"]["2025G"] = "L2L3Res_inputs/pnetreg_neutrino_v1/zb/jme_bplusZ_merged_pnetreg_neutrino_v1_2025G.root";
+// Z+jet MC file for PNET regression with neutrinos
+mf["pnetreg_neutrino_v1"]["Zmm"]["MC"] = "";
+
+// Z+jet Data files for PNET regression with neutrinos Closure
+mf["pnetreg_neutrino_v1_closure"]["Zmm"]["2025C"] = "L2L3Res_inputs/pnetreg_neutrino_v1_closure/zb/jme_bplusZ_merged_pnetreg_neutrino_v1_closure_2025C.root";
+mf["pnetreg_neutrino_v1_closure"]["Zmm"]["2025D"] = "L2L3Res_inputs/pnetreg_neutrino_v1_closure/zb/jme_bplusZ_merged_pnetreg_neutrino_v1_closure_2025D.root";
+mf["pnetreg_neutrino_v1_closure"]["Zmm"]["2025E"] = "L2L3Res_inputs/pnetreg_neutrino_v1_closure/zb/jme_bplusZ_merged_pnetreg_neutrino_v1_closure_2025E.root";
+mf["pnetreg_neutrino_v1_closure"]["Zmm"]["2025F"] = "L2L3Res_inputs/pnetreg_neutrino_v1_closure/zb/jme_bplusZ_merged_pnetreg_neutrino_v1_closure_2025F.root";
+mf["pnetreg_neutrino_v1_closure"]["Zmm"]["2025G"] = "L2L3Res_inputs/pnetreg_neutrino_v1_closure/zb/jme_bplusZ_merged_pnetreg_neutrino_v1_closure_2025G.root";
+// Z+jet MC file for PNET regression with neutrinos Closure
+mf["pnetreg_neutrino_v1_closure"]["Zmm"]["MC"] = "";
+
+// Z+jet Data files for UPART regression
+mf["upartreg_v1"]["Zmm"]["2025C"] = "L2L3Res_inputs/upartreg_v1/zb/jme_bplusZ_merged_upartreg_v1_2025C.root";
+mf["upartreg_v1"]["Zmm"]["2025D"] = "L2L3Res_inputs/upartreg_v1/zb/jme_bplusZ_merged_upartreg_v1_2025D.root";
+mf["upartreg_v1"]["Zmm"]["2025E"] = "L2L3Res_inputs/upartreg_v1/zb/jme_bplusZ_merged_upartreg_v1_2025E.root";
+mf["upartreg_v1"]["Zmm"]["2025F"] = "L2L3Res_inputs/upartreg_v1/zb/jme_bplusZ_merged_upartreg_v1_2025F.root";
+mf["upartreg_v1"]["Zmm"]["2025G"] = "L2L3Res_inputs/upartreg_v1/zb/jme_bplusZ_merged_upartreg_v1_2025G.root";
+// Z+jet MC file for UPART regression
+mf["upartreg_v1"]["Zmm"]["MC"] = "";
+
+// Z+jet Data files for UPART regression Closure
+mf["upartreg_v1_closure"]["Zmm"]["2025C"] = "L2L3Res_inputs/upartreg_v1_closure/zb/jme_bplusZ_merged_upartreg_v1_closure_2025C.root";
+mf["upartreg_v1_closure"]["Zmm"]["2025D"] = "L2L3Res_inputs/upartreg_v1_closure/zb/jme_bplusZ_merged_upartreg_v1_closure_2025D.root";
+mf["upartreg_v1_closure"]["Zmm"]["2025E"] = "L2L3Res_inputs/upartreg_v1_closure/zb/jme_bplusZ_merged_upartreg_v1_closure_2025E.root";
+mf["upartreg_v1_closure"]["Zmm"]["2025F"] = "L2L3Res_inputs/upartreg_v1_closure/zb/jme_bplusZ_merged_upartreg_v1_closure_2025F.root";
+mf["upartreg_v1_closure"]["Zmm"]["2025G"] = "L2L3Res_inputs/upartreg_v1_closure/zb/jme_bplusZ_merged_upartreg_v1_closure_2025G.root";
+// Z+jet MC file for UPART regression Closure
+mf["upartreg_v1_closure"]["Zmm"]["MC"] = "";
+
+// Z+jet Data files for UPART regression with neutrinos
+mf["upartreg_neutrino_v1"]["Zmm"]["2025C"] = "L2L3Res_inputs/upartreg_neutrino_v1/zb/jme_bplusZ_merged_upartreg_neutrino_v1_2025C.root";
+mf["upartreg_neutrino_v1"]["Zmm"]["2025D"] = "L2L3Res_inputs/upartreg_neutrino_v1/zb/jme_bplusZ_merged_upartreg_neutrino_v1_2025D.root";
+mf["upartreg_neutrino_v1"]["Zmm"]["2025E"] = "L2L3Res_inputs/upartreg_neutrino_v1/zb/jme_bplusZ_merged_upartreg_neutrino_v1_2025E.root";
+mf["upartreg_neutrino_v1"]["Zmm"]["2025F"] = "L2L3Res_inputs/upartreg_neutrino_v1/zb/jme_bplusZ_merged_upartreg_neutrino_v1_2025F.root";
+mf["upartreg_neutrino_v1"]["Zmm"]["2025G"] = "L2L3Res_inputs/upartreg_neutrino_v1/zb/jme_bplusZ_merged_upartreg_neutrino_v1_2025G.root";
+// Z+jet MC file for UPART regression with neutrinos
+mf["upartreg_neutrino_v1"]["Zmm"]["MC"] = "";
+
+// Z+jet Data files for UPART regression with neutrinos CLosure
+mf["upartreg_neutrino_v1_closure"]["Zmm"]["2025C"] = "L2L3Res_inputs/upartreg_neutrino_v1_closure/zb/jme_bplusZ_merged_upartreg_neutrino_v1_closure_2025C.root";
+mf["upartreg_neutrino_v1_closure"]["Zmm"]["2025D"] = "L2L3Res_inputs/upartreg_neutrino_v1_closure/zb/jme_bplusZ_merged_upartreg_neutrino_v1_closure_2025D.root";
+mf["upartreg_neutrino_v1_closure"]["Zmm"]["2025E"] = "L2L3Res_inputs/upartreg_neutrino_v1_closure/zb/jme_bplusZ_merged_upartreg_neutrino_v1_closure_2025E.root";
+mf["upartreg_neutrino_v1_closure"]["Zmm"]["2025F"] = "L2L3Res_inputs/upartreg_neutrino_v1_closure/zb/jme_bplusZ_merged_upartreg_neutrino_v1_closure_2025F.root";
+mf["upartreg_neutrino_v1_closure"]["Zmm"]["2025G"] = "L2L3Res_inputs/upartreg_neutrino_v1_closure/zb/jme_bplusZ_merged_upartreg_neutrino_v1_closure_2025G.root";
+// Z+jet MC file for UPART regression with neutrinos Closure
+mf["upartreg_neutrino_v1_closure"]["Zmm"]["MC"] = "";
+
+// Gam+jet Data files for PNET regression
+mf["pnetreg_v1"]["Gam"]["2025C"] = "L2L3Res_inputs/pnetreg_v1/gam/GamHistosFill_data_2025C_pnetreg_v1.root";
+mf["pnetreg_v1"]["Gam"]["2025D"] = "L2L3Res_inputs/pnetreg_v1/gam/GamHistosFill_data_2025D_pnetreg_v1.root";
+mf["pnetreg_v1"]["Gam"]["2025E"] = "L2L3Res_inputs/pnetreg_v1/gam/GamHistosFill_data_2025E_pnetreg_v1.root";
+mf["pnetreg_v1"]["Gam"]["2025F"] = "L2L3Res_inputs/pnetreg_v1/gam/GamHistosFill_data_2025F_pnetreg_v1.root";
+mf["pnetreg_v1"]["Gam"]["2025G"] = "L2L3Res_inputs/pnetreg_v1/gam/GamHistosFill_data_2025G_pnetreg_v1.root";
+// Gam+jet MC file for PNET regression
+mf["pnetreg_v1"]["Gam"]["MC"] = "L2L3Res_inputs/pnetreg_v1/gam/GamHistosFill_mc_2025P8_pnetreg_v1.root";
+
+// Gam+jet Data files for PNET regression Closure
+mf["pnetreg_v1_closure"]["Gam"]["2025C"] = "L2L3Res_inputs/pnetreg_v1_closure/gam/GamHistosFill_data_2025C_pnetreg_v1_closure.root";
+mf["pnetreg_v1_closure"]["Gam"]["2025D"] = "L2L3Res_inputs/pnetreg_v1_closure/gam/GamHistosFill_data_2025D_pnetreg_v1_closure.root";
+mf["pnetreg_v1_closure"]["Gam"]["2025E"] = "L2L3Res_inputs/pnetreg_v1_closure/gam/GamHistosFill_data_2025E_pnetreg_v1_closure.root";
+mf["pnetreg_v1_closure"]["Gam"]["2025F"] = "L2L3Res_inputs/pnetreg_v1_closure/gam/GamHistosFill_data_2025F_pnetreg_v1_closure.root";
+mf["pnetreg_v1_closure"]["Gam"]["2025G"] = "L2L3Res_inputs/pnetreg_v1_closure/gam/GamHistosFill_data_2025G_pnetreg_v1_closure.root";
+// Gam+jet MC file for PNET regression Closure
+mf["pnetreg_v1_closure"]["Gam"]["MC"] = "L2L3Res_inputs/pnetreg_v1_closure/gam/GamHistosFill_mc_2025P8_pnetreg_v1_closure.root";
+
+// Gam+jet Data files for PNET regression with neutrinos
+mf["pnetreg_neutrino_v1"]["Gam"]["2025C"] = "L2L3Res_inputs/pnetreg_neutrino_v1/gam/GamHistosFill_data_2025C_pnetreg_neutrino_v1.root";
+mf["pnetreg_neutrino_v1"]["Gam"]["2025D"] = "L2L3Res_inputs/pnetreg_neutrino_v1/gam/GamHistosFill_data_2025D_pnetreg_neutrino_v1.root";
+mf["pnetreg_neutrino_v1"]["Gam"]["2025E"] = "L2L3Res_inputs/pnetreg_neutrino_v1/gam/GamHistosFill_data_2025E_pnetreg_neutrino_v1.root";
+mf["pnetreg_neutrino_v1"]["Gam"]["2025F"] = "L2L3Res_inputs/pnetreg_neutrino_v1/gam/GamHistosFill_data_2025F_pnetreg_neutrino_v1.root";
+mf["pnetreg_neutrino_v1"]["Gam"]["2025G"] = "L2L3Res_inputs/pnetreg_neutrino_v1/gam/GamHistosFill_data_2025G_pnetreg_neutrino_v1.root";
+// Gam+jet MC file for PNET regression with neutrinos
+mf["pnetreg_neutrino_v1"]["Gam"]["MC"] = "L2L3Res_inputs/pnetreg_neutrino_v1/gam/GamHistosFill_mc_2025P8_pnetreg_neutrino_v1.root";
+
+// Gam+jet Data files for PNET regression with neutrinos Closure
+mf["pnetreg_neutrino_v1_closure"]["Gam"]["2025C"] = "L2L3Res_inputs/pnetreg_neutrino_v1_closure/gam/GamHistosFill_data_2025C_pnetreg_neutrino_v1_closure.root";
+mf["pnetreg_neutrino_v1_closure"]["Gam"]["2025D"] = "L2L3Res_inputs/pnetreg_neutrino_v1_closure/gam/GamHistosFill_data_2025D_pnetreg_neutrino_v1_closure.root";
+mf["pnetreg_neutrino_v1_closure"]["Gam"]["2025E"] = "L2L3Res_inputs/pnetreg_neutrino_v1_closure/gam/GamHistosFill_data_2025E_pnetreg_neutrino_v1_closure.root";
+mf["pnetreg_neutrino_v1_closure"]["Gam"]["2025F"] = "L2L3Res_inputs/pnetreg_neutrino_v1_closure/gam/GamHistosFill_data_2025F_pnetreg_neutrino_v1_closure.root";
+mf["pnetreg_neutrino_v1_closure"]["Gam"]["2025G"] = "L2L3Res_inputs/pnetreg_neutrino_v1_closure/gam/GamHistosFill_data_2025G_pnetreg_neutrino_v1_closure.root";
+// Gam+jet MC file for PNET regression with neutrinos Closure
+mf["pnetreg_neutrino_v1_closure"]["Gam"]["MC"] = "L2L3Res_inputs/pnetreg_neutrino_v1/gam/GamHistosFill_mc_2025P8_pnetreg_neutrino_v1.root";
+
+// Gam+jet Data files for UPART regression
+mf["upartreg_v1"]["Gam"]["2025C"] = "L2L3Res_inputs/upartreg_v1/gam/GamHistosFill_data_2025C_upartreg_v1.root";
+mf["upartreg_v1"]["Gam"]["2025D"] = "L2L3Res_inputs/upartreg_v1/gam/GamHistosFill_data_2025D_upartreg_v1.root";
+mf["upartreg_v1"]["Gam"]["2025E"] = "L2L3Res_inputs/upartreg_v1/gam/GamHistosFill_data_2025E_upartreg_v1.root";
+mf["upartreg_v1"]["Gam"]["2025F"] = "L2L3Res_inputs/upartreg_v1/gam/GamHistosFill_data_2025F_upartreg_v1.root";
+mf["upartreg_v1"]["Gam"]["2025G"] = "L2L3Res_inputs/upartreg_v1/gam/GamHistosFill_data_2025G_upartreg_v1.root";
+// Gam+jet MC file for UPART regression
+mf["upartreg_v1"]["Gam"]["MC"] = "L2L3Res_inputs/upartreg_v1/gam/GamHistosFill_mc_2025P8_upartreg_v1.root";
+
+// Gam+jet Data files for UPART regression Closure
+mf["upartreg_v1_closure"]["Gam"]["2025C"] = "L2L3Res_inputs/upartreg_v1_closure/gam/GamHistosFill_data_2025C_upartreg_v1_closure.root";
+mf["upartreg_v1_closure"]["Gam"]["2025D"] = "L2L3Res_inputs/upartreg_v1_closure/gam/GamHistosFill_data_2025D_upartreg_v1_closure.root";
+mf["upartreg_v1_closure"]["Gam"]["2025E"] = "L2L3Res_inputs/upartreg_v1_closure/gam/GamHistosFill_data_2025E_upartreg_v1_closure.root";
+mf["upartreg_v1_closure"]["Gam"]["2025F"] = "L2L3Res_inputs/upartreg_v1_closure/gam/GamHistosFill_data_2025F_upartreg_v1_closure.root";
+mf["upartreg_v1_closure"]["Gam"]["2025G"] = "L2L3Res_inputs/upartreg_v1_closure/gam/GamHistosFill_data_2025G_upartreg_v1_closure.root";
+// Gam+jet MC file for UPART regression Closure
+mf["upartreg_v1_closure"]["Gam"]["MC"] = "L2L3Res_inputs/upartreg_v1_closure/gam/GamHistosFill_mc_2025P8_upartreg_v1_closure.root";
+
+// Gam+jet Data files for UPART regression with neutrinos
+mf["upartreg_neutrino_v1"]["Gam"]["2025C"] = "L2L3Res_inputs/upartreg_neutrino_v1/gam/GamHistosFill_data_2025C_upartreg_neutrino_v1.root";
+mf["upartreg_neutrino_v1"]["Gam"]["2025D"] = "L2L3Res_inputs/upartreg_neutrino_v1/gam/GamHistosFill_data_2025D_upartreg_neutrino_v1.root";
+mf["upartreg_neutrino_v1"]["Gam"]["2025E"] = "L2L3Res_inputs/upartreg_neutrino_v1/gam/GamHistosFill_data_2025E_upartreg_neutrino_v1.root";
+mf["upartreg_neutrino_v1"]["Gam"]["2025F"] = "L2L3Res_inputs/upartreg_neutrino_v1/gam/GamHistosFill_data_2025F_upartreg_neutrino_v1.root";
+mf["upartreg_neutrino_v1"]["Gam"]["2025G"] = "L2L3Res_inputs/upartreg_neutrino_v1/gam/GamHistosFill_data_2025G_upartreg_neutrino_v1.root";
+// Gam+jet MC file for UPART regression with neutrinos
+mf["upartreg_neutrino_v1"]["Gam"]["MC"] = "L2L3Res_inputs/upartreg_neutrino_v1/gam/GamHistosFill_mc_2025P8_upartreg_neutrino_v1.root";
+
+// Gam+jet Data files for UPART regression with neutrinos Closure
+mf["upartreg_neutrino_v1_closure"]["Gam"]["2025C"] = "L2L3Res_inputs/upartreg_neutrino_v1_closure/gam/GamHistosFill_data_2025C_upartreg_neutrino_v1_closure.root";
+mf["upartreg_neutrino_v1_closure"]["Gam"]["2025D"] = "L2L3Res_inputs/upartreg_neutrino_v1_closure/gam/GamHistosFill_data_2025D_upartreg_neutrino_v1_closure.root";
+mf["upartreg_neutrino_v1_closure"]["Gam"]["2025E"] = "L2L3Res_inputs/upartreg_neutrino_v1_closure/gam/GamHistosFill_data_2025E_upartreg_neutrino_v1_closure.root";
+mf["upartreg_neutrino_v1_closure"]["Gam"]["2025F"] = "L2L3Res_inputs/upartreg_neutrino_v1_closure/gam/GamHistosFill_data_2025F_upartreg_neutrino_v1_closure.root";
+mf["upartreg_neutrino_v1_closure"]["Gam"]["2025G"] = "L2L3Res_inputs/upartreg_neutrino_v1_closure/gam/GamHistosFill_data_2025G_upartreg_neutrino_v1_closure.root";
+// Gam+jet MC file for UPART regression with neutrinos Closure
+mf["upartreg_neutrino_v1_closure"]["Gam"]["MC"] = "L2L3Res_inputs/upartreg_neutrino_v1_closure/gam/GamHistosFill_mc_2025P8_upartreg_neutrino_v1_closure.root";
+
+
 #endif

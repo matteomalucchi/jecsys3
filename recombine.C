@@ -80,6 +80,11 @@ void recombine(string type="Run2") {
   finns.push_back(make_pair<double,string>(37.73,"Run24G"));
   finns.push_back(make_pair<double,string>(5.44,"Run24H"));
   finns.push_back(make_pair<double,string>(11.42,"Run24I"));
+  finns.push_back(make_pair<double,string>(21.8,"Run25C"));
+  finns.push_back(make_pair<double,string>(25.3,"Run25D"));
+  finns.push_back(make_pair<double,string>(14.0,"Run25E"));
+  finns.push_back(make_pair<double,string>(26.4,"Run25F"));
+  finns.push_back(make_pair<double,string>(21.8,"Run25G"));
 
   vector<pair<double,TDirectory*> > fins(finns.size());
   for (unsigned int i = 0; i != finns.size(); ++i) {

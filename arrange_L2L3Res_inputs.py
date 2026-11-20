@@ -3,8 +3,8 @@ import argparse
 import subprocess
 
 DIJET=True
-GAMJET=False
-ZJET=False
+GAMJET=True
+ZJET=True
 
 L2L3RES_DIR="L2L3Res_inputs"
 HOME_DIR = "/afs/cern.ch/user/j/jessy/workspace/private/CMS/PNET_Regression/Residuals/"
@@ -39,7 +39,7 @@ if args.option == "copy":
     if ZJET:
         print("Copying ZbAnalysis")
         subprocess.run(f"mkdir {main_dir}/zb", shell=True)
-        subprocess.run(f"cp {HOME_DIR}/ZbAnalysis/figures/{vZjet}_*/jme_bplusZ_merged*.root {main_dir}/zb/", shell=True)
+        subprocess.run(f"cp {HOME_DIR}/ZbAnalysis/figures/2024_post-Jessy-updates_27Oct26/{vZjet}_*/jme_bplusZ_merged*.root {main_dir}/zb/", shell=True)
 
     print(f"Copied output in {main_dir}")
 

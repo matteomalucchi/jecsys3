@@ -14,6 +14,7 @@ run23 = ["Run23C123", "Run23C4","Run23D"]
 run22 = ['Run22CD','Run22E','Run22F','Run22G','Run22FG']
 # run22 = ['Run22F']
 run24 = ["Run24C","Run24D","Run24E","Run24F","Run24G","Run24H","Run24I"]
+run25 = ["Run25C","Run25D","Run25E","Run25F","Run25G"]
 
 version = "tot_23_pnetreg_ok"
 
@@ -27,6 +28,8 @@ args = parser.parse_args()
 
 version = args.version
 
+if "25" in args.IOV_list :
+    IOV_list=run25
 if "24" in args.IOV_list :
     IOV_list=run24
 elif "23" in args.IOV_list :

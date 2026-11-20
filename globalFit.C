@@ -685,7 +685,7 @@ void globalFitDraw(string run, string version) {
     //leg2->AddEntry(l,"Run 3 avg.","L");
     //leg2->AddEntry(herr,"Total unc.","F");
     //leg2->AddEntry(herr,"Run2 total unc.","F");
-    leg2->AddEntry(herr, TString(crun).Contains("24") ? "Summer24" : (TString(crun).Contains("23") ? "Summer23" : "Summer22"), "F");
+    leg2->AddEntry(herr, TString(crun).Contains("25") ? "Winter25" : (TString(crun).Contains("24") ? "Summer24" : (TString(crun).Contains("23") ? "Summer23" : "Summer22")), "F");
     leg2->AddEntry(gre,"Fit unc.","FL");
 
     // Separate canvas for CHF, NHF, NEF
@@ -940,7 +940,8 @@ void globalFitDraw(string run, string version) {
     if (run=="Run23C123")  nhf_off = -1.5;//1.0;//-1.0;//1.0;
     if (run=="Run23C4")  nhf_off = 2.0;//2.0;//7.0;//4.0;
     if (run=="Run23D")  nhf_off = 3.5;//2.0;//9.0;//4.5;
-    if (run=="Run24B" || run=="Run24C" || run=="Run24D" || run=="Run24E" ||
+    if (run=="Run25C" || run=="Run25D" || run=="Run25E" || run=="Run25F" || run=="Run25G" ||
+    run=="Run24B" || run=="Run24C" || run=="Run24D" || run=="Run24E" ||
 	  run=="Run24F" || run=="Run24G" || run=="Run24H" || run=="Run24I" || 
 	  run=="Run24BC" || run=="Run24BCD" || run=="Run24BCDE" ||
 	  run=="Run24CP" || run=="Run24CR" || run=="Run24CS")  nhf_off = 0.0;

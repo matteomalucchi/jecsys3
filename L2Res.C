@@ -21,7 +21,7 @@ bool fitD = true; // Dijet (pT,ave)
 bool fitP = true; // Dijet (pT,probe)
 bool fitJ = true; // Dijet (pT,tag)
 
-string version_string = "upartreg_neutrino_v1";
+string version_string = "upartreg_neutrino_v1_closure";
 const char * version = version_string.c_str();
 
 string YEAR = "24";
@@ -310,6 +310,12 @@ void L2Res() {
   std::vector<string> vsummer_v;
   std::vector<string> vyear_v;
 
+  if (YEAR == "2025" || YEAR == "25"){
+    vrun_v = {"2025C","2025D","2025E","2025F","2025G"};
+    vmc_v = {"Winter25","Winter25","Winter25","Winter25","Winter25"};
+    vsummer_v = {"Winter25","Winter25","Winter25","Winter25","Winter25"};
+    vyear_v = {"2025","2025","2025","2025","2025"};
+  }
   if (YEAR == "2024" || YEAR == "24"){
     vrun_v = {"2024C","2024D","2024E","2024F","2024G","2024H","2024I"};
     vmc_v = {"Summer24","Summer24","Summer24","Summer24","Summer24","Summer24","Summer24"};
@@ -343,8 +349,8 @@ void L2Res() {
   std::copy(vsummer_v.begin(), vsummer_v.end(), vsummer);
   std::copy(vyear_v.begin(), vyear_v.end(), vyear);
 
-  const int nrun = sizeof(vrun)/sizeof(vrun[0]) - ((DO_2022FG || YEAR == "2023" || YEAR == "23" || YEAR == "2024" || YEAR == "24") ? 0 : 1);
-  const int nmc = sizeof(vmc)/sizeof(vmc[0]) - ((DO_2022FG || YEAR == "2023" || YEAR == "23" || YEAR == "2024" || YEAR == "24") ? 0 : 1);
+  const int nrun = sizeof(vrun)/sizeof(vrun[0]) - ((DO_2022FG || YEAR == "2023" || YEAR == "23" || YEAR == "2024" || YEAR == "24" || YEAR == "2025" || YEAR == "25") ? 0 : 1);
+  const int nmc = sizeof(vmc)/sizeof(vmc[0]) - ((DO_2022FG || YEAR == "2023" || YEAR == "23" || YEAR == "2024" || YEAR == "24" || YEAR == "2025" || YEAR == "25") ? 0 : 1);
   std::cout << "nruns " << nrun << " nmc " << nmc << std::endl;
   assert(nmc==nrun);
   for (int irun = 0; irun != nrun; ++irun) {

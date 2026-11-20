@@ -17,13 +17,13 @@ bool skipG = false;//false;//true
 // Patch [2.853,2.964] minimum statistical uncertainty (for trig bias?)
 double patchErr29 = 0.005; // added in quadrature to stat unc
 
-string version_string = "upartreg_v1_closure";
+string version_string = "upartreg_neutrino_v1_closure";
 const char * version = version_string.c_str();
 
 string base_path_string = "/afs/cern.ch/user/j/jessy/workspace/private/CMS/PNET_Regression/Residuals/jecsys3/L2L3Res_inputs/";
 const char * base_path = base_path_string.c_str();
 
-string YEAR = "2024";
+string YEAR = "24";
 
 // Calculate JER with MPFX. If JER13 not given, calculate it
 TH1D *getJER(TProfile2D *p2s, TProfile2D *p2x, TH1D *hjer13,
@@ -353,6 +353,12 @@ void JERSF() {
   std::vector<string> vsummer_v;
   std::vector<string> vyear_v;
 
+  if (YEAR == "2025"){
+    vrun_v = {"2025C","2025D","2025E","2025F","2025G"};
+    vmc_v = {"Winter25","Winter25","Winter25","Winter25","Winter25"};
+    vsummer_v = {"Winter25","Winter25","Winter25","Winter25","Winter25"};
+    vyear_v = {"2025","2025","2025","2025","2025"};
+  }
   if (YEAR == "2024"){
     vrun_v = {"2024C","2024D","2024E","2024F","2024G","2024H","2024I"};
     vmc_v = {"Summer24","Summer24","Summer24","Summer24","Summer24","Summer24","Summer24"};
@@ -822,25 +828,23 @@ void JERSF() {
     fg = new TFile(mf[version]["Gam"][cr].c_str(),"READ");
     fgm = new TFile(mf[version]["Gam"]["MC"].c_str(),"READ");
   }
-  else if (tr.Contains("2025")) {
-    //f = new TFile(Form("rootfiles/Prompt2025/Jet_v129/jmenano_data_cmb_%s_JME_v129.root",cr),"READ"); // V9M prompt
-    if (tr.Contains("2025C"))
-      //f = new TFile(Form("rootfiles/Prompt2025/Jet_v131/jmenano_data_cmb_%s_JME_v131.root",cr),"READ"); // V1M
-      f = new TFile(Form("rootfiles/Prompt2025/Jet_v138/jmenano_data_cmb_%s_JME_v138.root",cr),"READ");
-    else
-      f = new TFile(Form("rootfiles/Prompt2025/Jet_v139/jmenano_data_cmb_%s_JME_v139.root",cr),"READ");
-    fm = new TFile("rootfiles/Prompt2025/Jet_v128/jmenano_mc_out_Winter25MG_v128.root","READ");
+  else if (TString(cr).Contains("2025")) {
+    string dijet_file_data = mf[version]["Jet"][cr];
+    cout << "Dijet file (Data) : " << dijet_file_data << endl;
+    f = new TFile(dijet_file_data.c_str(),"READ"); 
+    
+    string dijet_file_mc = mf[version]["Jet"]["MC"];
+    cout << "Dijet file (MC) : " << dijet_file_mc << endl;
+    fm = new TFile(dijet_file_mc.c_str(),"READ");
     fm = (TFile*)fm->GetDirectory("HLT_MC");
-    //
-    if (tr.Contains("2025C"))
-      //fz = new TFile(Form("rootfiles/Prompt2025/Zmm_v98/jme_Zj_%s_27052025_Zmm_v98_ddjson.root",cr),"READ");
-      fz = new TFile("rootfiles/Prompt2025/Zmm_v99/jme_Zj_2025C_02062025_Zmm_v99_ddjson.root","READ");
-    else
-      fz = new TFile(Form("rootfiles/Prompt2025/Zmm_v100/jme_Zj_%s_Zmm_v100.root",cr),"READ");
-    //fg = new TFile(Form("rootfiles/Prompt2025/Gam_w53/GamHistosFill_data_%s_NoL2L3Res_w53_28May2025.root",cr),"READ");
-    //fg = new TFile(Form("rootfiles/Prompt2025/Gam_w54/GamHistosFill_data_%s_w54.root",cr),"READ");
-    fg = new TFile(Form("rootfiles/Prompt2025/Gam_w58/GamHistosFill_data_%s_w58.root",cr),"READ"); 
-    fgm = new TFile("rootfiles/Prompt2024/w48_Gam/GamHistosFill_mc_summer2024P8_pu-2024CDEFGHI_w48.root","READ"); // V9M Summer24
+    
+    string zmm_file = mf[version]["Zmm"][cr];
+    cout << "Zmm file : " << zmm_file << endl;
+    fz = new TFile(zmm_file.c_str(),"READ");
+    fzm = fz;
+    
+    fg = new TFile(mf[version]["Gam"][cr].c_str(),"READ");
+    fgm = new TFile(mf[version]["Gam"]["MC"].c_str(),"READ");
   }
   else if (TString(cr).Contains("2022") || TString(cr).Contains("2023")) {
     f = new TFile(Form("%s/%s/dijet/jmenano_data_cmb_%s_JME_%s.root",base_path, version, cr, version),"READ");
