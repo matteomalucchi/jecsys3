@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#!/usr/bin/env python3
 import os
 import argparse
 import time
@@ -13,7 +13,8 @@ import time
 run23 = ["Run23C123", "Run23C4","Run23D"]
 run22 = ['Run22CD','Run22E','Run22F','Run22G','Run22FG']
 # run22 = ['Run22F']
-
+run24 = ["Run24C","Run24D","Run24E","Run24F","Run24G","Run24H","Run24I"]
+run25 = ["Run25C","Run25D","Run25E","Run25F","Run25G"]
 
 version = "tot_23_pnetreg_ok"
 
@@ -27,7 +28,11 @@ args = parser.parse_args()
 
 version = args.version
 
-if "23" in args.IOV_list :
+if "25" in args.IOV_list :
+    IOV_list=run25
+if "24" in args.IOV_list :
+    IOV_list=run24
+elif "23" in args.IOV_list :
     IOV_list=run23
 elif "22" in args.IOV_list:
     IOV_list=run22
@@ -51,7 +56,7 @@ for iov in IOV_list:
     # find line that starts with string version =
     for line in filedata.split("\n"):
         if line.startswith("bool _gf_penalizeFitPars"):
-            line_new = f"bool _gf_penalizeFitPars = {'false' if 'G' in iov and '22' in iov else 'true'};"
+            line_new = f"bool _gf_penalizeFitPars = {'false' if (('G' in iov and '22') or ((('F' in iov) or ('G' in iov)) and '24' in iov)) else 'true'};"
             print(line_new)
             break
     # modify line
@@ -76,18 +81,18 @@ for iov in IOV_list:
 # os.system("root -b -q 'mk_reprocess_RunEpoch.C(\"Run3\")'")
 
 # mv jecdata*.root
-for iov in IOV_list:
-    mv = (
-        "mv rootfiles/jecdata"
-        + iov
-        + ".root rootfiles/jecdata_"
-        + iov
-        + "_"
-        + version
-        # + ("_closure" if closure else "_initial")
-        + ".root"
-    )
-    os.system(mv)
+# for iov in IOV_list:
+#     mv = (
+#         "mv rootfiles/jecdata"
+#         + iov
+#         + ".root rootfiles/jecdata_"
+#         + iov
+#         + "_"
+#         + version
+#         # + ("_closure" if closure else "_initial")
+#         + ".root"
+#     )
+#     os.system(mv)
 
 # mv = (
 #     "mv rootfiles/jecdataRun3Data.root rootfiles/jecdataRun3Data_"

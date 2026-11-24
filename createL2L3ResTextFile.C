@@ -18,10 +18,10 @@
 
 using namespace std;
 
-string version_string = "rescaleMass_removeCorrectEvents_removeNAN_pnetreg_mctruth15_NewRunCrabSkim_closure";
+string version_string = "upartreg_neutrino_v1_closure";
 const char * version = version_string.c_str();
 
-string YEAR = "2022";
+string YEAR = "24";
 bool DO_2022FG = false;
 
 
@@ -42,8 +42,11 @@ void createL2L3ResTextFile() {
 		    //0.90+1e-4,1.30-1e-4,"p_{T} (GeV)",ptmin,ptmax);
 		    //0.88+1e-4,1.05-1e-4,"p_{T} (GeV)",ptmin,ptmax);
   lumi_136TeV = Form("%s      Run3, 63 fb^{-1}",
-    TString(version).Contains("neutrino") ? "PNet incl. neutrinos" : "PNet"); // Not including 23B
- TCanvas *c1 = tdrCanvas("c1",h,8,11,kSquare);
+      TString(version).Contains("upart") ? 
+        (TString(version).Contains("neutrino") ? "UparT incl. neutrinos" : "UparT") :
+        (TString(version).Contains("neutrino") ? "PNet incl. neutrinos" : "PNet")
+  ); // Not including 23B
+  TCanvas *c1 = tdrCanvas("c1",h,8,11,kSquare);
   c1->SetLeftMargin(0.17);
   c1->SetRightMargin(0.03);
   h->SetTitleOffset(1.5,"Y");
@@ -68,21 +71,39 @@ void createL2L3ResTextFile() {
   */
   gROOT->ProcessLine(Form(".! mkdir -p pdf/%s",version));
 
+  if (YEAR == "2025" || YEAR == "all" || YEAR == "25"){
+    createL2L3ResTextFiles("Run25C",true);
+    createL2L3ResTextFiles("Run25D",true);
+    createL2L3ResTextFiles("Run25E",true);
+    createL2L3ResTextFiles("Run25F",true);
+    createL2L3ResTextFiles("Run25G",true);
+  }
+  if (YEAR == "2024" || YEAR == "all" || YEAR == "24"){
+    createL2L3ResTextFiles("Run24C",true);
+    createL2L3ResTextFiles("Run24D",true);
+    createL2L3ResTextFiles("Run24E",true);
+    createL2L3ResTextFiles("Run24F",true);
+    createL2L3ResTextFiles("Run24G",true);
+    createL2L3ResTextFiles("Run24H",true);
+    createL2L3ResTextFiles("Run24I",true);
+  }
   if (YEAR == "2023" || YEAR == "all"){
-  createL2L3ResTextFiles("Run23C123-Summer23",true);
-  createL2L3ResTextFiles("Run23C4-Summer23",true);
-  createL2L3ResTextFiles("Run23D-Summer23",true);
+    createL2L3ResTextFiles("Run23C123-Summer23",true);
+    createL2L3ResTextFiles("Run23C4-Summer23",true);
+    createL2L3ResTextFiles("Run23D-Summer23",true);
   }
   if (YEAR == "2022" || YEAR == "all"){
-  createL2L3ResTextFiles("Run22CD-22Sep2023",true);
-  createL2L3ResTextFiles("Run22E-22Sep2023",true);
-  createL2L3ResTextFiles("Run22F-22Sep2023",true);
-  createL2L3ResTextFiles("Run22G-22Sep2023",true);
+    createL2L3ResTextFiles("Run22CD-22Sep2023",true);
+    createL2L3ResTextFiles("Run22E-22Sep2023",true);
+    createL2L3ResTextFiles("Run22F-22Sep2023",true);
+    createL2L3ResTextFiles("Run22G-22Sep2023",true);
   if (DO_2022FG) createL2L3ResTextFiles("Run22FG-22Sep2023",true);
   }
   c1->Update();
 
   string summer_str;
+  if (YEAR == "2025" || YEAR == "25") {summer_str = "Winter25";}
+  if (YEAR == "2024" || YEAR == "24") {summer_str = "Summer24";}
   if (YEAR == "2023") {summer_str = "Summer23";}
   if (YEAR == "2022") {summer_str = "Summer22";}
   if (YEAR == "all") {summer_str = "Run3";}
@@ -168,6 +189,9 @@ void createL2L3ResTextFiles(string set, bool leg2) {
   else if (set=="Run23C4D-Summer23") {
     f = new TFile("rootfiles/jecdataRun23C4D.root","READ"); isRun3=true;
   }
+  else if (TString(set).Contains("Run25") || TString(set).Contains("Run24") || TString(set).Contains("Run23") || TString(set).Contains("Run22")) {
+    f = new TFile(Form("rootfiles/jecdata_%s_%s.root",set.c_str(), version),"READ"); isRun3=true;
+  }
   else if (set=="Run3-Combo") {
     // use input to the global fit for pre-fit average JEC
     f = new TFile("rootfiles/jecdataRun3Data.root","READ"); isRun3=true;
@@ -220,6 +244,20 @@ void createL2L3ResTextFiles(string set, bool leg2) {
   color["Run23C123-Summer23"] = kOrange+1;
   color["Run23C4-Summer23"] = kBlue;
   color["Run23D-Summer23"] = kMagenta;
+
+  color["Run24C"] = kGreen+2;
+  color["Run24D"] = kCyan+2;
+  color["Run24E"] = kRed;
+  color["Run24F"] = kRed+2;
+  color["Run24G"] = kOrange+2;
+  color["Run24H"] = kBlue;
+  color["Run24I"] = kMagenta;
+
+  color["Run25C"] = kGreen+2;
+  color["Run25D"] = kCyan+2;
+  color["Run25E"] = kRed;
+  color["Run25F"] = kRed+2;
+  color["Run25G"] = kOrange+2;
 
   h->Fit(f1,"QRN");
   h->Fit(f1,"QRNM");
@@ -346,6 +384,104 @@ void createL2L3ResTextFiles(string set, bool leg2) {
     sin = Form("textfiles/%s/Summer23BPix-22Sep2023_Run2023D_V1_DATA_L2Residual_AK4PFPNet%s.txt", version,
               TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ; isNewL2Res = true;
     sout = Form("textfiles/%s/Summer23BPix-22Sep2023_Run2023D_V1_DATA_L2L3Residual_AK4PFPNet%s.txt", version,
+              TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ;
+  }
+
+  if (set=="Run24C") {
+    sin = Form("textfiles/%s/Summer24_Run2024C_V1_DATA_L2Residual_AK4PF%s%s.txt", version,
+              TString(version).Contains("pnet") ? "PNet" : "UparT",
+              TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ; isNewL2Res = true;
+    sout = Form("textfiles/%s/Summer24_Run2024C_V1_DATA_L2L3Residual_AK4PF%s%s.txt", version,
+              TString(version).Contains("pnet") ? "PNet" : "UparT",
+              TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ;
+  }
+  if (set=="Run24D") {
+    sin = Form("textfiles/%s/Summer24_Run2024D_V1_DATA_L2Residual_AK4PF%s%s.txt", version,
+              TString(version).Contains("pnet") ? "PNet" : "UparT",
+              TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ; isNewL2Res = true;
+    sout = Form("textfiles/%s/Summer24_Run2024D_V1_DATA_L2L3Residual_AK4PF%s%s.txt", version,
+              TString(version).Contains("pnet") ? "PNet" : "UparT",
+              TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ;
+  }
+  if (set=="Run24E") {
+    sin = Form("textfiles/%s/Summer24_Run2024E_V1_DATA_L2Residual_AK4PF%s%s.txt", version,
+              TString(version).Contains("pnet") ? "PNet" : "UparT",
+              TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ; isNewL2Res = true;
+    sout = Form("textfiles/%s/Summer24_Run2024E_V1_DATA_L2L3Residual_AK4PF%s%s.txt", version,
+              TString(version).Contains("pnet") ? "PNet" : "UparT",
+              TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ;
+  }
+  if (set=="Run24F") {
+    sin = Form("textfiles/%s/Summer24_Run2024F_V1_DATA_L2Residual_AK4PF%s%s.txt", version,
+              TString(version).Contains("pnet") ? "PNet" : "UparT",
+              TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ; isNewL2Res = true;
+    sout = Form("textfiles/%s/Summer24_Run2024F_V1_DATA_L2L3Residual_AK4PF%s%s.txt", version,
+              TString(version).Contains("pnet") ? "PNet" : "UparT",
+              TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ;
+  }
+  if (set=="Run24G") {
+    sin = Form("textfiles/%s/Summer24_Run2024G_V1_DATA_L2Residual_AK4PF%s%s.txt", version,
+              TString(version).Contains("pnet") ? "PNet" : "UparT",
+              TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ; isNewL2Res = true;
+    sout = Form("textfiles/%s/Summer24_Run2024G_V1_DATA_L2L3Residual_AK4PF%s%s.txt", version,
+              TString(version).Contains("pnet") ? "PNet" : "UparT",
+              TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ;
+  }
+  if (set=="Run24H") {
+    sin = Form("textfiles/%s/Summer24_Run2024H_V1_DATA_L2Residual_AK4PF%s%s.txt", version,
+              TString(version).Contains("pnet") ? "PNet" : "UparT",
+              TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ; isNewL2Res = true;
+    sout = Form("textfiles/%s/Summer24_Run2024H_V1_DATA_L2L3Residual_AK4PF%s%s.txt", version,
+              TString(version).Contains("pnet") ? "PNet" : "UparT",
+              TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ;
+  }
+  if (set=="Run24I") {
+    sin = Form("textfiles/%s/Summer24_Run2024I_V1_DATA_L2Residual_AK4PF%s%s.txt", version,
+              TString(version).Contains("pnet") ? "PNet" : "UparT",
+              TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ; isNewL2Res = true;
+    sout = Form("textfiles/%s/Summer24_Run2024I_V1_DATA_L2L3Residual_AK4PF%s%s.txt", version,
+              TString(version).Contains("pnet") ? "PNet" : "UparT",
+              TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ;
+  }
+
+  if (set=="Run25C") {
+    sin = Form("textfiles/%s/Winter25_Run2025C_V1_DATA_L2Residual_AK4PF%s%s.txt", version,
+              TString(version).Contains("pnet") ? "PNet" : "UparT",
+              TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ; isNewL2Res = true;
+    sout = Form("textfiles/%s/Winter25_Run2025C_V1_DATA_L2L3Residual_AK4PF%s%s.txt", version,
+              TString(version).Contains("pnet") ? "PNet" : "UparT",
+              TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ;
+  }
+  if (set=="Run25D") {
+    sin = Form("textfiles/%s/Winter25_Run2025D_V1_DATA_L2Residual_AK4PF%s%s.txt", version,
+              TString(version).Contains("pnet") ? "PNet" : "UparT",
+              TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ; isNewL2Res = true;
+    sout = Form("textfiles/%s/Winter25_Run2025D_V1_DATA_L2L3Residual_AK4PF%s%s.txt", version,
+              TString(version).Contains("pnet") ? "PNet" : "UparT",
+              TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ;
+  }
+  if (set=="Run25E") {
+    sin = Form("textfiles/%s/Winter25_Run2025E_V1_DATA_L2Residual_AK4PF%s%s.txt", version,
+              TString(version).Contains("pnet") ? "PNet" : "UparT",
+              TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ; isNewL2Res = true;
+    sout = Form("textfiles/%s/Winter25_Run2025E_V1_DATA_L2L3Residual_AK4PF%s%s.txt", version,
+              TString(version).Contains("pnet") ? "PNet" : "UparT",
+              TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ;
+  }
+  if (set=="Run25F") {
+    sin = Form("textfiles/%s/Winter25_Run2025F_V1_DATA_L2Residual_AK4PF%s%s.txt", version,
+              TString(version).Contains("pnet") ? "PNet" : "UparT",
+              TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ; isNewL2Res = true;
+    sout = Form("textfiles/%s/Winter25_Run2025F_V1_DATA_L2L3Residual_AK4PF%s%s.txt", version,
+              TString(version).Contains("pnet") ? "PNet" : "UparT",
+              TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ;
+  }
+  if (set=="Run25G") {
+    sin = Form("textfiles/%s/Winter25_Run2025G_V1_DATA_L2Residual_AK4PF%s%s.txt", version,
+              TString(version).Contains("pnet") ? "PNet" : "UparT",
+              TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ; isNewL2Res = true;
+    sout = Form("textfiles/%s/Winter25_Run2025G_V1_DATA_L2L3Residual_AK4PF%s%s.txt", version,
+              TString(version).Contains("pnet") ? "PNet" : "UparT",
               TString(version).Contains("neutrino") ? "PlusNeutrino" : "") ;
   }
 

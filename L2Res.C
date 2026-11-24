@@ -21,10 +21,10 @@ bool fitD = true; // Dijet (pT,ave)
 bool fitP = true; // Dijet (pT,probe)
 bool fitJ = true; // Dijet (pT,tag)
 
-string version_string = "rescaleMass_removeCorrectEvents_removeNAN_pnetreg_mctruth15_NewRunCrabSkim_closure";
+string version_string = "upartreg_neutrino_v1_closure";
 const char * version = version_string.c_str();
 
-string YEAR = "2022";
+string YEAR = "24";
 
 bool dijet = true;
 bool pdf = true;
@@ -310,13 +310,24 @@ void L2Res() {
   std::vector<string> vsummer_v;
   std::vector<string> vyear_v;
 
-
-  if (YEAR == "2023"){
+  if (YEAR == "2025" || YEAR == "25"){
+    vrun_v = {"2025C","2025D","2025E","2025F","2025G"};
+    vmc_v = {"Winter25","Winter25","Winter25","Winter25","Winter25"};
+    vsummer_v = {"Winter25","Winter25","Winter25","Winter25","Winter25"};
+    vyear_v = {"2025","2025","2025","2025","2025"};
+  }
+  if (YEAR == "2024" || YEAR == "24"){
+    vrun_v = {"2024C","2024D","2024E","2024F","2024G","2024H","2024I"};
+    vmc_v = {"Summer24","Summer24","Summer24","Summer24","Summer24","Summer24","Summer24"};
+    vsummer_v = {"Summer24","Summer24","Summer24","Summer24","Summer24","Summer24","Summer24"};
+    vyear_v = {"2024","2024","2024","2024","2024","2024","2024"};
+  }
+  else if (YEAR == "2023" || YEAR == "23"){
     vrun_v = {"2023Cv123","2023Cv4","2023D"};
     vmc_v = {"Summer23","Summer23","Summer23BPIX"};
     vsummer_v = {"Summer23-22Sep2023","Summer23-22Sep2023","Summer23BPix-22Sep2023"};
     vyear_v = {"2023","2023","2023"};}
-  else if (YEAR == "2022"){
+  else if (YEAR == "2022" || YEAR == "22"){
     vrun_v = {"2022CD","2022E","2022F","2022G","2022FG"};
     vmc_v = {"Summer22","Summer22EE","Summer22EE","Summer22EE","Summer22EE"};
     vsummer_v = {"Summer22-22Sep2023","Summer22EE-22Sep2023","Summer22EE-22Sep2023", "Summer22EE-22Sep2023", "Summer22EE-22Sep2023"};
@@ -338,8 +349,8 @@ void L2Res() {
   std::copy(vsummer_v.begin(), vsummer_v.end(), vsummer);
   std::copy(vyear_v.begin(), vyear_v.end(), vyear);
 
-  const int nrun = sizeof(vrun)/sizeof(vrun[0]) - ((DO_2022FG || YEAR == "2023") ? 0 : 1);
-  const int nmc = sizeof(vmc)/sizeof(vmc[0]) - ((DO_2022FG || YEAR == "2023") ? 0 : 1);
+  const int nrun = sizeof(vrun)/sizeof(vrun[0]) - ((DO_2022FG || YEAR == "2023" || YEAR == "23" || YEAR == "2024" || YEAR == "24" || YEAR == "2025" || YEAR == "25") ? 0 : 1);
+  const int nmc = sizeof(vmc)/sizeof(vmc[0]) - ((DO_2022FG || YEAR == "2023" || YEAR == "23" || YEAR == "2024" || YEAR == "24" || YEAR == "2025" || YEAR == "25") ? 0 : 1);
   std::cout << "nruns " << nrun << " nmc " << nmc << std::endl;
   assert(nmc==nrun);
   for (int irun = 0; irun != nrun; ++irun) {
@@ -363,7 +374,7 @@ void L2Res() {
   // Load Z+jet
   TFile *fz(0);
   TFile *fzd(0);
-  fz = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/zb/jme_bplusZ_merged_%s_%s.root",version,version, cr),"READ"); // Summer23 L2Res_V1
+  fz = new TFile(Form("/afs/cern.ch/user/j/jessy/workspace/private/CMS/PNET_Regression/Residuals/jecsys3/L2L3Res_inputs/%s/zb/jme_bplusZ_merged_%s_%s.root",version,version, cr),"READ"); // Summer23 L2Res_V1
   assert(fz && !fz->IsZombie());
 
   TDirectory *dz = fz->GetDirectory("data/l2res");
@@ -374,9 +385,9 @@ void L2Res() {
 
   // Load G+jet
   TFile *fg(0), *fgm(0);
-  fg = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/gam/GamHistosFill_data_%s_%s.root",version, cr, version),"READ"); // Summer23 with L2Res
+  fg = new TFile(Form("/afs/cern.ch/user/j/jessy/workspace/private/CMS/PNET_Regression/Residuals/jecsys3/L2L3Res_inputs/%s/gam/GamHistosFill_data_%s_%s.root",version, cr, version),"READ"); // Summer23 with L2Res
   assert(fg && !fg->IsZombie());
-  fgm = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/gam/GamHistosFill_mc_%sP8%s_%s.root" ,version, cyear, run=="2023D" ? "-BPix" : "", version),"READ"); // Summer23 with L2Res
+  fgm = new TFile(Form("/afs/cern.ch/user/j/jessy/workspace/private/CMS/PNET_Regression/Residuals/jecsys3/L2L3Res_inputs/%s/gam/GamHistosFill_mc_%sP8%s_%s.root" ,version, cyear, run=="2023D" ? "-BPix" : "", version),"READ"); // Summer23 with L2Res
   assert(fgm && !fgm->IsZombie());
 
   TDirectory *dg = fg->GetDirectory("Gamjet2");
@@ -387,10 +398,10 @@ void L2Res() {
 
   // Load dijet
   TFile *fd(0), *fdm(0);
-  fd = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/dijet/jmenano_data_cmb_%s_JME_%s.root",version, cr, version),"READ"); // Summer23 with L2Res
+  fd = new TFile(Form("/afs/cern.ch/user/j/jessy/workspace/private/CMS/PNET_Regression/Residuals/dijet/rootfiles/%s/jmenano_data_cmb_%s_JME_%s.root",version, cr, version),"READ"); // Summer23 with L2Res
   if (!dijet) fd = new TFile(Form("/work/mmalucch/L2L3Res_inputs/mc_truth_below15_2022_pnetreg/dijet/jmenano_data_cmb_2022F_JME_mc_truth_below15_2022_pnetreg.root"),"READ"); // Summer23 with L2Res
   assert(fd && !fd->IsZombie());
-  fdm = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/dijet/jmenano_mc_cmb_%sQCD%s_%s.root", version, year == "2023" ? "": cyear, run=="2023D" ? "-BPix" : "", version),"READ"); // Summer23 with L2Res
+  fdm = new TFile(Form("/afs/cern.ch/user/j/jessy/workspace/private/CMS/PNET_Regression/Residuals/dijet/rootfiles/%s/jmenano_mc_cmb_%sQCD%s_%s.root", version, year == "2023" ? "": cyear, run=="2023D" ? "-BPix" : "", version),"READ"); // Summer23 with L2Res
   if (!dijet) fdm = new TFile(Form("/work/mmalucch/L2L3Res_inputs/mc_truth_below15_2022_pnetreg/dijet/jmenano_mc_cmb_2022EEQCD_mc_truth_below15_2022_pnetreg.root"),"READ"); // Summer23 with L2Res
   assert(fdm && !fdm->IsZombie());
 
@@ -935,7 +946,7 @@ void L2Res() {
 
   // Step 8. Print out text files
   gROOT->ProcessLine(Form(".! mkdir -p textfiles/%s",version));
-  ofstream ftxt(Form("textfiles/%s/%s_Run%s_V1_DATA_L2Residual_AK4PFPNet%s.txt",version,cs,cr, TString(version).Contains("neutrino") ? "PlusNeutrino" : ""));
+  ofstream ftxt(Form("textfiles/%s/%s_Run%s_V1_DATA_L2Residual_AK4PF%s%s.txt",version,cs,cr, TString(version).Contains("pnet") ? "PNet" : "UparT", TString(version).Contains("neutrino") ? "PlusNeutrino" : ""));
   ftxt << Form("{ 1 JetEta 1 JetPt 1./(%s) Correction L2Relative}",
 	       vf1[0]->GetExpFormula().Data()) << endl;
   for (int ieta = p2d->GetNbinsX(); ieta != 0; --ieta) {

@@ -112,7 +112,7 @@ void reprocess(string epoch="", string version_string="", string closure="") {
   TDirectory *curdir = gDirectory;
 
   const char *cep = epoch.c_str();
-  TFile *fout = new TFile(Form("rootfiles/jecdata%s.root", cep), "RECREATE");
+  TFile *fout = new TFile(Form("rootfiles/jecdata_%s_%s.root", cep, version), "RECREATE");
 
   ////////////////////////////
   // Z+jet                  //
@@ -178,6 +178,42 @@ void reprocess(string epoch="", string version_string="", string closure="") {
     // fz = new TFile("rootfiles/Summer23_L2ResOnly/jme_bplusZ_2023D_Zmm_sync_v70.root","READ"); // Summer23 L2Res_V1
     fz = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/zb/jme_bplusZ_merged_%s_2023D.root", version, version),"READ"); // Summer23 L2Res_V1
   }
+  if (epoch=="Run24C") {
+    fz = new TFile(Form("/afs/cern.ch/user/j/jessy/workspace/private/CMS/PNET_Regression/Residuals/jecsys3/L2L3Res_inputs/%s/zb/jme_bplusZ_merged_%s_2024C.root", version, version),"READ"); // Summer23 L2Res_V1
+  }
+  if (epoch=="Run24D") {
+    fz = new TFile(Form("/afs/cern.ch/user/j/jessy/workspace/private/CMS/PNET_Regression/Residuals/jecsys3/L2L3Res_inputs/%s/zb/jme_bplusZ_merged_%s_2024D.root", version, version),"READ"); // Summer23 L2Res_V1
+  }
+  if (epoch=="Run24E") {
+    fz = new TFile(Form("/afs/cern.ch/user/j/jessy/workspace/private/CMS/PNET_Regression/Residuals/jecsys3/L2L3Res_inputs/%s/zb/jme_bplusZ_merged_%s_2024E.root", version, version),"READ"); // Summer23 L2Res_V1
+  }
+  if (epoch=="Run24F") {
+    fz = new TFile(Form("/afs/cern.ch/user/j/jessy/workspace/private/CMS/PNET_Regression/Residuals/jecsys3/L2L3Res_inputs/%s/zb/jme_bplusZ_merged_%s_2024F.root", version, version),"READ"); // Summer23 L2Res_V1
+  }
+  if (epoch=="Run24G") {
+    fz = new TFile(Form("/afs/cern.ch/user/j/jessy/workspace/private/CMS/PNET_Regression/Residuals/jecsys3/L2L3Res_inputs/%s/zb/jme_bplusZ_merged_%s_2024G.root", version, version),"READ"); // Summer23 L2Res_V1
+  }
+  if (epoch=="Run24H") {
+    fz = new TFile(Form("/afs/cern.ch/user/j/jessy/workspace/private/CMS/PNET_Regression/Residuals/jecsys3/L2L3Res_inputs/%s/zb/jme_bplusZ_merged_%s_2024H.root", version, version),"READ"); // Summer23 L2Res_V1
+  }
+  if (epoch=="Run24I") {
+    fz = new TFile(Form("/afs/cern.ch/user/j/jessy/workspace/private/CMS/PNET_Regression/Residuals/jecsys3/L2L3Res_inputs/%s/zb/jme_bplusZ_merged_%s_2024I.root", version, version),"READ"); // Summer23 L2Res_V1
+  }
+   if (epoch=="Run25C") {
+    fz = new TFile(Form("/afs/cern.ch/user/j/jessy/workspace/private/CMS/PNET_Regression/Residuals/jecsys3/L2L3Res_inputs/%s/zb/jme_bplusZ_merged_%s_2025C.root", version, version),"READ"); // Summer23 L2Res_V1
+  }
+  if (epoch=="Run25D") {
+    fz = new TFile(Form("/afs/cern.ch/user/j/jessy/workspace/private/CMS/PNET_Regression/Residuals/jecsys3/L2L3Res_inputs/%s/zb/jme_bplusZ_merged_%s_2025D.root", version, version),"READ"); // Summer23 L2Res_V1
+  }
+  if (epoch=="Run25E") {
+    fz = new TFile(Form("/afs/cern.ch/user/j/jessy/workspace/private/CMS/PNET_Regression/Residuals/jecsys3/L2L3Res_inputs/%s/zb/jme_bplusZ_merged_%s_2025E.root", version, version),"READ"); // Summer23 L2Res_V1
+  }
+  if (epoch=="Run25F") {
+    fz = new TFile(Form("/afs/cern.ch/user/j/jessy/workspace/private/CMS/PNET_Regression/Residuals/jecsys3/L2L3Res_inputs/%s/zb/jme_bplusZ_merged_%s_2025F.root", version, version),"READ"); // Summer23 L2Res_V1
+  }
+  if (epoch=="Run25G") {
+    fz = new TFile(Form("/afs/cern.ch/user/j/jessy/workspace/private/CMS/PNET_Regression/Residuals/jecsys3/L2L3Res_inputs/%s/zb/jme_bplusZ_merged_%s_2025G.root", version, version),"READ"); // Summer23 L2Res_V1
+  }
   if (epoch=="Run3") {
     //fz = new TFile(Form("%s/jme_bplusZ_Run3_Zmm_sync_v59.root",cdz58p1),"READ"); // Sami's combo
     fz = new TFile("rootfiles/jecdataRun3Data.root","READ"); // manual combo
@@ -207,6 +243,8 @@ void reprocess(string epoch="", string version_string="", string closure="") {
       //epoch=="Run23C" ||
       //epoch=="Run23C1" ||epoch=="Run23C2" || epoch=="Run23C3" ||
       epoch=="Run23C4" || epoch=="Run23D" || epoch=="Run23C4D" ||
+      epoch=="Run24C" || epoch=="Run24D" || epoch=="Run24E" || epoch=="Run24F" || epoch=="Run24G" || epoch=="Run24H" || epoch=="Run24I" ||
+      epoch=="Run25C" || epoch=="Run25D" || epoch=="Run25E" || epoch=="Run25F" || epoch=="Run25G" ||
       (epoch=="Run3" && false)
       ) {
     TH2D *hmz_dt2 = (TH2D*)fmz->Get(Form("data/%s/h_Zpt_mZ_alpha100",cr));
@@ -267,6 +305,18 @@ void reprocess(string epoch="", string version_string="", string closure="") {
   mp["Run23C4"] = "2023Cv4";
   mp["Run23D"] = "2023D";
   mp["Run23C4D"] = "2023Cv4D";
+  mp["Run24C"] = "2024C";
+  mp["Run24D"] = "2024D";
+  mp["Run24E"] = "2024E";
+  mp["Run24F"] = "2024F";
+  mp["Run24G"] = "2024G";
+  mp["Run24H"] = "2024H";
+  mp["Run24I"] = "2024I";
+  mp["Run25C"] = "2025C";
+  mp["Run25D"] = "2025D";
+  mp["Run25E"] = "2025E";
+  mp["Run25F"] = "2025F";
+  mp["Run25G"] = "2025G";
   mp["Run3"] = "Run3";
   //TFile *fp = new TFile(Form("../gamjet/files/GamHistosRatio_%s_P8_v21.root",
   //TFile *fp = new TFile(Form("../gamjet/rootfiles/GamHistosRatio_%s_P8_v24.root",mp[epoch]),"READ");
@@ -278,7 +328,7 @@ void reprocess(string epoch="", string version_string="", string closure="") {
   //TFile *fp = new TFile(Form("../gamjet/rootfiles/GamHistosRatio_%s_P8QCD_v32.root",mp[epoch]),"READ"); // L2L3Res_V3
   TFile *fp(0);
 
-  fp = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/gam/GamHistosRatio_%s_P8%sQCD_%s.root",version, mp[epoch],epoch=="Run23D" ? "BPix" : "",version),"READ"); // Summer23 L2Res_V1 (withQCD)
+  fp = new TFile(Form("/afs/cern.ch/user/j/jessy/workspace/private/CMS/PNET_Regression/Residuals/gamjet-analysis/rootfiles/%s/GamHistosRatio_%s_P8%sQCD_%s.root",version, mp[epoch],epoch=="Run23D" ? "BPix" : "",version),"READ"); // Summer23 L2Res_V1 (withQCD)
 
   assert(fp && !fp->IsZombie());
 
@@ -344,6 +394,18 @@ void reprocess(string epoch="", string version_string="", string closure="") {
   //mmjd["Run23C4"] = "2023BCv123"; //19Dec patch
   mmjd["Run23D"] = "2023D";
   mmjd["Run23C4D"] = "2023Cv4D";
+  mmjd["Run24C"] = "2024C";
+  mmjd["Run24D"] = "2024D";
+  mmjd["Run24E"] = "2024E";
+  mmjd["Run24F"] = "2024F";
+  mmjd["Run24G"] = "2024G";
+  mmjd["Run24H"] = "2024H";
+  mmjd["Run24I"] = "2024I";
+  mmjd["Run25C"] = "2025C";
+  mmjd["Run25D"] = "2025D";
+  mmjd["Run25E"] = "2025E";
+  mmjd["Run25F"] = "2025F";
+  mmjd["Run25G"] = "2025G";
   mmjd["Run3"] = "Run3";
   map<string,const char*> mmjm;
   mmjm["Run22C"] = "2022QCD";
@@ -363,6 +425,18 @@ void reprocess(string epoch="", string version_string="", string closure="") {
   mmjm["Run23C4"] = "QCD";//BPix";//"Summer22MG";
   mmjm["Run23D"] = "QCD-BPix";//"Summer22MG";
   mmjm["Run23C4D"] = "QCD-BPix";//22MG";
+  mmjm["Run24C"] = "2024QCD";
+  mmjm["Run24D"] = "2024QCD";
+  mmjm["Run24E"] = "2024QCD";
+  mmjm["Run24F"] = "2024QCD";
+  mmjm["Run24G"] = "2024QCD";
+  mmjm["Run24H"] = "2024QCD";
+  mmjm["Run24I"] = "2024QCD";
+  mmjm["Run25C"] = "2025QCD";
+  mmjm["Run25D"] = "2025QCD";
+  mmjm["Run25E"] = "2025QCD";
+  mmjm["Run25F"] = "2025QCD";
+  mmjm["Run25G"] = "2025QCD";
   mmjm["Run3"] = "Summer22MG";
   //TFile *fmjd = new TFile(Form("../dijet/rootfiles/jmenano_data_cmb_%s_JME_v32.root",mmjd[epoch]),"READ"); // no L2L3Res (L2Res for 2022 only)
   //assert(fmjd && !fmjd->IsZombie());
@@ -374,8 +448,8 @@ void reprocess(string epoch="", string version_string="", string closure="") {
   // TFile *fmjd = new TFile(Form("rootfiles/Summer23_L2ResOnly/jmenano_data_cmb_%s_JME_v39_noRwPU_noSmearJets_25Feb2024_L2Res_v1.root",mmjd[epoch]),"READ"); // Summer23_V1
   // TFile *fmjm = new TFile(Form("rootfiles/Summer23_L2ResOnly/jmenano_mc_cmb_%s_v39_noRwPU_noSmearJets_25Feb2024_L2Res_v1.root",mmjm[epoch]),"READ"); // Summer23 L2Res_V1
 
-  TFile *fmjd = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/dijet/jmenano_data_cmb_%s_JME_%s.root",version,mmjd[epoch],version),"READ"); // Summer23_V1
-  TFile *fmjm = new TFile(Form("/work/mmalucch/L2L3Res_inputs/%s/dijet/jmenano_mc_cmb_%s_%s.root",version,mmjm[epoch],version),"READ"); // Summer23 L2Res_V1
+  TFile *fmjd = new TFile(Form("/afs/cern.ch/user/j/jessy/workspace/private/CMS/PNET_Regression/Residuals/dijet/rootfiles/%s/jmenano_data_cmb_%s_JME_%s.root",version,mmjd[epoch],version),"READ"); // Summer23_V1
+  TFile *fmjm = new TFile(Form("/afs/cern.ch/user/j/jessy/workspace/private/CMS/PNET_Regression/Residuals/dijet/rootfiles/%s/jmenano_mc_cmb_%s_%s.root",version,mmjm[epoch],version),"READ"); // Summer23 L2Res_V1
   // TFile *fmjd = new TFile(Form("/work/mmalucch/L2L3Res_inputs/mc_truth_below15_2022_pnetreg/dijet/jmenano_data_cmb_2022F_JME_mc_truth_below15_2022_pnetreg.root"),"READ"); //when not dijet
   // TFile *fmjm = new TFile(Form("/work/mmalucch/L2L3Res_inputs/mc_truth_below15_2022_pnetreg/dijet/jmenano_mc_cmb_2022EEQCD_mc_truth_below15_2022_pnetreg.root"),"READ"); // when not dijet
 
@@ -433,6 +507,8 @@ void reprocess(string epoch="", string version_string="", string closure="") {
       //epoch=="Run23C" ||
       //epoch=="Run23C1" || epoch=="Run23C2" || epoch=="Run23C3" ||
       epoch=="Run23C4" || epoch=="Run23D" || epoch=="Run23C4D" ||
+      epoch=="Run24C" || epoch=="Run24D" || epoch=="Run24E" || epoch=="Run24F" || epoch=="Run24G" || epoch=="Run24H" || epoch=="Run24I" ||
+      epoch=="Run25C" || epoch=="Run25D" || epoch=="Run25E" || epoch=="Run25F" || epoch=="Run25G" ||
       epoch=="Run3"
       ) {
     rename["zjet"]["ratio"] = "data"; // missing => PATCH
@@ -665,6 +741,8 @@ void reprocess(string epoch="", string version_string="", string closure="") {
       //epoch=="Run23C" ||
       //epoch=="Run23C1" || epoch=="Run23C2" || epoch=="Run23C3" ||
       epoch=="Run23C4" || epoch=="Run23D" || epoch=="Run23C4D" ||
+      epoch=="Run24C" || epoch=="Run24D" || epoch=="Run24E" || epoch=="Run24F" || epoch=="Run24G" || epoch=="Run24H" || epoch=="Run24I" ||
+      epoch=="Run25C" || epoch=="Run25D" || epoch=="Run25E" || epoch=="Run25F" || epoch=="Run25G" ||
       epoch=="Run3") {
     types.push_back("chf");
     types.push_back("nef");
@@ -686,6 +764,8 @@ void reprocess(string epoch="", string version_string="", string closure="") {
       //epoch=="Run23C" ||
       //epoch=="Run23C1" || epoch=="Run23C2" || epoch=="Run23C3" ||
       epoch=="Run23C4" || epoch=="Run23D" || epoch=="Run23C4D" ||
+      epoch=="Run24C" || epoch=="Run24D" || epoch=="Run24E" || epoch=="Run24F" || epoch=="Run24G" || epoch=="Run24H" || epoch=="Run24I" ||
+      epoch=="Run25C" || epoch=="Run25D" || epoch=="Run25E" || epoch=="Run25F" || epoch=="Run25G" ||
       epoch=="Run3") {
     types.push_back("rho");
   }
@@ -701,6 +781,8 @@ void reprocess(string epoch="", string version_string="", string closure="") {
       //epoch=="Run23C" ||
       //epoch=="Run23C1" || epoch=="Run23C2" || epoch=="Run23C3" ||
       epoch=="Run23C4" || epoch=="Run23D" || epoch=="Run23C4D" ||
+      epoch=="Run24C" || epoch=="Run24D" || epoch=="Run24E" || epoch=="Run24F" || epoch=="Run24G" || epoch=="Run24H" || epoch=="Run24I" ||
+      epoch=="Run25C" || epoch=="Run25D" || epoch=="Run25E" || epoch=="Run25F" || epoch=="Run25G" ||
       epoch=="Run3") {
     types.push_back("rjet");
     types.push_back("gjet");
@@ -867,6 +949,8 @@ void reprocess(string epoch="", string version_string="", string closure="") {
 		//epoch=="Run23C" ||
 		//epoch=="Run23C1" || epoch=="Run23C2" || epoch=="Run23C3" ||
 		epoch=="Run23C4" || epoch=="Run23D" || epoch=="Run23C4D" ||
+    epoch=="Run24C" || epoch=="Run24D" || epoch=="Run24E" || epoch=="Run24F" || epoch=="Run24G" || epoch=="Run24H" || epoch=="Run24I" ||
+    epoch=="Run25C" || epoch=="Run25D" || epoch=="Run25E" || epoch=="Run25F" || epoch=="Run25G" ||
 		epoch=="Run3"
 		) {
 	      c = Form("%s/eta_%02.0f_%02.0f/%s%s_zmmjet_a%1.0f",
@@ -1245,6 +1329,54 @@ void reprocess(string epoch="", string version_string="", string closure="") {
       mcjec = getFJC("","Summer23BPixRun3_V3_MC_L2Relative_AK4PUPPI");
     }
     if (epoch=="Run23C4D") { assert(false); exit(0); }
+    if (epoch=="Run24C") {
+      jec = getFJC("","","Summer24Prompt24_RunCnib1_V1_DATA_L2L3Residual_AK4PFPuppi");
+      mcjec = getFJC("","Summer24Prompt24_V1_MC_L2Relative_AK4PFPuppi");
+    }
+    if (epoch=="Run24D") {
+      jec = getFJC("","","Summer24Prompt24_RunDnib1_V1_DATA_L2L3Residual_AK4PFPuppi");
+      mcjec = getFJC("","Summer24Prompt24_V1_MC_L2Relative_AK4PFPuppi");
+    }
+    if (epoch=="Run24E") {
+      jec = getFJC("","","Summer24Prompt24_RunEnib1_V1_DATA_L2L3Residual_AK4PFPuppi");
+      mcjec = getFJC("","Summer24Prompt24_V1_MC_L2Relative_AK4PFPuppi");
+    }
+    if (epoch=="Run24F") {
+      jec = getFJC("","","Summer24Prompt24_RunFnib1_V1_DATA_L2L3Residual_AK4PFPuppi");
+      mcjec = getFJC("","Summer24Prompt24_V1_MC_L2Relative_AK4PFPuppi");
+    }
+    if (epoch=="Run24G") {
+      jec = getFJC("","","Summer24Prompt24_RunGnib1_V1_DATA_L2L3Residual_AK4PFPuppi");
+      mcjec = getFJC("","Summer24Prompt24_V1_MC_L2Relative_AK4PFPuppi");
+    }
+    if (epoch=="Run24H") {
+      jec = getFJC("","","Summer24Prompt24_RunHnib1_V1_DATA_L2L3Residual_AK4PFPuppi");
+      mcjec = getFJC("","Summer24Prompt24_V1_MC_L2Relative_AK4PFPuppi");
+    }
+    if (epoch=="Run24I") {
+      jec = getFJC("","","Summer24Prompt24_RunInib1_V1_DATA_L2L3Residual_AK4PFPuppi");
+      mcjec = getFJC("","Summer24Prompt24_V1_MC_L2Relative_AK4PFPuppi");
+    }
+    if (epoch=="Run25C") {
+      jec = getFJC("","","Winter25Prompt25_RunC_V4_DATA_L2L3Residual_AK4PFPuppi");
+      mcjec = getFJC("","Winter25Prompt25_V1_MC_L2Relative_AK4PFPuppi");
+    }
+    if (epoch=="Run25D") {
+      jec = getFJC("","","Winter25Prompt25_RunD_V4_DATA_L2L3Residual_AK4PFPuppi");
+      mcjec = getFJC("","Winter25Prompt25_V1_MC_L2Relative_AK4PFPuppi");
+    }
+    if (epoch=="Run25E") {
+      jec = getFJC("","","Winter25Prompt25_RunE_V4_DATA_L2L3Residual_AK4PFPuppi");
+      mcjec = getFJC("","Winter25Prompt25_V1_MC_L2Relative_AK4PFPuppi");
+    }
+    if (epoch=="Run25F") {
+      jec = getFJC("","","Winter25Prompt25_RunF_V4_DATA_L2L3Residual_AK4PFPuppi");
+      mcjec = getFJC("","Winter25Prompt25_V1_MC_L2Relative_AK4PFPuppi");
+    }
+    if (epoch=="Run25G") {
+      jec = getFJC("","","Winter25Prompt25_RunG_V4_DATA_L2L3Residual_AK4PFPuppi");
+      mcjec = getFJC("","Winter25Prompt25_V1_MC_L2Relative_AK4PFPuppi");
+    }
     if (epoch=="Run3") {
       //jec = getFJC("","","Winter23Prompt23_RunA_V1_DATA_L2L3Residual");
       //mcjec = getFJC("","Winter23Prompt23_RunA_V1_DATA_L2Relative");
@@ -1316,6 +1448,42 @@ void reprocess(string epoch="", string version_string="", string closure="") {
     if (epoch=="Run23D") {
       // jecold = getFJC("","","Summer22Prompt23_Run2023D_V3_DATA_L2L3Residual");
       jecold = getFJC("","","Summer23Prompt23_Run2023D_V2_DATA_L2L3Residual_AK4PFPuppi");
+    }
+    if (epoch=="Run24C") {
+      jecold = getFJC("","","Summer24Prompt24_RunCnib1_V1_DATA_L2L3Residual_AK4PFPuppi"); 
+    }
+    if (epoch=="Run24D") {
+      jecold = getFJC("","","Summer24Prompt24_RunDnib1_V1_DATA_L2L3Residual_AK4PFPuppi");
+    }
+    if (epoch=="Run24E") {
+      jecold = getFJC("","","Summer24Prompt24_RunEnib1_V1_DATA_L2L3Residual_AK4PFPuppi");
+    }
+    if (epoch=="Run24F") {
+      jecold = getFJC("","","Summer24Prompt24_RunFnib1_V1_DATA_L2L3Residual_AK4PFPuppi");
+    }
+    if (epoch=="Run24G") {
+      jecold = getFJC("","","Summer24Prompt24_RunGnib1_V1_DATA_L2L3Residual_AK4PFPuppi");
+    }
+    if (epoch=="Run24H") {
+      jecold = getFJC("","","Summer24Prompt24_RunHnib1_V1_DATA_L2L3Residual_AK4PFPuppi");
+    }
+    if (epoch=="Run24I") {
+      jecold = getFJC("","","Summer24Prompt24_RunInib1_V1_DATA_L2L3Residual_AK4PFPuppi");
+    }
+    if (epoch=="Run25C") {
+      jecold = getFJC("","","Winter25Prompt25_RunC_V4_DATA_L2L3Residual_AK4PFPuppi"); 
+    }
+    if (epoch=="Run25D") {
+      jecold = getFJC("","","Winter25Prompt25_RunD_V4_DATA_L2L3Residual_AK4PFPuppi");
+    }
+    if (epoch=="Run25E") {
+      jecold = getFJC("","","Winter25Prompt25_RunE_V4_DATA_L2L3Residual_AK4PFPuppi");
+    }
+    if (epoch=="Run25F") {
+      jecold = getFJC("","","Winter25Prompt25_RunF_V4_DATA_L2L3Residual_AK4PFPuppi");
+    }
+    if (epoch=="Run25G") {
+      jecold = getFJC("","","Winter25Prompt25_RunG_V4_DATA_L2L3Residual_AK4PFPuppi");
     }
     if (epoch=="Run3") {
       // Combo done with jecdataRun3Data.root and createL2L3ResTextFile.C

@@ -90,7 +90,7 @@ void softrad3(double etamin=0.0, double etamax=1.3, string epoch="", string vers
   TDirectory *curdir = gDirectory;
 
   // Open jecdata.root produced by reprocess.C
-  TFile *finout = new TFile(Form("rootfiles/jecdata%s.root",epoch.c_str()),
+  TFile *finout = new TFile(Form("rootfiles/jecdata_%s_%s.root",epoch.c_str(),version.c_str()),
 			    "UPDATE");
   assert(finout && !finout->IsZombie());
 
@@ -167,7 +167,7 @@ void softrad3(double etamin=0.0, double etamax=1.3, string epoch="", string vers
 
 	if (m=="counts") {
 	  TH1D *h = (TH1D*)finout->Get(cg);
-	  if (!h) cout << cg << flush << endl; assert(h);
+	  if (!h) cout << "cg : " << cg << flush << endl; assert(h);
 	  hs[d][s] = h;
 	}
 	else {
@@ -734,7 +734,6 @@ void softrad3(double etamin=0.0, double etamax=1.3, string epoch="", string vers
 			  cd,int(10*etamin),int(10*etamax)));
 	  hdm->Write(Form("hdm_%s_%s",cm,cs),TObject::kOverwrite);
 	  curdir->cd();
-
 	} // mpfchs
 
       } // isam

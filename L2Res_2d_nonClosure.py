@@ -115,7 +115,7 @@ def plot_2d_hist(histo_2d, fig_name):
         0.95,
         (
             r"anti-$k_{T}$ R=0.4 (PUPPI)"
-            + ("\nPNet incl. neutrinos" if "neutrino" in args.version else "\nPNet")
+            + (f"\n{'UparT' if 'upart' in args.version else 'PNet'}{' incl. neutrinos' if 'neutrino' in args.version else ''}")
             + "\n"
             + (
                 r"$\sigma_{Rel}$"
